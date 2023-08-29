@@ -23,6 +23,8 @@ CC			=	gcc
 LIBFT		=	libft
 LIBFLAGS	=	-Llibft -lft
 MLXFLAG		=	-lmlx -lXext -lX11
+LNX_MLXFLAG	=	-Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+MAC_MLXFLAG =	-Lmlx -lmlx -framework OpenGL -framework AppKit
 SANITIZE	=	-fsanitize=address -g3
 
 INCLUDES	=	./includes
@@ -36,14 +38,14 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -s -C libft
-	$(CC) $(CFLAGS) $(OBJS) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME) $(LIBFLAGS)
+	$(CC) $(CFLAGS) $(OBJS) $(MAC_MLXFLAG) -o $(NAME) $(LIBFLAGS)
 	@echo "$(B_GREEN)Compiling $(C_END)"
 	@echo "$(C_GREEN)Makefile for minishell completed.$(C_END)"
 
 $(OBJ_PATH)/%.o:	$(SRC_PATH)/%.c*
 					@mkdir -p $(OBJ_PATH)
 					@echo "$(B_GREEN)Creating object file: $<$(C_ENDR)"
-					@$(CC) $(CFLAGS) -I/usr/include -Imlx_linux -O3 -c $< -o $@
+					@$(CC) $(CFLAGS) -Imlx -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_PATH)
