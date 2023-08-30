@@ -18,13 +18,14 @@ C_BLUE	=	\033[1;34m
 C_END 	=	\033[0m
 
 NAME		=	cub3d
-CFLAGS		=	-Wall -Wextra -Werror
+# CFLAGS		=	-Wall -Wextra -Werror
 CC			=	gcc
 LIBFT		=	libft
 LIBFLAGS	=	-Llibft -lft
-MLXFLAG		=	-lmlx -lXext -lX11
+# INC 		=	-lmlx -lGL -lX11 -lXext
+MLXFLAG		=	-I/usr/include -Imlx_linux -O3
 LNX_MLXFLAG	=	-Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
-MAC_MLXFLAG =	-Lmlx -lmlx -framework OpenGL -framework AppKit
+# MAC_MLXFLAG =	-Lmlx -lmlx -framework OpenGL -framework AppKit
 SANITIZE	=	-fsanitize=address -g3
 
 INCLUDES	=	./includes
@@ -38,14 +39,14 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -s -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(MAC_MLXFLAG) -o $(NAME) $(LIBFLAGS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(LNX_MLXFLAG) -o $(NAME)
 	@echo "$(B_GREEN)Compiling $(C_END)"
 	@echo "$(C_GREEN)Makefile for minishell completed.$(C_END)"
 
 $(OBJ_PATH)/%.o:	$(SRC_PATH)/%.c*
 					@mkdir -p $(OBJ_PATH)
 					@echo "$(B_GREEN)Creating object file: $<$(C_ENDR)"
-					@$(CC) $(CFLAGS) -Imlx -c $< -o $@
+					@$(CC) $(CFLAGS) $(MLXFLAG) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_PATH)
