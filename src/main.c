@@ -14,37 +14,59 @@
 
 void	print_img(t_vars *vars)
 {
-	int		bits_per_pixel = 0;
-	int		size_line = 0;
-	int		endian = 0;
-	char	*pixel_data;
-
 	vars->img = mlx_new_image(vars->mlx, screenWidth, screenHeight);
-	pixel_data = mlx_get_data_addr(vars->img, &bits_per_pixel, &size_line, &endian);
 
 	t_pixel bg;
-	bg.addr = mlx_get_data_addr(vars->bg_img, &bg.bits_per_pixel, &bg.size_line, &bg.endian);
-
-	int x = vars->pos_x;
-	int y = vars->pos_y;
-	while (y < (vars->pos_y + vars->pos_size))
+	bg.addr = mlx_get_data_addr(vars->img, &bg.bits_per_pixel, &bg.size_line, &bg.endian);
+	int bgx = 0;
+	int bgy = 0;
+	while (bgy < 720)
 	{
-		while (x < (vars->pos_x + vars->pos_size))
+		while (bgx < 720)
 		{
-			int offset = y * size_line + x * (bits_per_pixel / 8);
-			int pos = y * bg.size_line + x * (bg.bits_per_pixel / 8);
-			pixel_data[offset] = bg.addr[pos];     // Blue
-			pixel_data[offset + 1] = bg.addr[pos + 1]; // Green
-			pixel_data[offset + 2] = bg.addr[pos + 2]; // Red
-			pixel_data[offset + 3] = bg.addr[pos + 3]; // Alpha
-			x++;
+			int pixel = bgy * bg.size_line + bgx * (bg.bits_per_pixel / 8);
+			if (worldMap[bgx/30][bgy/30] == 1)
+			{
+				bg.addr[pixel] = 0xFF;		// Blue
+				bg.addr[pixel + 1] = 0xFF;	// Green
+				bg.addr[pixel + 2] = 0xFF;	// Red
+				bg.addr[pixel + 3] = 0x00;	// Alpha
+			}
+			else if (worldMap[bgx/30][bgy/30] == 2)
+				bg.addr[pixel] = 0xFF;		// Blue
+			else if (worldMap[bgx/30][bgy/30] == 3)
+				bg.addr[pixel + 2] = 0xFF;	// Red
+			else if (worldMap[bgx/30][bgy/30] == 4)
+			{
+				bg.addr[pixel] = 0xFF;		// Blue
+				bg.addr[pixel + 2] = 0xFF;	// Red
+			}
+			bgx++;
 		}
-		x = vars->pos_x;
-		y++;
+		bgx = 0;
+		bgy++;
 	}
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img, 0, 0);
 
-	// int pos = (y * size_line + x * (bits_per_pixel / 8));
+	t_pixel player;
+	player.addr = mlx_get_data_addr(vars->img, &player.bits_per_pixel, &player.size_line, &player.endian);
+	int px = vars->pos_x;
+	int py = vars->pos_y;
+	while (py < (vars->pos_y + vars->pos_size))
+	{
+		while (px < (vars->pos_x + vars->pos_size))
+		{
+			int pixel = py * player.size_line + px * (player.bits_per_pixel / 8);
+			// player.addr[pixel] = 0x00;		// Blue
+			player.addr[pixel + 1] = 0xFF;	// Green
+			// player.addr[pixel + 2] = 0x00;	// Red
+			// player.addr[pixel + 3] = 0x00;	// Alpha
+			px++;
+		}
+		px = vars->pos_x;
+		py++;
+	}
+
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img, 0, 0);
 
 	// while (++vars->map_y * vars->map_size < screenHeight)
 	// {
@@ -94,12 +116,10 @@ void	init(t_vars	*vars)
 	vars->map_x = -1;
 	vars->map_y = -1;
 	vars->map_size = 24;
-	vars->img_size = 24;
-	vars->pos_size = 50;
-	vars->pos_x = 48;
-	vars->pos_y = 48;
-	vars->bg_img = mlx_xpm_file_to_image(vars->mlx, "background.xpm", &vars->img_size, &vars->img_size);
-	// vars->pos_img = mlx_xpm_file_to_image(vars->mlx, "dot.xpm", &vars->pos_size, &vars->pos_size);
+	vars->chunk_size = 24;
+	vars->pos_size = 12;
+	vars->pos_x = 300;
+	vars->pos_y = 240;
 }
 
 int	main(void)
