@@ -26,14 +26,15 @@
 
 void	draw_player(t_vars *vars)
 {
-	t_pixel player;
-	player.x = vars->pos_x;
-	player.y = vars->pos_y;
+	t_pixel	player;
+
+	player.x = vars->px;
+	player.y = vars->py;
 
 	player.addr = mlx_get_data_addr(vars->img, &player.bits_per_pixel, &player.size_line, &player.endian);
-	while (player.y < (vars->pos_y + vars->player_size))
+	while (player.y < (vars->py + vars->player_size))
 	{
-		while (player.x < (vars->pos_x + vars->player_size))
+		while (player.x < (vars->px + vars->player_size))
 		{
 			player.pos = player.y * player.size_line + player.x * (player.bits_per_pixel / 8);
 			player.addr[player.pos] = 0x00;		// Blue
@@ -42,14 +43,15 @@ void	draw_player(t_vars *vars)
 			player.addr[player.pos + 3] = 0x00;	// Alpha
 			player.x++;
 		}
-		player.x = vars->pos_x;
+		player.x = vars->px;
 		player.y++;
 	}
 }
 
 void	draw_bg(t_vars *vars)
 {
-	t_pixel bg;
+	t_pixel	bg;
+
 	bg.addr = mlx_get_data_addr(vars->img, &bg.bits_per_pixel, &bg.size_line, &bg.endian);
 	bg.x = -1;
 	bg.y = -1;
@@ -90,12 +92,28 @@ void	draw_bg(t_vars *vars)
 		bg.x = -1;
 	}
 }
+
+void	draw_line(t_vars *vars)
+{
+	t_pixel	line;
+
+	line.x = vars->px + 5;
+	line.y = vars->py + 5;
+	for(int i = 0; i < 10; i++)
+	{
+		mlx_pixel_put(vars->mlx, vars->win, line.x, line.y, 0xFFFF00);
+		line.x += vars->pdx;
+		line.y += vars->pdy;
+	}
+}
+
 void	print_img(t_vars *vars)
 {
 	vars->img = mlx_new_image(vars->mlx, screenWidth, screenHeight);
 	draw_bg(vars);
 	draw_player(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img, 0, 0);
+	draw_line(vars);
 	mlx_destroy_image(vars->mlx, vars->img);
 }
 
@@ -115,20 +133,34 @@ int	key_hook(int keycode, t_vars *vars)
 		mlx_destroy_window(vars->mlx, vars->win);
 		exit(0);
 	}
-	if (keycode == W && worldMap[(vars->pos_y - move)/100][vars->pos_x/100] == 0
-		&& worldMap[(vars->pos_y - move)/100][(vars->pos_x + vars->player_size - 1)/100] == 0)
-		vars->pos_y -= move;
-	if (keycode == A && worldMap[vars->pos_y/100][(vars->pos_x - move)/100] == 0
-		&& worldMap[(vars->pos_y + vars->player_size - 1)/100][(vars->pos_x - move)/100] == 0)
-		vars->pos_x -= move;
-	if (keycode == S && worldMap[(vars->pos_y + vars->player_size)/100][vars->pos_x/100] == 0
-		&& worldMap[(vars->pos_y + vars->player_size)/100][(vars->pos_x + vars->player_size - 1)/100] == 0)
-		vars->pos_y += move;
-	if (keycode == D && worldMap[vars->pos_y/100][(vars->pos_x + vars->player_size)/100] == 0
-		&& worldMap[(vars->pos_y + vars->player_size - 1)/100][(vars->pos_x + vars->player_size)/100] == 0)
-		vars->pos_x += move;
+	if (keycode == A)
+	{
+		vars->pa -= 0.1;
+		if (vars->pa < 0)
+			vars->pa += 2 * PI;
+		vars->pdx = cos(vars->pa) * 10;
+		vars->pdy = sin(vars->pa) * 10;
+	}
+	if (keycode == D)
+	{
+		vars->pa += 0.1;
+		if (vars->pa > 2 * PI)
+			vars->pa -= 2 * PI;
+		vars->pdx = cos(vars->pa) * 10;
+		vars->pdy = sin(vars->pa) * 10;
+	}
+	if (keycode == W)
+	{
+		vars->px += vars->pdx;
+		vars->py += vars->pdy;
+	}
+	if (keycode == S)
+	{
+		vars->px -= vars->pdx;
+		vars->py -= vars->pdy;
+	}
 	print_img(vars);
-	printf("player x:%d y:%d\n", vars->pos_x, vars->pos_y);
+	printf("player x:%f y:%f\n", vars->px, vars->py);
 	return (0);
 }
 
@@ -137,8 +169,11 @@ void	init(t_vars	*vars)
 	vars->mlx = mlx_init();
 	vars->win = mlx_new_window(vars->mlx, screenWidth, screenHeight, "Raycaster");
 	vars->player_size = 10;
-	vars->pos_x = 100;
-	vars->pos_y = 100;
+	vars->px = 100;
+	vars->py = 100;
+	vars->pdx = cos(vars->pa);
+	vars->pdy = sin(vars->pa);
+	vars->pa = 0;
 }
 
 int	main(void)

@@ -24,8 +24,8 @@ LIBFT		=	libft
 LIBFLAGS	=	-Llibft -lft
 # INC 		=	-lmlx -lGL -lX11 -lXext
 MLXFLAG		=	-I/usr/include -Imlx_linux -O3
-LNX_MLXFLAG	=	-Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
-# MAC_MLXFLAG =	-Lmlx -lmlx -framework OpenGL -framework AppKit
+# LNX_MLXFLAG	=	-Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+MAC_MLXFLAG =	-lmlx -framework OpenGL -framework AppKit
 SANITIZE	=	-fsanitize=address -g3
 
 INCLUDES	=	./includes
@@ -39,7 +39,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -s -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(LNX_MLXFLAG) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(MAC_MLXFLAG) -o $(NAME)
 	@echo "$(B_GREEN)Compiling $(C_END)"
 	@echo "$(C_GREEN)Makefile for minishell completed.$(C_END)"
 

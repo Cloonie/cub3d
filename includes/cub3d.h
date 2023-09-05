@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/04 20:13:19 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/05 15:07:52 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,19 @@
 # include <math.h>
 
 // key_hook keycodes for mac
-// # define ESC 53
-// # define W 13
-// # define A 0
-// # define S 1
-// # define D 2
+// defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# define ESC 53
+# define W 13
+# define A 0
+# define S 1
+# define D 2
 
 // key_hook keycodes for windows
-# define ESC 65307
-# define W 119
-# define A 97
-# define S 115
-# define D 100
+// # define ESC 65307
+// # define W 119
+// # define A 97
+// # define S 115
+// # define D 100
 
 #define chunkSize 100
 #define mapWidth 12
@@ -52,11 +53,11 @@ typedef struct s_vars
 {
 	void	*mlx;
 	void	*win;
-	int		pos_x;
-	int		pos_y;
-	char	*map;
-	int		map_x;
-	int		map_y;
+	float	px;
+	float	py;
+	float	pdx;
+	float	pdy;
+	float	pa;
 	int		player_size;
 	void	*img;
 }				t_vars;
