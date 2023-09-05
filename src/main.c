@@ -99,11 +99,27 @@ void	draw_line(t_vars *vars)
 
 	line.x = vars->px + 5;
 	line.y = vars->py + 5;
-	for(int i = 0; i < 10; i++)
+	for(int i = 0; i < screenHeight; i++)
 	{
-		mlx_pixel_put(vars->mlx, vars->win, line.x, line.y, 0xFFFF00);
+		mlx_pixel_put(vars->mlx, vars->win, line.x, line.y, 0x00FF00);
 		line.x += vars->pdx;
 		line.y += vars->pdy;
+	}
+	line.x = vars->px + 5;
+	line.y = vars->py + 5;
+	for(int i = 0; i < screenHeight; i++)
+	{
+		mlx_pixel_put(vars->mlx, vars->win, line.x, line.y, 0x00FF00);
+		line.x += vars->pdx - 5;
+		line.y += vars->pdy - 5;
+	}
+	line.x = vars->px + 5;
+	line.y = vars->py + 5;
+	for(int i = 0; i < screenHeight; i++)
+	{
+		mlx_pixel_put(vars->mlx, vars->win, line.x, line.y, 0x00FF00);
+		line.x += vars->pdx + 5;
+		line.y += vars->pdy + 5;
 	}
 }
 
