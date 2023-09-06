@@ -18,7 +18,7 @@ C_BLUE	=	\033[1;34m
 C_END 	=	\033[0m
 
 NAME		=	cub3d
-# CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror
 CC			=	gcc
 LIBFT		=	libft
 LIBFLAGS	=	-Llibft -lft
@@ -39,7 +39,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -s -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(MAC_MLXFLAG) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(LNX_MLXFLAG) $(MAC_MLXFLAG) -o $(NAME)
 	@echo "$(B_GREEN)Compiling $(C_END)"
 	@echo "$(C_GREEN)Makefile for minishell completed.$(C_END)"
 

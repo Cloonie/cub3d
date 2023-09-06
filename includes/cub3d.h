@@ -6,7 +6,7 @@
 /*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/05 15:07:52 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/06 13:57:16 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,25 @@
 // # define S 115
 // # define D 100
 
-#define chunkSize 100
-#define mapWidth 12
-#define mapHeight 6
-#define screenWidth mapWidth*chunkSize
-#define screenHeight mapHeight*chunkSize
+#define chunkSize 64
+#define mapX 7
+#define mapY 7
+#define screenWidth mapX*chunkSize
+#define screenHeight mapY*chunkSize
 #define PI 3.14159265359
+#define P2 PI/2
+#define P3 3*PI/2
 
-int worldMap[mapHeight][mapWidth]=
+
+int map[mapY][mapX]=
 {
-	{1,1,1,1,1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,1,0,0,0,0,3,0,2,0,1},
-	{1,0,0,0,1,0,0,0,0,0,0,1},
-	{1,0,0,0,1,0,0,0,0,0,0,1},
-	{1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1},
+	{1,0,0,0,0,0,1},
+	{1,0,0,0,0,0,1},
+	{1,0,0,1,0,0,1},
+	{1,1,0,0,0,1,1},
+	{1,0,0,0,0,0,1},
+	{1,1,1,1,1,1,1},
 };
 
 typedef struct s_vars
@@ -72,5 +76,19 @@ typedef struct s_pixel
 	int		x;
 	int		y;
 }				t_pixel;
+
+typedef struct s_ray
+{
+	int		r;
+	int		mx;
+	int		my;
+	int		mp;
+	int		dof;
+	float	rx;
+	float	ry;
+	float	ra;
+	float	xo;
+	float	yo;
+}				t_ray;
 
 #endif
