@@ -183,7 +183,6 @@ void	draw_rays(t_vars *vars)
 		{
 			ray.mx = (int)(ray.rx) >> 6;
 			ray.my = (int)(ray.ry) >> 6;
-			printf("debug\n");
 			if (ray.mx > 0 && ray.my > 0
 				&& ray.mx < mapX && ray.my < mapY
 				&& map[ray.my][ray.mx] == 1)
@@ -208,9 +207,9 @@ void	draw_rays(t_vars *vars)
 		float vy = vars->py;
 		ray.dof = 0;
 		float nTan = -tan(ray.ra);
-		if (ray.ra > P2 && ray.ra < P3) // looking left
+		if (ray.ra > P2 && ray.ra < P3) // looking left	
 		{
-			ray.rx = (((int)vars->py >> 6) << 6) - 0.0001;
+			ray.rx = (((int)vars->px >> 6) << 6) - 0.0001;
 			ray.ry = (vars->px - ray.rx) * nTan + vars->py;
 			ray.xo = -64;
 			ray.yo = -ray.xo * nTan;
