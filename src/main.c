@@ -183,8 +183,10 @@ void	draw_rays(t_vars *vars)
 		{
 			ray.mx = (int)(ray.rx) >> 6;
 			ray.my = (int)(ray.ry) >> 6;
-			ray.mp = 0;
-			if (ray.mx < mapX && ray.my < mapY && map[ray.my][ray.mx] == 1)
+			printf("debug\n");
+			if (ray.mx > 0 && ray.my > 0
+				&& ray.mx < mapX && ray.my < mapY
+				&& map[ray.my][ray.mx] == 1)
 			{
 				hx = ray.rx;
 				hy = ray.ry;
@@ -198,7 +200,7 @@ void	draw_rays(t_vars *vars)
 				ray.dof += 1;
 			}
 		}
-		// draw_line(vars, ray.rx, ray.ry, 0xFF0000);
+		// draw_line(vars, ray.rx, ray.ry, 0x0000FF);
 
 		// vertical lines
 		float disV = 1000000;
@@ -230,8 +232,9 @@ void	draw_rays(t_vars *vars)
 		{
 			ray.mx = (int)(ray.rx) >> 6;
 			ray.my = (int)(ray.ry) >> 6;
-			ray.mp = 0;
-			if (ray.mx < mapX && ray.my < mapY && map[ray.my][ray.mx] == 1)
+			if (ray.mx > 0 && ray.my > 0
+				&& ray.mx < mapX && ray.my < mapY
+				&& map[ray.my][ray.mx] == 1)
 			{
 				vx = ray.rx;
 				vy = ray.ry;
