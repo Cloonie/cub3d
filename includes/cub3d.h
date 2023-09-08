@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/08 19:01:32 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/08 22:47:21 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,23 @@
 # define S 115
 # define D 100
 
-# define chunkSize 64
+# define mapS 64
 # define mapX 7
 # define mapY 7
-# define screenWidth mapX*chunkSize
-# define screenHeight mapY*chunkSize
+# define screenWidth (mapX*mapS)+500
+# define screenHeight mapY*mapS
 # define PI 3.14159265359
 # define P2 PI/2
 # define P3 3*PI/2
 # define DR 0.0174533 // one degree in radians
 
-
-
 int map[mapY][mapX]=
 {
 	{1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,1},
-	{1,0,0,0,0,0,1},
-	{1,0,0,0,0,0,1},
-	{1,0,1,0,1,0,1},
+	{1,0,0,1,0,0,1},
+	{1,0,0,1,0,0,1},
+	{1,0,1,1,1,0,1},
 	{1,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1},
 };
@@ -91,6 +89,15 @@ typedef struct s_ray
 	float	ra; // ray angle
 	float	xo; // x offset
 	float	yo; // y offset
+	float	disH;
+	float	hx;
+	float	hy;
+	float	aTan;
+	float	disV;
+	float	vx;
+	float	vy;
+	float	nTan;
+	float	disT;
 }				t_ray;
 
 #endif

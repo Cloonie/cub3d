@@ -55,14 +55,14 @@ void	draw_bg(t_vars *vars)
 	bg.addr = mlx_get_data_addr(vars->img, &bg.bits_per_pixel, &bg.size_line, &bg.endian);
 	bg.x = -1;
 	bg.y = -1;
-	while (++bg.y < (mapY * chunkSize))
+	while (++bg.y < (mapY * mapS))
 	{
-		while (++bg.x < (mapX * chunkSize))
+		while (++bg.x < (mapX * mapS))
 		{
 			int pixel = bg.y * bg.size_line + bg.x * (bg.bits_per_pixel / 8);
-			int x = bg.x/chunkSize;
-			int y = bg.y/chunkSize;
-			if (bg.y % chunkSize == 0 || bg.x % chunkSize == 0)
+			int x = bg.x/mapS;
+			int y = bg.y/mapS;
+			if (bg.y % mapS == 0 || bg.x % mapS == 0)
 				;
 			else if (map[y][x] == 1)
 			{
@@ -108,10 +108,8 @@ void	draw_bg(t_vars *vars)
 // 	printf("pdx: %f, pdy :%f pa: %f\n", vars->pdx, vars->pdy, vars->pa);
 // }
 
-void draw_line(t_vars *vars, int x1, int y1, int colour)
+void draw_line(t_vars *vars, int x0, int y0, int x1, int y1, int colour)
 {
-	int x0 = (vars->px);
-	int y0 = (vars->py);
 	int dx = abs(x1 - x0);
 	int dy = abs(y1 - y0);
 	int sx = (x0 < x1) ? 1 : -1;
@@ -159,23 +157,23 @@ void	draw_rays(t_vars *vars)
 	{
 		// horizonal lines
 		ray.dof = 0;
-		float disH = 1000000;
-		float hx = vars->px;
-		float hy = vars->py;
-		float aTan = -1/tan(ray.ra);
+		ray.disH = 1000000;
+		ray.hx = vars->px;
+		ray.hy = vars->py;
+		ray.aTan = -1/tan(ray.ra);
 		if (ray.ra > PI) // looking up
 		{
 			ray.ry = (((int)vars->py >> 6) << 6) - 0.0001;
-			ray.rx = (vars->py - ray.ry) * aTan + vars->px;
+			ray.rx = (vars->py - ray.ry) * ray.aTan + vars->px;
 			ray.yo = -64;
-			ray.xo = -ray.yo * aTan;
+			ray.xo = -ray.yo * ray.aTan;
 		}
 		if (ray.ra < PI) // looking down
 		{
 			ray.ry = (((int)vars->py >> 6) << 6) + 64;
-			ray.rx = (vars->py - ray.ry) * aTan + vars->px;
+			ray.rx = (vars->py - ray.ry) * ray.aTan + vars->px;
 			ray.yo = 64;
-			ray.xo = -ray.yo * aTan;
+			ray.xo = -ray.yo * ray.aTan;
 		}
 		if (ray.ra == 0 || ray.ra == PI) // looking left or right
 		{
@@ -191,9 +189,9 @@ void	draw_rays(t_vars *vars)
 			if (ray.mp > 0 && ray.mx < mapX && ray.my < mapY
 				&& map[ray.my][ray.mx] == 1)
 			{
-				hx = ray.rx;
-				hy = ray.ry;
-				disH = dist(vars->px, vars->py, hx, hy, ray.ra);
+				ray.hx = ray.rx;
+				ray.hy = ray.ry;
+				ray.disH = dist(vars->px, vars->py, ray.hx, ray.hy, ray.ra);
 				ray.dof = 8;
 			}
 			else
@@ -207,23 +205,23 @@ void	draw_rays(t_vars *vars)
 
 		// vertical lines
 		ray.dof = 0;
-		float disV = 1000000;
-		float vx = vars->px;
-		float vy = vars->py;
-		float nTan = -tan(ray.ra);
-		if (ray.ra > P2 && ray.ra < P3) // looking left	
+		ray.disV = 1000000;
+		ray.vx = vars->px;
+		ray.vy = vars->py;
+		ray.nTan = -tan(ray.ra);
+		if (ray.ra > P2 && ray.ra < P3) // looking left
 		{
 			ray.rx = (((int)vars->px >> 6) << 6) - 0.0001;
-			ray.ry = (vars->px - ray.rx) * nTan + vars->py;
+			ray.ry = (vars->px - ray.rx) * ray.nTan + vars->py;
 			ray.xo = -64;
-			ray.yo = -ray.xo * nTan;
+			ray.yo = -ray.xo * ray.nTan;
 		}
 		if (ray.ra < P2 || ray.ra > P3) // looking right
 		{
 			ray.rx = (((int)vars->px >> 6) << 6) + 64;
-			ray.ry = (vars->px - ray.rx) * nTan + vars->py;
+			ray.ry = (vars->px - ray.rx) * ray.nTan + vars->py;
 			ray.xo = 64;
-			ray.yo = -ray.xo * nTan;
+			ray.yo = -ray.xo * ray.nTan;
 		}
 		if (ray.ra == 0 || ray.ra == PI) // looking up or down
 		{
@@ -239,9 +237,9 @@ void	draw_rays(t_vars *vars)
 			if (ray.mp > 0 && ray.mx < mapX && ray.my < mapY
 				&& map[ray.my][ray.mx] == 1)
 			{
-				vx = ray.rx;
-				vy = ray.ry;
-				disV = dist(vars->px, vars->py, vx, vy, ray.ra);
+				ray.vx = ray.rx;
+				ray.vy = ray.ry;
+				ray.disV = dist(vars->px, vars->py, ray.vx, ray.vy, ray.ra);
 				ray.dof = 8;
 			}
 			else
@@ -251,23 +249,38 @@ void	draw_rays(t_vars *vars)
 				ray.dof += 1;
 			}
 		}
-		if (disV < disH)
+		if (ray.disV < ray.disH)
 		{
-			ray.rx = vx;
-			ray.ry = vy;
+			ray.rx = ray.vx;
+			ray.ry = ray.vy;
+			ray.disT = ray.disV;
 		}
-		if (disH < disV)
+		if (ray.disH < ray.disV)
 		{
-			ray.rx = hx;
-			ray.ry = hy;
+			ray.rx = ray.hx;
+			ray.ry = ray.hy;
+			ray.disT = ray.disH;
 		}
-		printf("vertical rx: %f ry: %f\n", ray.rx, ray.ry);
-		draw_line(vars, ray.rx, ray.ry, 0xFF0000);
+		// printf("vertical rx: %f ry: %f\n", ray.rx, ray.ry);
+		draw_line(vars, vars->px, vars->py, ray.rx, ray.ry, 0xFF0000);
 		ray.ra += DR;
 		if (ray.ra < 0)
 			ray.ra += 2 * PI;
 		if (ray.ra > 2 * PI)
 			ray.ra -= 2 * PI;
+		
+		// draw 3d
+		float ca= vars->pa - ray.ra;
+		if (ca < 0)
+			ca += 2 * PI;
+		if (ca > 2 * PI)
+			ca -= 2 * PI;
+		ray.disT = ray.disT*cos(ca);
+		float lineH = (mapS*320)/ray.disT;
+		float lineO = 224-lineH/2;
+		if (lineH>320) {lineH = 320;}
+		for (int d = 0; d < 8; d++)
+			draw_line(vars, r*8+d+460, lineO, r*8+d+460, lineH+lineO, 0xFF0000);
 	}
 }
 
