@@ -150,14 +150,18 @@ void	draw_rays(t_vars *vars)
 {
 	t_ray	ray;
 
-	ray.ra = vars->pa;
-	for (int r = 0; r < 1; r++)
+	ray.ra = vars->pa - (DR * 30);
+	if (ray.ra < 0)
+		ray.ra += 2 * PI;
+	if (ray.ra > 2 * PI)
+		ray.ra -= 2 * PI;
+	for (int r = 0; r < 60; r++)
 	{
 		// horizonal lines
+		ray.dof = 0;
 		float disH = 1000000;
 		float hx = vars->px;
 		float hy = vars->py;
-		ray.dof = 0;
 		float aTan = -1/tan(ray.ra);
 		if (ray.ra > PI) // looking up
 		{
@@ -183,8 +187,8 @@ void	draw_rays(t_vars *vars)
 		{
 			ray.mx = (int)(ray.rx) >> 6;
 			ray.my = (int)(ray.ry) >> 6;
-			if (ray.mx > 0 && ray.my > 0
-				&& ray.mx < mapX && ray.my < mapY
+			ray.mp = ray.my * mapX + ray.mx;
+			if (ray.mp > 0 && ray.mx < mapX && ray.my < mapY
 				&& map[ray.my][ray.mx] == 1)
 			{
 				hx = ray.rx;
@@ -202,10 +206,10 @@ void	draw_rays(t_vars *vars)
 		// draw_line(vars, ray.rx, ray.ry, 0x0000FF);
 
 		// vertical lines
+		ray.dof = 0;
 		float disV = 1000000;
 		float vx = vars->px;
 		float vy = vars->py;
-		ray.dof = 0;
 		float nTan = -tan(ray.ra);
 		if (ray.ra > P2 && ray.ra < P3) // looking left	
 		{
@@ -216,7 +220,7 @@ void	draw_rays(t_vars *vars)
 		}
 		if (ray.ra < P2 || ray.ra > P3) // looking right
 		{
-			ray.rx = (((int)vars->py >> 6) << 6) + 64;
+			ray.rx = (((int)vars->px >> 6) << 6) + 64;
 			ray.ry = (vars->px - ray.rx) * nTan + vars->py;
 			ray.xo = 64;
 			ray.yo = -ray.xo * nTan;
@@ -231,8 +235,8 @@ void	draw_rays(t_vars *vars)
 		{
 			ray.mx = (int)(ray.rx) >> 6;
 			ray.my = (int)(ray.ry) >> 6;
-			if (ray.mx > 0 && ray.my > 0
-				&& ray.mx < mapX && ray.my < mapY
+			ray.mp = ray.my * mapX + ray.mx;
+			if (ray.mp > 0 && ray.mx < mapX && ray.my < mapY
 				&& map[ray.my][ray.mx] == 1)
 			{
 				vx = ray.rx;
@@ -259,6 +263,11 @@ void	draw_rays(t_vars *vars)
 		}
 		printf("vertical rx: %f ry: %f\n", ray.rx, ray.ry);
 		draw_line(vars, ray.rx, ray.ry, 0xFF0000);
+		ray.ra += DR;
+		if (ray.ra < 0)
+			ray.ra += 2 * PI;
+		if (ray.ra > 2 * PI)
+			ray.ra -= 2 * PI;
 	}
 }
 
