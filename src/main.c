@@ -234,20 +234,23 @@ void	draw_rays(t_vars *vars)
 				ray.dof += 1;
 			}
 		}
+		int colour;
 		if (ray.disV < ray.disH)
 		{
 			ray.rx = ray.vx;
 			ray.ry = ray.vy;
 			ray.disT = ray.disV;
+			colour = 0xFF0000;
 		}
 		if (ray.disH < ray.disV)
 		{
 			ray.rx = ray.hx;
 			ray.ry = ray.hy;
 			ray.disT = ray.disH;
+			colour = 0x990000;
 		}
 		// printf("vertical rx: %f ry: %f\n", ray.rx, ray.ry);
-		draw_line(vars, vars->px, vars->py, ray.rx, ray.ry, 0xFF0000);
+		draw_line(vars, vars->px, vars->py, ray.rx, ray.ry, colour);
 		
 		// draw 3d / rendering 3d
 		float ca = vars->pa - ray.ra;
@@ -261,7 +264,7 @@ void	draw_rays(t_vars *vars)
 			lineH = 320;
 		float lineO = 160-lineH/2;
 		for (int d = 0; d < 8; d++)
-			draw_line(vars, r*8+d+460, lineO, r*8+d+460, lineH+lineO, 0xFF0000);
+			draw_line(vars, r*8+d+(screenWidth/2)+16, lineO, r*8+d+(screenWidth/2)+16, lineH+lineO, colour);
 
 		// loop for each ray at next radian
 		ray.ra += DR;
