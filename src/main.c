@@ -93,21 +93,6 @@ void	draw_bg(t_vars *vars)
 	}
 }
 
-// void	draw_line(t_vars *vars, float dx, float dy, int colour)
-// {
-// 	t_pixel	line;
-
-// 	line.x = vars->px + vars->player_size / 2;
-// 	line.y = vars->py + vars->player_size / 2;
-// 	for (int i = 0; i < 5; i++)
-// 	{
-// 		mlx_pixel_put(vars->mlx, vars->win, line.x, line.y, colour);
-// 		line.x += dx;
-// 		line.y += dy;
-// 	}
-// 	printf("pdx: %f, pdy :%f pa: %f\n", vars->pdx, vars->pdy, vars->pa);
-// }
-
 void draw_line(t_vars *vars, int x0, int y0, int x1, int y1, int colour)
 {
 	int dx = abs(x1 - x0);
@@ -263,24 +248,27 @@ void	draw_rays(t_vars *vars)
 		}
 		// printf("vertical rx: %f ry: %f\n", ray.rx, ray.ry);
 		draw_line(vars, vars->px, vars->py, ray.rx, ray.ry, 0xFF0000);
-		ray.ra += DR;
-		if (ray.ra < 0)
-			ray.ra += 2 * PI;
-		if (ray.ra > 2 * PI)
-			ray.ra -= 2 * PI;
 		
-		// draw 3d
-		float ca= vars->pa - ray.ra;
+		// draw 3d / rendering 3d
+		float ca = vars->pa - ray.ra;
 		if (ca < 0)
 			ca += 2 * PI;
 		if (ca > 2 * PI)
 			ca -= 2 * PI;
 		ray.disT = ray.disT*cos(ca);
 		float lineH = (mapS*320)/ray.disT;
-		float lineO = 224-lineH/2;
-		if (lineH>320) {lineH = 320;}
+		if (lineH > 320)
+			lineH = 320;
+		float lineO = 160-lineH/2;
 		for (int d = 0; d < 8; d++)
 			draw_line(vars, r*8+d+460, lineO, r*8+d+460, lineH+lineO, 0xFF0000);
+
+		// loop for each ray at next radian
+		ray.ra += DR;
+		if (ray.ra < 0)
+			ray.ra += 2 * PI;
+		if (ray.ra > 2 * PI)
+			ray.ra -= 2 * PI;
 	}
 }
 
