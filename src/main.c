@@ -133,12 +133,15 @@ void	draw_rays(t_vars *vars)
 {
 	t_ray	ray;
 
+	// init angle facing straight back by 30 radians to get fov
 	ray.ra = vars->pa - (DR * 30);
 	if (ray.ra < 0)
 		ray.ra += 2 * PI;
 	if (ray.ra > 2 * PI)
 		ray.ra -= 2 * PI;
-	for (int r = 0; r < 60; r++)
+
+	// loop for each ray
+	for (int r = 0; r < 240; r++)
 	{
 		// horizonal lines
 		ray.dof = 0;
@@ -259,15 +262,15 @@ void	draw_rays(t_vars *vars)
 		if (ca > 2 * PI)
 			ca -= 2 * PI;
 		ray.disT = ray.disT*cos(ca);
-		float lineH = (mapS*320)/ray.disT;
-		if (lineH > 320)
-			lineH = 320;
-		float lineO = 160-lineH/2;
-		for (int d = 0; d < 8; d++)
-			draw_line(vars, r*8+d+(screenWidth/2)+16, lineO, r*8+d+(screenWidth/2)+16, lineH+lineO, colour);
+		float lineH = (mapS*440)/ray.disT;
+		if (lineH > 440)
+			lineH = 440;
+		float lineO = 240-lineH/2;
+		for (int d = 0; d < 2; d++)
+			draw_line(vars, r*2+d+(screenWidth/2)+16, lineO, r*2+d+(screenWidth/2)+16, lineH+lineO, colour);
 
 		// loop for each ray at next radian
-		ray.ra += DR;
+		ray.ra += DR/4;
 		if (ray.ra < 0)
 			ray.ra += 2 * PI;
 		if (ray.ra > 2 * PI)
