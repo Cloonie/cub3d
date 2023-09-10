@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/09 15:02:40 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/10 14:58:08 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,37 @@
 # include <stdio.h>
 # include <math.h>
 
-// key_hook keycodes for mac
+// unlock mac keyboard key hold down press //
 // defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+// key_hook keycodes for mac //
 // # define ESC 53
 // # define W 13
 // # define A 0
 // # define S 1
 // # define D 2
+// # define LEFT 123
+// # define RIGHT 124
 
-// key_hook keycodes for windows
+// key_hook keycodes for windows //
 # define ESC 65307
 # define W 119
 # define A 97
 # define S 115
 # define D 100
+# define LEFT 65361
+# define RIGHT 65363
 
+// variables
 # define mapS 64
 # define mapX 8
 # define mapY 8
-# define screenWidth (mapX*mapS)*2
-# define screenHeight mapY*mapS
+# define screenWidth (mapX*mapS)*3
+# define screenHeight (mapY*mapS)*1.5
 # define PI 3.14159265359
-# define P2 PI/2
-# define P3 3*PI/2
-# define DR 0.0174533 // one degree in radians
+# define P2 PI/2		// 90 degrees
+# define P3 3*PI/2		// 270 degrees
+# define DR 0.0174533	// one degree in radians
 
 int map[mapY][mapX]=
 {
@@ -78,27 +85,45 @@ typedef struct s_pixel
 	int		y;
 }				t_pixel;
 
+typedef struct s_line
+{
+	int	x0;
+	int	y0;
+	int	x1;
+	int	y1;
+	int	colour;
+	int	dx;
+	int	dy;
+	int	sx;
+	int	sy;
+	int	err;
+	int	err2;
+}				t_line;
+
 typedef struct s_ray
 {
-	int		r; // ray count
-	int		mx; // map x
-	int		my; // map y
-	int		mp; // map point
-	int		dof; // depth of field
-	float	rx; // ray x
-	float	ry; // ray y
-	float	ra; // ray angle
-	float	xo; // x offset
-	float	yo; // y offset
-	float	disH;
+	int		r;
+	int		mx;
+	int		my;
+	int		mp;
+	int		dof;
+	float	rx;
+	float	ry;
+	float	ra;
+	float	xo;
+	float	yo;
+
+	float	hdis;
 	float	hx;
 	float	hy;
-	float	aTan;
-	float	disV;
+	float	a_tan;
+
+	float	vdis;
 	float	vx;
 	float	vy;
-	float	nTan;
-	float	disT;
+	float	n_tan;
+
+	float	tdis;
 }				t_ray;
 
 #endif

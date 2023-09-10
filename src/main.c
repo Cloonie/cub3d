@@ -37,10 +37,9 @@ void	draw_player(t_vars *vars)
 		while (player.x < (vars->px + (vars->player_size/2)))
 		{
 			player.pos = player.y * player.size_line + player.x * (player.bits_per_pixel / 8);
-			player.addr[player.pos] = 0x00;		// Blue
-			player.addr[player.pos + 1] = 0xFF;	// Green
-			player.addr[player.pos + 2] = 0x00;	// Red
-			player.addr[player.pos + 3] = 0x00;	// Alpha
+			player.addr[player.pos] = 0x00;
+			player.addr[player.pos + 1] = 0xFF;
+			player.addr[player.pos + 2] = 0x00;
 			player.x++;
 		}
 		player.x = vars->px - (vars->player_size/2);
@@ -66,27 +65,27 @@ void	draw_bg(t_vars *vars)
 				;
 			else if (map[y][x] == 1)
 			{
-				bg.addr[pixel] = 0xFF;		// Blue
-				bg.addr[pixel + 1] = 0xFF;	// Green
-				bg.addr[pixel + 2] = 0xFF;	// Red
+				bg.addr[pixel] = 0xFF;
+				bg.addr[pixel + 1] = 0xFF;
+				bg.addr[pixel + 2] = 0xFF;
 			}
 			else if (map[y][x] == 2)
 			{
-				bg.addr[pixel] = 0xFF;		// Blue
-				bg.addr[pixel + 1] = 0x00;	// Green
-				bg.addr[pixel + 2] = 0x00;	// Red
+				bg.addr[pixel] = 0xFF;
+				bg.addr[pixel + 1] = 0x00;
+				bg.addr[pixel + 2] = 0x00;
 			}
 			else if (map[y][x] == 3)
 			{
-				bg.addr[pixel] = 0x00;		// Blue
-				bg.addr[pixel + 1] = 0x00;	// Green
-				bg.addr[pixel + 2] = 0xFF;	// Red
+				bg.addr[pixel] = 0x00;
+				bg.addr[pixel + 1] = 0x00;
+				bg.addr[pixel + 2] = 0xFF;
 			}
 			else
 			{
-				bg.addr[pixel] = 0x50;		// Blue
-				bg.addr[pixel + 1] = 0x50;	// Green
-				bg.addr[pixel + 2] = 0x50;	// Red
+				bg.addr[pixel] = 0x50;
+				bg.addr[pixel + 1] = 0x50;
+				bg.addr[pixel + 2] = 0x50;
 			}
 		}
 		bg.x = -1;
@@ -95,37 +94,38 @@ void	draw_bg(t_vars *vars)
 
 void draw_line(t_vars *vars, int x0, int y0, int x1, int y1, int colour)
 {
-	int dx = abs(x1 - x0);
-	int dy = abs(y1 - y0);
-	int sx = (x0 < x1) ? 1 : -1;
-	int sy = (y0 < y1) ? 1 : -1;
-	int err = dx - dy;
-	int err2;
+	t_line	line;
 
+	line.x0 = x0;
+	line.y0 = y0;
+	line.x1 = x1;
+	line.y1 = y1;
+	line.dx = abs(x1 - x0);
+	line.dy = abs(y1 - y0);
+	line.sx = (x0 < x1) ? 1 : -1;
+	line.sy = (y0 < y1) ? 1 : -1;
+	line.err = line.dx - line.dy;
 	while (1)
 	{
-		mlx_pixel_put(vars->mlx, vars->win, x0, y0, colour);
-
-		if (x0 == x1 && y0 == y1)
+		mlx_pixel_put(vars->mlx, vars->win, line.x0, line.y0, colour);
+		if (line.x0 == line.x1 && line.y0 == line.y1)
 			break ;
-
-		err2 = 2 * err;
-		if (err2 > -dy)
+		line.err2 = 2 * line.err;
+		if (line.err2 > -line.dy)
 		{
-			err -= dy;
-			x0 += sx;
+			line.err -= line.dy;
+			line.x0 += line.sx;
 		}
-		if (err2 < dx)
+		if (line.err2 < line.dx)
 		{
-			err += dx;
-			y0 += sy;
+			line.err += line.dx;
+			line.y0 += line.sy;
 		}
 	}
 }
 
-float	dist(float ax, float ay, float bx, float by, float ang)
+float	dist(float ax, float ay, float bx, float by)
 {
-	(void)ang;
 	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
 
@@ -133,7 +133,6 @@ void	draw_rays(t_vars *vars)
 {
 	t_ray	ray;
 
-	// init angle facing straight back by 30 radians to get fov
 	ray.ra = vars->pa - (DR * 30);
 	if (ray.ra < 0)
 		ray.ra += 2 * PI;
@@ -141,27 +140,28 @@ void	draw_rays(t_vars *vars)
 		ray.ra -= 2 * PI;
 
 	// loop for each ray
-	for (int r = 0; r < 240; r++)
+	ray.r = -1;
+	while (++ray.r < 360)
 	{
 		// horizonal lines
 		ray.dof = 0;
-		ray.disH = 1000000;
+		ray.hdis = 1000000;
 		ray.hx = vars->px;
 		ray.hy = vars->py;
-		ray.aTan = -1/tan(ray.ra);
+		ray.a_tan = -1 / tan(ray.ra);
 		if (ray.ra > PI) // looking up
 		{
 			ray.ry = (((int)vars->py >> 6) << 6) - 0.0001;
-			ray.rx = (vars->py - ray.ry) * ray.aTan + vars->px;
+			ray.rx = (vars->py - ray.ry) * ray.a_tan + vars->px;
 			ray.yo = -64;
-			ray.xo = -ray.yo * ray.aTan;
+			ray.xo = -ray.yo * ray.a_tan;
 		}
 		if (ray.ra < PI) // looking down
 		{
 			ray.ry = (((int)vars->py >> 6) << 6) + 64;
-			ray.rx = (vars->py - ray.ry) * ray.aTan + vars->px;
+			ray.rx = (vars->py - ray.ry) * ray.a_tan + vars->px;
 			ray.yo = 64;
-			ray.xo = -ray.yo * ray.aTan;
+			ray.xo = -ray.yo * ray.a_tan;
 		}
 		if (ray.ra == 0 || ray.ra == PI) // looking left or right
 		{
@@ -179,7 +179,7 @@ void	draw_rays(t_vars *vars)
 			{
 				ray.hx = ray.rx;
 				ray.hy = ray.ry;
-				ray.disH = dist(vars->px, vars->py, ray.hx, ray.hy, ray.ra);
+				ray.hdis = dist(vars->px, vars->py, ray.hx, ray.hy);
 				ray.dof = 8;
 			}
 			else
@@ -193,23 +193,23 @@ void	draw_rays(t_vars *vars)
 
 		// vertical lines
 		ray.dof = 0;
-		ray.disV = 1000000;
+		ray.vdis = 1000000;
 		ray.vx = vars->px;
 		ray.vy = vars->py;
-		ray.nTan = -tan(ray.ra);
+		ray.n_tan = -tan(ray.ra);
 		if (ray.ra > P2 && ray.ra < P3) // looking left
 		{
 			ray.rx = (((int)vars->px >> 6) << 6) - 0.0001;
-			ray.ry = (vars->px - ray.rx) * ray.nTan + vars->py;
+			ray.ry = (vars->px - ray.rx) * ray.n_tan + vars->py;
 			ray.xo = -64;
-			ray.yo = -ray.xo * ray.nTan;
+			ray.yo = -ray.xo * ray.n_tan;
 		}
 		if (ray.ra < P2 || ray.ra > P3) // looking right
 		{
 			ray.rx = (((int)vars->px >> 6) << 6) + 64;
-			ray.ry = (vars->px - ray.rx) * ray.nTan + vars->py;
+			ray.ry = (vars->px - ray.rx) * ray.n_tan + vars->py;
 			ray.xo = 64;
-			ray.yo = -ray.xo * ray.nTan;
+			ray.yo = -ray.xo * ray.n_tan;
 		}
 		if (ray.ra == 0 || ray.ra == PI) // looking up or down
 		{
@@ -227,7 +227,7 @@ void	draw_rays(t_vars *vars)
 			{
 				ray.vx = ray.rx;
 				ray.vy = ray.ry;
-				ray.disV = dist(vars->px, vars->py, ray.vx, ray.vy, ray.ra);
+				ray.vdis = dist(vars->px, vars->py, ray.vx, ray.vy);
 				ray.dof = 8;
 			}
 			else
@@ -238,39 +238,39 @@ void	draw_rays(t_vars *vars)
 			}
 		}
 		int colour;
-		if (ray.disV < ray.disH)
+		if (ray.vdis < ray.hdis)
 		{
 			ray.rx = ray.vx;
 			ray.ry = ray.vy;
-			ray.disT = ray.disV;
+			ray.tdis = ray.vdis;
 			colour = 0xFF0000;
 		}
-		if (ray.disH < ray.disV)
+		if (ray.hdis < ray.vdis)
 		{
 			ray.rx = ray.hx;
 			ray.ry = ray.hy;
-			ray.disT = ray.disH;
+			ray.tdis = ray.hdis;
 			colour = 0x990000;
 		}
 		// printf("vertical rx: %f ry: %f\n", ray.rx, ray.ry);
 		draw_line(vars, vars->px, vars->py, ray.rx, ray.ry, colour);
-		
+
 		// draw 3d / rendering 3d
 		float ca = vars->pa - ray.ra;
 		if (ca < 0)
 			ca += 2 * PI;
 		if (ca > 2 * PI)
 			ca -= 2 * PI;
-		ray.disT = ray.disT*cos(ca);
-		float lineH = (mapS*440)/ray.disT;
-		if (lineH > 440)
-			lineH = 440;
-		float lineO = 240-lineH/2;
+		ray.tdis = ray.tdis * cos(ca);
+		float lineH = (mapS * 700) / ray.tdis;
+		if (lineH > 700)
+			lineH = 700;
+		float lineO = 350 - lineH / 2;
 		for (int d = 0; d < 2; d++)
-			draw_line(vars, r*2+d+(screenWidth/2)+16, lineO, r*2+d+(screenWidth/2)+16, lineH+lineO, colour);
+			draw_line(vars, ray.r*2+d+(mapY*mapS)+16, lineO, ray.r*2+d+(mapY*mapS)+16, lineH+lineO, colour);
 
 		// loop for each ray at next radian
-		ray.ra += DR/4;
+		ray.ra += DR / 6;
 		if (ray.ra < 0)
 			ray.ra += 2 * PI;
 		if (ray.ra > 2 * PI)
@@ -299,7 +299,7 @@ int	key_hook(int keycode, t_vars *vars)
 		mlx_destroy_window(vars->mlx, vars->win);
 		exit(0);
 	}
-	if (keycode == A)
+	if (keycode == LEFT)
 	{
 		if (vars->pa < 0)
 			vars->pa += 2 * PI;
@@ -307,7 +307,7 @@ int	key_hook(int keycode, t_vars *vars)
 		vars->pdx = cos(vars->pa) * 10;
 		vars->pdy = sin(vars->pa) * 10;
 	}
-	if (keycode == D)
+	if (keycode == RIGHT)
 	{
 		if (vars->pa > (2 * PI))
 			vars->pa -= 2 * PI;
@@ -325,10 +325,20 @@ int	key_hook(int keycode, t_vars *vars)
 		vars->px -= vars->pdx;
 		vars->py -= vars->pdy;
 	}
+	if (keycode == A)
+	{
+		vars->px += cos(vars->pa - (PI / 2.0)) * 10;
+		vars->py += sin(vars->pa - (PI / 2.0)) * 10;
+	}
+	if (keycode == D)
+	{
+		vars->px += cos(vars->pa + (PI / 2.0)) * 10;
+		vars->py += sin(vars->pa + (PI / 2.0)) * 10;
+	}
 	print_img(vars);
 	// printf("player x:%f y:%f\n", vars->px, vars->py);
 	return (0);
-}
+	}
 
 void	init(t_vars	*vars)
 {
@@ -342,6 +352,13 @@ void	init(t_vars	*vars)
 	vars->pdy = sin(vars->pa) * 10;
 }
 
+int	window_close(t_vars *vars)
+{
+	(void)vars;
+	printf("window close\n");
+	exit(0);
+}
+
 int	main(void)
 {
 	t_vars	vars;
@@ -349,6 +366,7 @@ int	main(void)
 	init(&vars);
 	print_img(&vars);
 	mlx_key_hook(vars.win, key_hook, &vars);
+	mlx_hook(vars.win, 17, 0, window_close, &vars);
 	mlx_loop(vars.mlx);
 }
 

@@ -3,10 +3,10 @@ Copyright (c) 2004-2019, Lode Vandevenne
 
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+Retdisribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+    * Retdisributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    * Retdisributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the tdisribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -132,13 +132,13 @@ int main(int /*argc*/, char */*argv*/[])
       int mapY = int(posY);
 
       //length of ray from current position to next x or y-side
-      double sideDistX;
-      double sideDistY;
+      double sidetdisX;
+      double sidetdisY;
 
       //length of ray from one x or y-side to next x or y-side
-      double deltaDistX = (rayDirX == 0) ? 1e30 : std::abs(1 / rayDirX);
-      double deltaDistY = (rayDirY == 0) ? 1e30 : std::abs(1 / rayDirY);
-      double perpWallDist;
+      double deltatdisX = (rayDirX == 0) ? 1e30 : std::abs(1 / rayDirX);
+      double deltatdisY = (rayDirY == 0) ? 1e30 : std::abs(1 / rayDirY);
+      double perpWalltdis;
 
       //what direction to step in x or y-direction (either +1 or -1)
       int stepX;
@@ -147,40 +147,40 @@ int main(int /*argc*/, char */*argv*/[])
       int hit = 0; //was there a wall hit?
       int side; //was a NS or a EW wall hit?
 
-      //calculate step and initial sideDist
+      //calculate step and initial sidetdis
       if(rayDirX < 0)
       {
         stepX = -1;
-        sideDistX = (posX - mapX) * deltaDistX;
+        sidetdisX = (posX - mapX) * deltatdisX;
       }
       else
       {
         stepX = 1;
-        sideDistX = (mapX + 1.0 - posX) * deltaDistX;
+        sidetdisX = (mapX + 1.0 - posX) * deltatdisX;
       }
       if(rayDirY < 0)
       {
         stepY = -1;
-        sideDistY = (posY - mapY) * deltaDistY;
+        sidetdisY = (posY - mapY) * deltatdisY;
       }
       else
       {
         stepY = 1;
-        sideDistY = (mapY + 1.0 - posY) * deltaDistY;
+        sidetdisY = (mapY + 1.0 - posY) * deltatdisY;
       }
       //perform DDA
       while (hit == 0)
       {
         //jump to next map square, either in x-direction, or in y-direction
-        if(sideDistX < sideDistY)
+        if(sidetdisX < sidetdisY)
         {
-          sideDistX += deltaDistX;
+          sidetdisX += deltatdisX;
           mapX += stepX;
           side = 0;
         }
         else
         {
-          sideDistY += deltaDistY;
+          sidetdisY += deltatdisY;
           mapY += stepY;
           side = 1;
         }
@@ -188,12 +188,12 @@ int main(int /*argc*/, char */*argv*/[])
         if(map[mapX][mapY] > 0) hit = 1;
       }
 
-      //Calculate distance of perpendicular ray (Euclidean distance would give fisheye effect!)
-      if(side == 0) perpWallDist = (sideDistX - deltaDistX);
-      else          perpWallDist = (sideDistY - deltaDistY);
+      //Calculate tdisance of perpendicular ray (Euclidean tdisance would give fisheye effect!)
+      if(side == 0) perpWalltdis = (sidetdisX - deltatdisX);
+      else          perpWalltdis = (sidetdisY - deltatdisY);
 
       //Calculate height of line to draw on screen
-      int lineHeight = (int)(h / perpWallDist);
+      int lineHeight = (int)(h / perpWalltdis);
 
 
       int pitch = 100;
@@ -209,8 +209,8 @@ int main(int /*argc*/, char */*argv*/[])
 
       //calculate value of wallX
       double wallX; //where exactly the wall was hit
-      if(side == 0) wallX = posY + perpWallDist * rayDirY;
-      else          wallX = posX + perpWallDist * rayDirX;
+      if(side == 0) wallX = posY + perpWalltdis * rayDirY;
+      else          wallX = posX + perpWalltdis * rayDirX;
       wallX -= floor((wallX));
 
       //x coordinate on the texture
