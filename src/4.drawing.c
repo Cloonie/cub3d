@@ -152,9 +152,15 @@ t_line	set_line(int x0, int y0, int x1, int y1)
 */
 void	draw_line(t_vars *vars, t_line *line, int colour)
 {
+	t_pixel	pixel;
+
+	pixel.addr = mlx_get_data_addr(vars->img, &pixel.bits_per_pixel,
+			&pixel.size_line, &pixel.endian);
 	while (1)
 	{
-		mlx_pixel_put(vars->mlx, vars->win, line->curr_x, line->curr_y, colour);
+		pixel.x = line->curr_x;
+		pixel.y = line->curr_y;
+		set_colour(&pixel, colour);
 		if (line->curr_x == line->x1 && line->curr_y == line->y1)
 			break ;
 		line->err2 = 2 * line->err;

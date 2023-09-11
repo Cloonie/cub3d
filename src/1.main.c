@@ -205,8 +205,8 @@ void	put_whole_image(t_vars *vars)
 	vars->img = mlx_new_image(vars->mlx, screenWidth, screenHeight);
 	draw_bg(vars);
 	draw_player(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->img, 0, 0);
 	draw_rays(vars);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->img, 0, 0);
 	mlx_destroy_image(vars->mlx, vars->img);
 }
 
