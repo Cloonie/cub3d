@@ -18,7 +18,7 @@ C_BLUE	=	\033[1;34m
 C_END 	=	\033[0m
 
 NAME		=	cub3d
-# CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror
 CC			=	gcc
 LIBFT		=	libft
 LIBFLAGS	=	-Llibft -lft

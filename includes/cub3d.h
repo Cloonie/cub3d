@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/10 14:58:08 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/11 18:12:06 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
+# include <limits.h>
 
 // unlock mac keyboard key hold down press //
 // defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
@@ -49,7 +50,7 @@
 # define P3 3*PI/2		// 270 degrees
 # define DR 0.0174533	// one degree in radians
 
-int map[mapY][mapX]=
+static int map[mapY][mapX]=
 {
 	{1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,1},
@@ -60,6 +61,17 @@ int map[mapY][mapX]=
 	{1,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1},
 };
+
+typedef struct s_config
+{
+	char	north_texture[999];
+	char	south_texture[999];
+	char	west_texture[999];
+	char	east_texture[999];
+	int		floor_color[3];
+	int		ceiling_color[3];
+	int		map[mapX][mapY];
+}				t_config;
 
 typedef struct s_vars
 {
@@ -83,6 +95,10 @@ typedef struct s_pixel
 	int		endian;
 	int		x;
 	int		y;
+	int		red;
+	int		green;
+	int		blue;
+	int		alpha;
 }				t_pixel;
 
 typedef struct s_line
@@ -91,6 +107,8 @@ typedef struct s_line
 	int	y0;
 	int	x1;
 	int	y1;
+	int	curr_x;
+	int	curr_y;
 	int	colour;
 	int	dx;
 	int	dy;
@@ -124,6 +142,12 @@ typedef struct s_ray
 	float	n_tan;
 
 	float	tdis;
+	int		colour;
 }				t_ray;
 
+void	set_colour(t_pixel *pixel, int color);
+void	draw_player(t_vars *vars);
+void	draw_bg(t_vars *vars);
+t_line	set_line(int x0, int y0, int x1, int y1);
+void	draw_line(t_vars *vars, t_line *line, int colour);
 #endif
