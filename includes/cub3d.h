@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/11 18:12:06 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/11 19:36:09 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,30 @@ typedef struct s_ray
 	int		colour;
 }				t_ray;
 
+// init.c
+
+void	start_init(t_vars	*vars, t_config *config);
+void	put_whole_image(t_vars *vars);
+
+// movement.c
+
+int		key_hook(int keycode, t_vars *vars);
+
+// drawing.c
+
 void	set_colour(t_pixel *pixel, int color);
 void	draw_player(t_vars *vars);
 void	draw_bg(t_vars *vars);
 t_line	set_line(int x0, int y0, int x1, int y1);
 void	draw_line(t_vars *vars, t_line *line, int colour);
+
+// raycasting.c
+
+void	draw_rays(t_vars *vars);
+
+// utils.c
+
+int		window_close(t_vars *vars);
+float	dist(float ax, float ay, float bx, float by);
+
 #endif
