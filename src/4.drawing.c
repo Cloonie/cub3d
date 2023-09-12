@@ -28,19 +28,14 @@
 	addr[pos + 2] = 0x99;	Red
 	addr[pos + 3] = 0xFF;	Alpha / Transparency
 */
-void	set_colour(t_pixel *pixel, int color)
+void	set_colour(t_pixel *pixel, int red, int green, int blue)
 {
-	pixel->alpha = (color >> 24) & 0xFF;
-	pixel->red = (color >> 16) & 0xFF;
-	pixel->green = (color >> 8) & 0xFF;
-	pixel->blue = color & 0xFF;
-
 	pixel->pos = pixel->y * pixel->size_line + pixel->x
 		* (pixel->bits_per_pixel / 8);
-	pixel->addr[pixel->pos] = pixel->blue;
-	pixel->addr[pixel->pos + 1] = pixel->green;
-	pixel->addr[pixel->pos + 2] = pixel->red;
-	pixel->addr[pixel->pos + 3] = pixel->alpha;
+	pixel->addr[pixel->pos] = blue;
+	pixel->addr[pixel->pos + 1] = green;
+	pixel->addr[pixel->pos + 2] = red;
+	// pixel->addr[pixel->pos + 3] = 255;
 }
 
 /*
@@ -58,7 +53,7 @@ void	draw_player(t_vars *vars)
 	{
 		while (player.x < (vars->px + (vars->player_size / 2)))
 		{
-			set_colour(&player, 0x0000FF00);
+			set_colour(&player, 0, 255, 0);
 			player.x++;
 		}
 		player.x = vars->px - (vars->player_size / 2);
@@ -82,11 +77,11 @@ void	draw_bg(t_vars *vars)
 		while (++bg.x < (mapX * mapS))
 		{
 			if (bg.y % mapS == 0 || bg.x % mapS == 0)
-				set_colour(&bg, 0x00999999);
+				set_colour(&bg, 15, 15, 15);
 			else if (map[bg.y / mapS][bg.x / mapS] == 1)
-				set_colour(&bg, 0x00FFFFFF);
+				set_colour(&bg, 255, 255, 255);
 			else
-				set_colour(&bg, 0x00505050);
+				set_colour(&bg, 127, 127, 127);
 		}
 		bg.x = -1;
 	}
@@ -150,7 +145,7 @@ t_line	set_line(int x0, int y0, int x1, int y1)
 	taking into account the step size and decision parameter.
 	It is widely used in computer graphics due to its simplicity and efficiency.
 */
-void	draw_line(t_vars *vars, t_line *line, int colour)
+void	draw_line(t_vars *vars, t_line *line)
 {
 	t_pixel	pixel;
 
@@ -160,7 +155,7 @@ void	draw_line(t_vars *vars, t_line *line, int colour)
 	{
 		pixel.x = line->curr_x;
 		pixel.y = line->curr_y;
-		set_colour(&pixel, colour);
+		set_colour(&pixel, line->red, line->green, line->blue);
 		if (line->curr_x == line->x1 && line->curr_y == line->y1)
 			break ;
 		line->err2 = 2 * line->err;

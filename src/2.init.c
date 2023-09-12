@@ -15,7 +15,7 @@
 /*
 	Initialize variables required for the start of program.
 */
-void	start_init(t_vars	*vars, t_mapdata *data)
+void	start_init(t_vars	*vars)
 {
 	vars->mlx = mlx_init();
 	vars->win = mlx_new_window(vars->mlx, screenWidth, screenHeight, "cub3d");
@@ -26,7 +26,6 @@ void	start_init(t_vars	*vars, t_mapdata *data)
 	// vars->pa = PI/2; // S
 	// vars->pa = 0; // E
 	// vars->pa = PI; // W
-	(void)data;
 }
 
 /*

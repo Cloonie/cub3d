@@ -33,7 +33,6 @@ void	init_rays(t_ray *ray)
 	// ray->vy = 0;
 	// ray->n_tan = 0;
 	ray->tdis = 0;
-	ray->colour = 0x000000;
 }
 
 void	draw_rays(t_vars *vars)
@@ -151,18 +150,22 @@ void	draw_rays(t_vars *vars)
 			ray.rx = ray.vx;
 			ray.ry = ray.vy;
 			ray.tdis = ray.vdis;
-			ray.colour = 0x00FF0000;
+			line.red = 255;
+			line.green = 0;
+			line.blue = 0;
 		}
 		if (ray.hdis < ray.vdis)
 		{
 			ray.rx = ray.hx;
 			ray.ry = ray.hy;
 			ray.tdis = ray.hdis;
-			ray.colour = 0x00990000;
+			line.red = 254;
+			line.green = 0;
+			line.blue = 0;
 		}
 		// printf("vertical rx: %f ry: %f\n", ray.rx, ray.ry);
 		line = set_line(vars->px, vars->py, ray.rx, ray.ry);
-		draw_line(vars, &line, ray.colour);
+		draw_line(vars, &line);
 
 		// draw 3d / rendering 3d
 		float ca = vars->pa - ray.ra;
@@ -177,15 +180,23 @@ void	draw_rays(t_vars *vars)
 		float lineO = 350 - lineH / 2;
 		for (int d = 0; d < 2; d++)
 		{
-			// ceiling
-			line = set_line(ray.r*2+d+(mapY*mapS)+16, 0, ray.r*2+d+(mapY*mapS)+16, lineO);
-			draw_line(vars, &line, 0x0087CEEB);
 			// walls
 			line = set_line(ray.r*2+d+(mapY*mapS)+16, lineO, ray.r*2+d+(mapY*mapS)+16, lineH+lineO);
-			draw_line(vars, &line, ray.colour);
+			draw_line(vars, &line);
+
+			// ceiling
+			line = set_line(ray.r*2+d+(mapY*mapS)+16, 0, ray.r*2+d+(mapY*mapS)+16, lineO);
+			line.red = vars->mapdata.ceiling_color[0];
+			line.green = vars->mapdata.ceiling_color[1];
+			line.blue = vars->mapdata.ceiling_color[2];
+			draw_line(vars, &line);
+
 			// floor
 			line = set_line(ray.r*2+d+(mapY*mapS)+16, lineH+lineO, ray.r*2+d+(mapY*mapS)+16, lineH+lineO+lineO);
-			draw_line(vars, &line, 0x00F5F5DC);
+			line.red = vars->mapdata.floor_color[0];
+			line.green = vars->mapdata.floor_color[1];
+			line.blue = vars->mapdata.floor_color[2];
+			draw_line(vars, &line);
 		}
 
 		// loop for each ray at next radian

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
+/*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/12 19:11:09 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/13 02:01:39 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct s_vars
 	float	pa;
 	int		player_size;
 	void	*img;
+	t_mapdata	mapdata;
 }				t_vars;
 
 typedef struct s_pixel
@@ -109,10 +110,6 @@ typedef struct s_pixel
 	int		endian;
 	int		x;
 	int		y;
-	int		red;
-	int		green;
-	int		blue;
-	int		alpha;
 }				t_pixel;
 
 typedef struct s_line
@@ -130,6 +127,9 @@ typedef struct s_line
 	int	sy;
 	int	err;
 	int	err2;
+	int	red;
+	int	green;
+	int	blue;
 }				t_line;
 
 typedef struct s_ray
@@ -156,12 +156,11 @@ typedef struct s_ray
 	float	n_tan;
 
 	float	tdis;
-	int		colour;
 }				t_ray;
 
 // init.c
 
-void	start_init(t_vars	*vars, t_mapdata *config);
+void	start_init(t_vars	*vars);
 void	put_whole_image(t_vars *vars);
 
 // movement.c
@@ -174,11 +173,11 @@ void	open_map_file(t_mapdata *mapdata);
 
 // drawing.c
 
-void	set_colour(t_pixel *pixel, int color);
+void	set_colour(t_pixel *pixel, int red, int green, int blue);
 void	draw_player(t_vars *vars);
 void	draw_bg(t_vars *vars);
 t_line	set_line(int x0, int y0, int x1, int y1);
-void	draw_line(t_vars *vars, t_line *line, int colour);
+void	draw_line(t_vars *vars, t_line *line);
 
 // raycasting.c
 
