@@ -15,18 +15,18 @@
 /*
 	Initialize variables required for the start of program.
 */
-void	start_init(t_vars	*vars, t_config *config)
+void	start_init(t_vars	*vars, t_mapdata *data)
 {
 	vars->mlx = mlx_init();
 	vars->win = mlx_new_window(vars->mlx, screenWidth, screenHeight, "cub3d");
 	vars->player_size = 10;
-	vars->px = 100;
-	vars->py = 100;
-	// vars->pa = P3; // N
+	vars->px = 64+32;
+	vars->py = (6*64)+32;
+	vars->pa = P3; // N
 	// vars->pa = PI/2; // S
-	vars->pa = 0; // E
+	// vars->pa = 0; // E
 	// vars->pa = PI; // W
-	(void)config;
+	(void)data;
 }
 
 /*

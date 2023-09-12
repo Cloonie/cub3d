@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/11 19:36:09 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/11 19:50:09 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 // # define RIGHT 124
 
 // key_hook keycodes for windows //
+
 # define ESC 65307
 # define W 119
 # define A 97
@@ -40,6 +41,8 @@
 # define RIGHT 65363
 
 // variables
+
+# define MAX_PATH_LENGTH 100
 # define mapS 64
 # define mapX 8
 # define mapY 8
@@ -62,16 +65,16 @@ static int map[mapY][mapX]=
 	{1,1,1,1,1,1,1,1},
 };
 
-typedef struct s_config
+typedef struct s_mapdata
 {
-	char	north_texture[999];
-	char	south_texture[999];
-	char	west_texture[999];
-	char	east_texture[999];
+	char	north_texture[MAX_PATH_LENGTH];
+	char	south_texture[MAX_PATH_LENGTH];
+	char	west_texture[MAX_PATH_LENGTH];
+	char	east_texture[MAX_PATH_LENGTH];
 	int		floor_color[3];
 	int		ceiling_color[3];
 	int		map[mapX][mapY];
-}				t_config;
+}				t_mapdata;
 
 typedef struct s_vars
 {
@@ -147,7 +150,7 @@ typedef struct s_ray
 
 // init.c
 
-void	start_init(t_vars	*vars, t_config *config);
+void	start_init(t_vars	*vars, t_mapdata *config);
 void	put_whole_image(t_vars *vars);
 
 // movement.c

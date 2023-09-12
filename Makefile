@@ -39,14 +39,14 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -s -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(LNX_MLXFLAG) $(MAC_MLXFLAG) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(LNX_MLXFLAG) $(MAC_MLXFLAG) -I $(INCLUDES) -o $(NAME)
 	@echo "$(B_GREEN)Compiling $(C_END)"
 	@echo "$(C_GREEN)Makefile for minishell completed.$(C_END)"
 
 $(OBJ_PATH)/%.o:	$(SRC_PATH)/%.c*
 					@mkdir -p $(OBJ_PATH)
 					@echo "$(B_GREEN)Creating object file: $<$(C_ENDR)"
-					@$(CC) $(CFLAGS) $(MLXFLAG) -c $< -o $@
+					@$(CC) $(CFLAGS) $(MLXFLAG) -I $(INCLUDES) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_PATH)

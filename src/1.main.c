@@ -15,7 +15,7 @@
 int	main(void)
 {
 	t_vars		vars;
-	t_config	config;
+	t_mapdata	config;
 
 	start_init(&vars, &config);
 	put_whole_image(&vars);
