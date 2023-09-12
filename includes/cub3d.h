@@ -3,42 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/11 19:50:09 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/12 19:11:09 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
+
+# include "../libft/includes/libft.h"
+# include "../libft/includes/ft_printf.h"
+# include "../libft/includes/get_next_line_bonus.h"
+
 # include <mlx.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <unistd.h>
 # include <math.h>
 # include <limits.h>
 
 // unlock mac keyboard key hold down press //
 // defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
+# ifdef __APPLE__
 // key_hook keycodes for mac //
-// # define ESC 53
-// # define W 13
-// # define A 0
-// # define S 1
-// # define D 2
-// # define LEFT 123
-// # define RIGHT 124
+#  define ESC 53
+#  define W 13
+#  define A 0
+#  define S 1
+#  define D 2
+#  define LEFT 123
+#  define RIGHT 124
+# else
 
 // key_hook keycodes for windows //
-
-# define ESC 65307
-# define W 119
-# define A 97
-# define S 115
-# define D 100
-# define LEFT 65361
-# define RIGHT 65363
+#  define ESC 65307
+#  define W 119
+#  define A 97
+#  define S 115
+#  define D 100
+#  define LEFT 65361
+#  define RIGHT 65363
+# endif
 
 // variables
 
@@ -67,10 +78,10 @@ static int map[mapY][mapX]=
 
 typedef struct s_mapdata
 {
-	char	north_texture[MAX_PATH_LENGTH];
-	char	south_texture[MAX_PATH_LENGTH];
-	char	west_texture[MAX_PATH_LENGTH];
-	char	east_texture[MAX_PATH_LENGTH];
+	char	*north_texture;
+	char	*south_texture;
+	char	*west_texture;
+	char	*east_texture;
 	int		floor_color[3];
 	int		ceiling_color[3];
 	int		map[mapX][mapY];
@@ -156,6 +167,10 @@ void	put_whole_image(t_vars *vars);
 // movement.c
 
 int		key_hook(int keycode, t_vars *vars);
+
+// parasing.c
+
+void	open_map_file(t_mapdata *mapdata);
 
 // drawing.c
 

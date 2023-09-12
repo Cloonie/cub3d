@@ -24,9 +24,17 @@ LIBFT		=	libft
 LIBFLAGS	=	-Llibft -lft
 # INC 		=	-lmlx -lGL -lX11 -lXext
 MLXFLAG		=	-I/usr/include -Imlx_linux -O3
-LNX_MLXFLAG	=	-Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+# LNX_MLXFLAG	=	-Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 # MAC_MLXFLAG =	-lmlx -framework OpenGL -framework AppKit
 SANITIZE	=	-fsanitize=address -g3
+
+UNAME := $(shell uname)
+ifeq ($(UNAME), Linux)
+	MLXFLAGS2	= -Lmlx_linux -lmlx_Linux -L/usr/lib -I/usr/include -Imlx_linux -lXext -lX11 -lm -lz
+endif
+ifeq ($(UNAME), Darwin)
+	MLXFLAGS2	= -lmlx -framework OpenGL -framework AppKit -Imlx
+endif
 
 INCLUDES	=	./includes
 SRC_PATH	=	./src
@@ -39,7 +47,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -s -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(LNX_MLXFLAG) $(MAC_MLXFLAG) -I $(INCLUDES) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFLAGS) $(MLXFLAGS2) -I $(INCLUDES) -o $(NAME)
 	@echo "$(B_GREEN)Compiling $(C_END)"
 	@echo "$(C_GREEN)Makefile for minishell completed.$(C_END)"
 

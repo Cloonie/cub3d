@@ -10,5 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../includes/cub3d.h"
+#include "../includes/cub3d.h"
+
+void	open_map_file(t_mapdata *mapdata)
+{
+	int		i;
+	int		fd;
+	char	buf[1000];
+
+	fd = open("maps/map.cub", O_RDONLY);
+	if (fd == -1)
+		perror("fd cant open");
+	i = read(fd, buf, 1000);
+	buf[i] = '\0';
+
+	printf("%s\n", buf);
+
+	char **array = ft_split(buf, '\n');
+	i = -1;
+	while (array[++i])
+	{
+		if (array[i])
+			printf("array[%d]: %s\n", i, array[i]);
+	}
+
+	mapdata->north_texture = ft_strnstr(array[0], "./", 100);
+	mapdata->south_texture = ft_strnstr(array[1], "./", 100);
+	mapdata->west_texture = ft_strnstr(array[2], "./", 100);
+	mapdata->east_texture = ft_strnstr(array[3], "./", 100);
+}
 

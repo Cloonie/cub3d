@@ -58,7 +58,7 @@ void	draw_player(t_vars *vars)
 	{
 		while (player.x < (vars->px + (vars->player_size / 2)))
 		{
-			set_colour(&player, 0xFF00FF00);
+			set_colour(&player, 0x0000FF00);
 			player.x++;
 		}
 		player.x = vars->px - (vars->player_size / 2);
@@ -82,11 +82,11 @@ void	draw_bg(t_vars *vars)
 		while (++bg.x < (mapX * mapS))
 		{
 			if (bg.y % mapS == 0 || bg.x % mapS == 0)
-				set_colour(&bg, 0xFF999999);
+				set_colour(&bg, 0x00999999);
 			else if (map[bg.y / mapS][bg.x / mapS] == 1)
-				set_colour(&bg, 0xFFFFFFFF);
+				set_colour(&bg, 0x00FFFFFF);
 			else
-				set_colour(&bg, 0xFF505050);
+				set_colour(&bg, 0x00505050);
 		}
 		bg.x = -1;
 	}
