@@ -66,6 +66,12 @@ void	open_map_file(t_mapdata *mapdata)
 			{
 				if (array[i][0] != '1' || array[i][ft_strlen(array[i]) - 2] != '1')
 					perror("map sides not closed");
+				int player_found = 0;
+				j = -1;
+				// while (array[i][++j])
+				// {
+				// 	if (array[i][j] == 'N' || array[i][j] == 'S');
+				// }
 				if (array[i + 1] == NULL)
 					break ;
 			}

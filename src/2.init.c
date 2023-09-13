@@ -22,10 +22,10 @@ void	start_init(t_vars	*vars)
 	vars->player_size = 10;
 	vars->px = 64+32;
 	vars->py = (6*64)+32;
-	vars->pa = P3; // N
+	// vars->pa = P3; // N
 	// vars->pa = PI/2; // S
 	// vars->pa = 0; // E
-	// vars->pa = PI; // W
+	vars->pa = PI; // W
 }
 
 /*
