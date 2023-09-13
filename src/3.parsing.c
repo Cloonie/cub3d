@@ -32,7 +32,9 @@ void	open_map_file(t_mapdata *mapdata)
 	while (array[++i])
 	{
 		printf("array[%d]: %s\n", i, array[i]);
-		if (!ft_strncmp(array[i], "NO ", 3))
+		if (!ft_strncmp(array[i], "\r", 1))
+			;
+		else if (!ft_strncmp(array[i], "NO ", 3))
 			mapdata->north_texture = ft_strchr(array[i], '.');
 		else if (!ft_strncmp(array[i], "SO ", 3))
 			mapdata->south_texture = ft_strchr(array[i], '.');
@@ -51,6 +53,33 @@ void	open_map_file(t_mapdata *mapdata)
 			mapdata->ceiling_color[0] = ft_atoi(&array[i][2]);
 			mapdata->ceiling_color[1] = ft_atoi(ft_strchr(&array[i][2], ',') + 1);
 			mapdata->ceiling_color[2] = ft_atoi(ft_strchr(ft_strchr(&array[i][2], ',') + 1, ',') + 1);
+		}
+		else if (!ft_strncmp(array[i], "1", 1))
+		{
+			int j = -1;
+			while (array[i][++j])
+			{
+				if (array[i][j] != '1' && array[i][j] != '\r')
+					perror("map top not closed");
+			}
+			while (array[++i])
+			{
+				if (array[i][0] != '1' || array[i][ft_strlen(array[i]) - 2] != '1')
+					perror("map sides not closed");
+				if (array[i + 1] == NULL)
+					break ;
+			}
+			j = -1;
+			while (array[i][++j])
+			{
+				if (array[i][j] != '1')
+					perror("map bottom not closed");
+			}
+		}
+		else
+		{
+			perror("error");
+			break ;
 		}
 	}
 }

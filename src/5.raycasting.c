@@ -159,7 +159,7 @@ void	draw_rays(t_vars *vars)
 			ray.rx = ray.hx;
 			ray.ry = ray.hy;
 			ray.tdis = ray.hdis;
-			line.red = 254;
+			line.red = 150;
 			line.green = 0;
 			line.blue = 0;
 		}
