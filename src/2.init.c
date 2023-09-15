@@ -22,10 +22,10 @@ void	start_init(t_vars	*vars)
 	vars->player_size = 10;
 	vars->px = 64+32;
 	vars->py = (6*64)+32;
-	// vars->pa = P3; // N
+	vars->pa = P3; // N
 	// vars->pa = PI/2; // S
 	// vars->pa = 0; // E
-	vars->pa = PI; // W
+	// vars->pa = PI; // W
 }
 
 /*
@@ -33,9 +33,11 @@ void	start_init(t_vars	*vars)
 	one whole image onto the window, this is done so to prevent the images
 	from blinking, rendering line by line which makes the game not smooth.
 */
-void	put_whole_image(t_vars *vars)
+int	put_whole_image(t_vars *vars)
 {
 	vars->img = mlx_new_image(vars->mlx, screenWidth, screenHeight);
+	movement(vars);
+	rotation(vars);
 	draw_bg(vars);
 	draw_player(vars);
 	draw_rays(vars);

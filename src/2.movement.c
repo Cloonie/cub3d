@@ -12,54 +12,88 @@
 
 #include "../includes/cub3d.h"
 
-/*
-	key_hook function 
-*/
-int	key_hook(int keycode, t_vars *vars)
+void	rotation(t_vars *vars)
 {
-	// printf("key_hook func keycode: %d\n", keycode);
+	int FPS = 1;
+	if (vars->key.left == 1)
+	{
+		if (vars->pa < 0)
+			vars->pa += 2 * PI;
+		vars->pa -= 0.01 * FPS;
+		vars->pdx = cos(vars->pa) * FPS;
+		vars->pdy = sin(vars->pa) * FPS;
+	}
+	if (vars->key.right == 1)
+	{
+		if (vars->pa > (2 * PI))
+			vars->pa -= 2 * PI;
+		vars->pa += 0.01 * FPS;
+		vars->pdx = cos(vars->pa) * FPS;
+		vars->pdy = sin(vars->pa) * FPS;
+	}
+}
+
+void	movement(t_vars *vars)
+{
+	int FPS = 1;
+	// int xo	= 0; if (vars->pdx < 0) { xo =- 20 } else { xo =+ 20 }
+	// int yo	= 0; if (vars->pdy < 0) { yo =- 20 } else { yo =+ 20 }
+
+	if (vars->key.w == 1)
+	{
+		vars->px += cos(vars->pa) * FPS;
+		vars->py += sin(vars->pa) * FPS;
+	}
+	if (vars->key.s == 1)
+	{
+		vars->px -= cos(vars->pa) * FPS;
+		vars->py -= sin(vars->pa) * FPS;
+	}
+	if (vars->key.a == 1)
+	{
+		vars->px += cos(vars->pa - (PI / 2.0)) * FPS;
+		vars->py += sin(vars->pa - (PI / 2.0)) * FPS;
+	}
+	if (vars->key.d == 1)
+	{
+		vars->px += cos(vars->pa + (PI / 2.0)) * FPS;
+		vars->py += sin(vars->pa + (PI / 2.0)) * FPS;
+	}
+}
+
+int	key_press(int keycode, t_vars *vars)
+{
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(vars->mlx, vars->win);
 		exit(0);
 	}
-	if (keycode == LEFT)
-	{
-		if (vars->pa < 0)
-			vars->pa += 2 * PI;
-		vars->pa -= 0.05;
-		vars->pdx = cos(vars->pa) * 10;
-		vars->pdy = sin(vars->pa) * 10;
-	}
-	if (keycode == RIGHT)
-	{
-		if (vars->pa > (2 * PI))
-			vars->pa -= 2 * PI;
-		vars->pa += 0.05;
-		vars->pdx = cos(vars->pa) * 10;
-		vars->pdy = sin(vars->pa) * 10;
-	}
 	if (keycode == W)
-	{
-		vars->px += cos(vars->pa) * 10;
-		vars->py += sin(vars->pa) * 10;
-	}
-	if (keycode == S)
-	{
-		vars->px -= cos(vars->pa) * 10;
-		vars->py -= sin(vars->pa) * 10;
-	}
+		vars->key.w = 1;
 	if (keycode == A)
-	{
-		vars->px += cos(vars->pa - (PI / 2.0)) * 10;
-		vars->py += sin(vars->pa - (PI / 2.0)) * 10;
-	}
+		vars->key.a = 1;
+	if (keycode == S)
+		vars->key.s = 1;
 	if (keycode == D)
-	{
-		vars->px += cos(vars->pa + (PI / 2.0)) * 10;
-		vars->py += sin(vars->pa + (PI / 2.0)) * 10;
-	}
-	put_whole_image(vars);
-	// printf("player x:%f y:%f\n", vars->px, vars->py);
-	return (0);
+		vars->key.d = 1;
+	if (keycode == LEFT)
+		vars->key.left = 1;
+	if (keycode == RIGHT)
+		vars->key.right = 1;
+}
+
+int	key_release(int keycode, t_vars *vars)
+{
+	if (keycode == W)
+		vars->key.w = 0;
+	if (keycode == A)
+		vars->key.a = 0;
+	if (keycode == S)
+		vars->key.s = 0;
+	if (keycode == D)
+		vars->key.d = 0;
+	if (keycode == LEFT)
+		vars->key.left = 0;
+	if (keycode == RIGHT)
+		vars->key.right = 0;
 }

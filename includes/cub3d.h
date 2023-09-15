@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/13 02:01:39 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/15 15:34:29 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,16 @@ typedef struct s_mapdata
 	int		map[mapX][mapY];
 }				t_mapdata;
 
+typedef struct s_key
+{
+	int	w;
+	int	a;
+	int	s;
+	int	d;
+	int	left;
+	int	right;
+}				t_key;
+
 typedef struct s_vars
 {
 	void	*mlx;
@@ -99,6 +109,7 @@ typedef struct s_vars
 	int		player_size;
 	void	*img;
 	t_mapdata	mapdata;
+	t_key		key;
 }				t_vars;
 
 typedef struct s_pixel
@@ -161,11 +172,14 @@ typedef struct s_ray
 // init.c
 
 void	start_init(t_vars	*vars);
-void	put_whole_image(t_vars *vars);
+int		put_whole_image(t_vars *vars);
 
 // movement.c
 
-int		key_hook(int keycode, t_vars *vars);
+void	movement(t_vars *vars);
+void	rotation(t_vars *vars);
+int		key_press(int keycode, t_vars *vars);
+int		key_release(int keycode, t_vars *vars);
 
 // parasing.c
 
