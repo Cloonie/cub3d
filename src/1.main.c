@@ -15,7 +15,6 @@
 int	main(int argc, char **argv)
 {
 	t_vars		vars;
-	t_mapdata	mapdata;
 
 	if (argc != 2)
 	{
@@ -23,8 +22,8 @@ int	main(int argc, char **argv)
 		// return (0);
 	}
 	start_init(&vars);
-	open_map_file(&vars.mapdata);
-	// mlx_key_hook(vars.win, key_hook, &vars);
+	open_map_file(&vars);
+	// put_whole_image(&vars);
 	mlx_loop_hook(vars.mlx, put_whole_image, &vars);
 	mlx_hook(vars.win, 2, 1L << 0, key_press, &vars);
 	mlx_hook(vars.win, 3, 1L << 1, key_release, &vars);

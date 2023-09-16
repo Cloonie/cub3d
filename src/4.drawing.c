@@ -13,6 +13,22 @@
 #include "../includes/cub3d.h"
 
 /*
+	Takes in a hex_color in the format 0xRRGGBB values between
+	00-FF for each RR/GG/BB and converts into values 0-255
+
+	*alpha = (color >> 24) & 0xFF;
+	*red = (color >> 16) & 0xFF;
+	*green = (color >> 8) & 0xFF;
+	*blue = color & 0xFF;
+*/
+void	hex_to_rgb(int hex_color, int *red, int *green, int *blue)
+{
+	*red = (hex_color >> 16) & 0xFF;
+	*green = (hex_color >> 8) & 0xFF;
+	*blue = hex_color & 0xFF;
+}
+
+/*
 	After using mlx_get_data_addr to get the return value of an image address
 	use this formula:
 	pos = y * size_line + x * (bits_per_pixel / 8);
@@ -26,16 +42,37 @@
 	addr[pos] = 0x00;		Blue
 	addr[pos + 1] = 0x55;	Green
 	addr[pos + 2] = 0x99;	Red
-	addr[pos + 3] = 0xFF;	Alpha / Transparency
+	addr[pos + 3] = 0xFF;	Alpha	// not used here
 */
-void	set_colour(t_pixel *pixel, int red, int green, int blue)
+void	draw_pixel(t_vars *vars, int x, int y, int color)
 {
-	pixel->pos = pixel->y * pixel->size_line + pixel->x
-		* (pixel->bits_per_pixel / 8);
-	pixel->addr[pixel->pos] = blue;
-	pixel->addr[pixel->pos + 1] = green;
-	pixel->addr[pixel->pos + 2] = red;
-	// pixel->addr[pixel->pos + 3] = 255;
+	t_pixel	pixel;
+
+	hex_to_rgb(color, &pixel.r, &pixel.g, &pixel.b);
+	pixel.addr = mlx_get_data_addr(vars->img, &pixel.bits_per_pixel,
+			&pixel.size_line, &pixel.endian);
+	pixel.pos = y * pixel.size_line + x * (pixel.bits_per_pixel / 8);
+	pixel.addr[pixel.pos] = pixel.b;
+	pixel.addr[pixel.pos + 1] = pixel.g;
+	pixel.addr[pixel.pos + 2] = pixel.r;
+}
+
+void	draw_square(t_vars *vars, int x, int y, int color)
+{
+	int	xx;
+	int	yy;
+
+	yy = y;
+	while (yy < (y + vars->bg_size))
+	{
+		xx = x;
+		while (xx < (x + vars->bg_size))
+		{
+			draw_pixel(vars, xx, yy, color);
+			xx++;
+		}
+		yy++;
+	}
 }
 
 /*
@@ -53,7 +90,7 @@ void	draw_player(t_vars *vars)
 	{
 		while (player.x < (vars->px + (vars->player_size / 2)))
 		{
-			set_colour(&player, 0, 255, 0);
+			draw_pixel(vars, player.x, player.y, 0x00FF00);
 			player.x++;
 		}
 		player.x = vars->px - (vars->player_size / 2);
@@ -66,26 +103,26 @@ void	draw_player(t_vars *vars)
 */
 void	draw_bg(t_vars *vars)
 {
-	t_pixel	bg;
+	int	x;
+	int	y;
 
-	bg.addr = mlx_get_data_addr(vars->img, &bg.bits_per_pixel,
-			&bg.size_line, &bg.endian);
-	bg.x = -1;
-	bg.y = -1;
-	while (++bg.y < (mapY * mapS))
+	x = -1;
+	y = -1;
+	while (++y < (mapY * mapS))
 	{
-		while (++bg.x < (mapX * mapS))
+		while (++x < (mapX * mapS))
 		{
-			if (bg.y % mapS == 0 || bg.x % mapS == 0)
-				set_colour(&bg, 15, 15, 15);
-			else if (map[bg.y / mapS][bg.x / mapS] == 1)
-				set_colour(&bg, 255, 255, 255);
+			if (y % mapS == 0 || x % mapS == 0)
+				draw_pixel(vars, x, y, 0x0F0F0F);
+			else if (map[y / mapS][x / mapS] == 1)
+				draw_pixel(vars, x, y, 0xFFFFFF);
 			else
-				set_colour(&bg, 127, 127, 127);
+				draw_pixel(vars, x, y, 0x999999);
 		}
-		bg.x = -1;
+		x = -1;
 	}
 }
+
 
 /*
 	Variable initialization for Bresenham's line algorithm for draw_line function
@@ -145,17 +182,16 @@ t_line	set_line(int x0, int y0, int x1, int y1)
 	taking into account the step size and decision parameter.
 	It is widely used in computer graphics due to its simplicity and efficiency.
 */
-void	draw_line(t_vars *vars, t_line *line)
+void	draw_line(t_vars *vars, t_line *line, int color)
 {
-	t_pixel	pixel;
+	int	x;
+	int	y;
 
-	pixel.addr = mlx_get_data_addr(vars->img, &pixel.bits_per_pixel,
-			&pixel.size_line, &pixel.endian);
 	while (1)
 	{
-		pixel.x = line->curr_x;
-		pixel.y = line->curr_y;
-		set_colour(&pixel, line->red, line->green, line->blue);
+		x = line->curr_x;
+		y = line->curr_y;
+		draw_pixel(vars, x, y, color);
 		if (line->curr_x == line->x1 && line->curr_y == line->y1)
 			break ;
 		line->err2 = 2 * line->err;
@@ -171,3 +207,16 @@ void	draw_line(t_vars *vars, t_line *line)
 		}
 	}
 }
+
+// void	set_texture(t_vars *vars, t_pixel *pixel, char *texturefile)
+// {
+// 	t_pixel	texture;
+
+// 	texture.addr = mlx_get_data_addr(vars->mapdata.north_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
+// 	texture.pos = pixel->y * texture.size_line + pixel->x
+// 		* (texture.bits_per_pixel / 8);
+// 	pixel->addr[pixel->pos] = texture.addr[texture.pos];
+// 	pixel->addr[pixel->pos + 1] = texture.addr[texture.pos + 1];
+// 	pixel->addr[pixel->pos + 2] = texture.addr[texture.pos + 2];
+// 	// pixel->addr[pixel->pos + 3] = 255;
+// }

@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-void	open_map_file(t_mapdata *mapdata)
+void	open_map_file(t_vars *vars)
 {
 	int		i;
 	int		fd;
@@ -31,28 +31,28 @@ void	open_map_file(t_mapdata *mapdata)
 	i = -1;
 	while (array[++i])
 	{
-		printf("array[%d]: %s\n", i, array[i]);
+		// printf("array[%d]: %s\n", i, array[i]);
 		if (!ft_strncmp(array[i], "\r", 1))
 			;
 		else if (!ft_strncmp(array[i], "NO ", 3))
-			mapdata->north_texture = ft_strchr(array[i], '.');
+			vars->mapdata.north_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->size, &vars->size);
 		else if (!ft_strncmp(array[i], "SO ", 3))
-			mapdata->south_texture = ft_strchr(array[i], '.');
+			vars->mapdata.south_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->size, &vars->size);
 		else if (!ft_strncmp(array[i], "WE ", 3))
-			mapdata->west_texture = ft_strchr(array[i], '.');
+			vars->mapdata.west_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->size, &vars->size);
 		else if (!ft_strncmp(array[i], "EA ", 3))
-			mapdata->east_texture = ft_strchr(array[i], '.');
+			vars->mapdata.east_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->size, &vars->size);
 		else if (!ft_strncmp(array[i], "F ", 2))
 		{
-			mapdata->floor_color[0] = ft_atoi(&array[i][2]);
-			mapdata->floor_color[1] = ft_atoi(ft_strchr(&array[i][2], ',') + 1);
-			mapdata->floor_color[2] = ft_atoi(ft_strchr(ft_strchr(&array[i][2], ',') + 1, ',') + 1);
+			vars->mapdata.floor_color[0] = ft_atoi(&array[i][2]);
+			vars->mapdata.floor_color[1] = ft_atoi(ft_strchr(&array[i][2], ',') + 1);
+			vars->mapdata.floor_color[2] = ft_atoi(ft_strchr(ft_strchr(&array[i][2], ',') + 1, ',') + 1);
 		}
 		else if (!ft_strncmp(array[i], "C ", 2))
 		{
-			mapdata->ceiling_color[0] = ft_atoi(&array[i][2]);
-			mapdata->ceiling_color[1] = ft_atoi(ft_strchr(&array[i][2], ',') + 1);
-			mapdata->ceiling_color[2] = ft_atoi(ft_strchr(ft_strchr(&array[i][2], ',') + 1, ',') + 1);
+			vars->mapdata.ceiling_color[0] = ft_atoi(&array[i][2]);
+			vars->mapdata.ceiling_color[1] = ft_atoi(ft_strchr(&array[i][2], ',') + 1);
+			vars->mapdata.ceiling_color[2] = ft_atoi(ft_strchr(ft_strchr(&array[i][2], ',') + 1, ',') + 1);
 		}
 		else if (!ft_strncmp(array[i], "1", 1))
 		{

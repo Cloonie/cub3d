@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/15 15:34:29 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/16 18:15:17 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ static int map[mapY][mapX]=
 
 typedef struct s_mapdata
 {
-	char	*north_texture;
-	char	*south_texture;
-	char	*west_texture;
-	char	*east_texture;
+	void	*north_texture;
+	void	*south_texture;
+	void	*west_texture;
+	void	*east_texture;
 	int		floor_color[3];
 	int		ceiling_color[3];
 	int		map[mapX][mapY];
@@ -107,9 +107,12 @@ typedef struct s_vars
 	float	pdy;
 	float	pa;
 	int		player_size;
+	int		bg_size;
 	void	*img;
 	t_mapdata	mapdata;
 	t_key		key;
+	void	*new_xpm;
+	int		size;
 }				t_vars;
 
 typedef struct s_pixel
@@ -121,6 +124,9 @@ typedef struct s_pixel
 	int		endian;
 	int		x;
 	int		y;
+	int		r;
+	int		g;
+	int		b;
 }				t_pixel;
 
 typedef struct s_line
@@ -138,9 +144,9 @@ typedef struct s_line
 	int	sy;
 	int	err;
 	int	err2;
-	int	red;
-	int	green;
-	int	blue;
+	char	*red;
+	char	*green;
+	char	*blue;
 }				t_line;
 
 typedef struct s_ray
@@ -183,15 +189,19 @@ int		key_release(int keycode, t_vars *vars);
 
 // parasing.c
 
-void	open_map_file(t_mapdata *mapdata);
+void	open_map_file(t_vars *vars);
 
 // drawing.c
 
-void	set_colour(t_pixel *pixel, int red, int green, int blue);
+void	hex_to_rgb(int hex_color, int *red, int *green, int *blue);
+void	draw_pixel(t_vars *vars, int x, int y, int color);
+void	draw_square(t_vars *vars, int x, int y, int color);
 void	draw_player(t_vars *vars);
 void	draw_bg(t_vars *vars);
 t_line	set_line(int x0, int y0, int x1, int y1);
-void	draw_line(t_vars *vars, t_line *line);
+void	draw_line(t_vars *vars, t_line *line, int color);
+
+void	set_texture(t_vars *vars, t_pixel *pixel, char *texturefile);
 
 // raycasting.c
 
