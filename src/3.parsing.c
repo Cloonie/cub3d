@@ -35,13 +35,13 @@ void	open_map_file(t_vars *vars)
 		if (!ft_strncmp(array[i], "\r", 1))
 			;
 		else if (!ft_strncmp(array[i], "NO ", 3))
-			vars->mapdata.north_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->size, &vars->size);
+			vars->mapdata.north_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->mapdata.mlx_size, &vars->mapdata.mlx_size);
 		else if (!ft_strncmp(array[i], "SO ", 3))
-			vars->mapdata.south_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->size, &vars->size);
+			vars->mapdata.south_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->mapdata.mlx_size, &vars->mapdata.mlx_size);
 		else if (!ft_strncmp(array[i], "WE ", 3))
-			vars->mapdata.west_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->size, &vars->size);
+			vars->mapdata.west_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->mapdata.mlx_size, &vars->mapdata.mlx_size);
 		else if (!ft_strncmp(array[i], "EA ", 3))
-			vars->mapdata.east_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->size, &vars->size);
+			vars->mapdata.east_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->mapdata.mlx_size, &vars->mapdata.mlx_size);
 		else if (!ft_strncmp(array[i], "F ", 2))
 		{
 			vars->mapdata.floor_color[0] = ft_atoi(&array[i][2]);

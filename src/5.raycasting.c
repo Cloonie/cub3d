@@ -20,7 +20,7 @@ void	init_rays(t_vars *vars, t_ray *ray)
 	ray->xo = 0;
 	ray->yo = 0;
 	ray->tdis = 0;
-
+	ray->shade = 1;
 	// starting angle position
 	ray->ra = vars->pa - (DR * 30);
 	// resets angle if exceeds 360 or less than 0
@@ -39,14 +39,14 @@ void	horizon_rays(t_vars *vars, t_ray *ray)
 	ray->a_tan = -1 / tan(ray->ra);
 	if (ray->ra > PI) // looking up
 	{
-		ray->ry = (((int)vars->py >> 6) << 6) - 0.0001;
+		ray->ry = (((int)vars->py / 64) * 64) - 0.0001;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
 		ray->yo = -64;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
 	if (ray->ra < PI) // looking down
 	{
-		ray->ry = (((int)vars->py >> 6) << 6) + 64;
+		ray->ry = (((int)vars->py / 64) * 64) + 64;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
 		ray->yo = 64;
 		ray->xo = -ray->yo * ray->a_tan;
@@ -63,8 +63,8 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 {
 	while (ray->dof < 8)
 	{
-		ray->mx = (int)(ray->rx) >> 6;
-		ray->my = (int)(ray->ry) >> 6;
+		ray->mx = (int)(ray->rx) / 64;
+		ray->my = (int)(ray->ry) / 64;
 		ray->mp = ray->my * mapX + ray->mx;
 		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
 			&& map[ray->my][ray->mx] == 1)
@@ -90,16 +90,16 @@ void	vertical_rays(t_vars *vars, t_ray *ray)
 	ray->vx = vars->px;
 	ray->vy = vars->py;
 	ray->n_tan = -tan(ray->ra);
-	if (ray->ra > P2 && ray->ra < P3) // looking left
+	if (ray->ra > D90 && ray->ra < D270) // looking left
 	{
-		ray->rx = (((int)vars->px >> 6) << 6) - 0.0001;
+		ray->rx = (((int)vars->px / 64) * 64) - 0.0001;
 		ray->ry = (vars->px - ray->rx) * ray->n_tan + vars->py;
 		ray->xo = -64;
 		ray->yo = -ray->xo * ray->n_tan;
 	}
-	if (ray->ra < P2 || ray->ra > P3) // looking right
+	if (ray->ra < D90 || ray->ra > D270) // looking right
 	{
-		ray->rx = (((int)vars->px >> 6) << 6) + 64;
+		ray->rx = (((int)vars->px / 64) * 64) + 64;
 		ray->ry = (vars->px - ray->rx) * ray->n_tan + vars->py;
 		ray->xo = 64;
 		ray->yo = -ray->xo * ray->n_tan;
@@ -116,8 +116,8 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 {
 	while (ray->dof < 8)
 	{
-		ray->mx = (int)(ray->rx) >> 6;
-		ray->my = (int)(ray->ry) >> 6;
+		ray->mx = (int)(ray->rx) / 64;
+		ray->my = (int)(ray->ry) / 64;
 		ray->mp = ray->my * mapX + ray->mx;
 		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
 			&& map[ray->my][ray->mx] == 1)
@@ -136,109 +136,119 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 	}
 }
 
+void	get_nearest_ray(t_vars *vars, t_ray *ray)
+{
+	t_line	line;
+
+	if (ray->vdis < ray->hdis)
+	{
+		ray->rx = ray->vx;
+		ray->ry = ray->vy;
+		ray->tdis = ray->vdis;
+		ray->shade = 0.5;
+	}
+	if (ray->hdis < ray->vdis)
+	{
+		ray->rx = ray->hx;
+		ray->ry = ray->hy;
+		ray->tdis = ray->hdis;
+		ray->shade = 1;
+	}
+
+	line = set_line(vars->px, vars->py, ray->rx, ray->ry);
+	draw_line(vars, &line, 0xFF0000);
+}
+
 void	draw_rays(t_vars *vars)
 {
-	t_ray	ray;
+	t_ray	*ray;
 
-	init_rays(vars, &ray);
-	// loop for each ray
-	while (++ray.r < 720)
+	ray = &vars->ray;
+	init_rays(vars, ray);
+	while (++ray->r < 720) // loop for each ray
 	{
-		horizon_rays(vars, &ray);
-		horizon_dof(vars, &ray);
-		vertical_rays(vars, &ray);
-		vertical_dof(vars, &ray);
+		horizon_rays(vars, ray);
+		horizon_dof(vars, ray);
+		vertical_rays(vars, ray);
+		vertical_dof(vars, ray);
+		get_nearest_ray(vars, ray);
 
-		int shade = 1;
-		if (ray.vdis < ray.hdis)
-		{
-			ray.rx = ray.vx;
-			ray.ry = ray.vy;
-			ray.tdis = ray.vdis;
-			shade = 0.5;
-		}
-		if (ray.hdis < ray.vdis)
-		{
-			ray.rx = ray.hx;
-			ray.ry = ray.hy;
-			ray.tdis = ray.hdis;
-		}
+		// rendering 3d
+		t_render	*render;
 
-		t_line	line;
-		line = set_line(vars->px, vars->py, ray.rx, ray.ry);
-		draw_line(vars, &line, 0xFF0000);
-
-		// draw 3d / rendering 3d
-		float ca = vars->pa - ray.ra;
-		if (ca < 0)
-			ca += 2 * PI;
-		if (ca > 2 * PI)
-			ca -= 2 * PI;
-		ray.tdis = ray.tdis * cos(ca);
-		float lineH = (mapS * rendersize) / ray.tdis;
-		float	ty_step = 64/(float)lineH;
-		float	ty_off = 0;
-		if (lineH > rendersize)
+		render = &vars->render;
+		render->ca = vars->pa - ray->ra;
+		if (render->ca < 0)
+			render->ca += 2 * PI;
+		if (render->ca > 2 * PI)
+			render->ca -= 2 * PI;
+		ray->tdis = ray->tdis * cos(render->ca);
+		render->lineH = (mapS * rendersize) / ray->tdis;
+		render->ty_step = 64 / (float)render->lineH;
+		render->ty_off = 0;
+		if (render->lineH > rendersize)
 		{
-			ty_off = (lineH - rendersize)/2.0;
-			lineH = rendersize;
+			render->ty_off = (render->lineH - rendersize) / 2;
+			render->lineH = rendersize;
 		}
-		float lineO = (rendersize / 2) - lineH / 2;
+		float lineO = (rendersize / 2) - render->lineH / 2;
 
 		// walls
-		float	ty = ty_off * ty_step;
-		float	tx;
+		render->ty = render->ty_off * render->ty_step;
+		render->tx;
 		t_pixel	tex;
-		if (shade == 1)
+		if (ray->shade == 1)
 		{
-			tx = (int)(ray.rx) % 64;
-			if (ray.ra < PI)
+			render->tx = (int)(ray->rx) % 64;
+			if (ray->ra < PI)
 			{
-				tx = 63 - tx; // flip image horizontally
+				render->tx = 63 - render->tx; // flip image horizontally
 				tex.addr = mlx_get_data_addr(vars->mapdata.north_texture,
 					&tex.bits_per_pixel, &tex.size_line, &tex.endian);
 			}
-			if (ray.ra > PI)
+			if (ray->ra > PI)
 				tex.addr = mlx_get_data_addr(vars->mapdata.south_texture,
 					&tex.bits_per_pixel, &tex.size_line, &tex.endian);
 		}
 		else
 		{
-			tx = (int)(ray.ry) % 64;
-			if (ray.ra > P2 && ray.ra < P3)
+			render->tx = (int)(ray->ry) % 64;
+			if (ray->ra > D90 && ray->ra < D270)
 			{
-				tx = 63 - tx; // flip image horizontally
+				render->tx = 63 - render->tx; // flip image horizontally
 				tex.addr = mlx_get_data_addr(vars->mapdata.east_texture,
-					&tex.bits_per_pixel, &tex.size_line, &tex.endian);
+						&tex.bits_per_pixel, &tex.size_line, &tex.endian);
 			}
-			if (ray.ra < P2 || ray.ra > P3)
+			if (ray->ra < D90 || ray->ra > D270)
 				tex.addr = mlx_get_data_addr(vars->mapdata.west_texture,
-					&tex.bits_per_pixel, &tex.size_line, &tex.endian);
+						&tex.bits_per_pixel, &tex.size_line, &tex.endian);
 		}
-		for (int y = 0; y < lineH; y++)
+		for (int y = 0; y < render->lineH; y++)
 		{
-			tex.pos = (int)ty * tex.size_line + (int)tx * (tex.bits_per_pixel / 8);
-			draw_pixel(vars, ray.r+(mapY*mapS)+16, y+lineO, rgb_to_hex(tex.addr[tex.pos + 2], tex.addr[tex.pos + 1], tex.addr[tex.pos]));
-			ty += ty_step;
+			tex.pos = (int)render->ty * tex.size_line + (int)render->tx * (tex.bits_per_pixel / 8);
+			draw_pixel(vars, ray->r+(mapY*mapS), y+lineO,
+				rgb_to_hex(tex.addr[tex.pos + 2], tex.addr[tex.pos + 1], tex.addr[tex.pos]));
+			render->ty += render->ty_step;
 		}
 
 		// ceiling
-		line = set_line(ray.r+(mapY*mapS)+16, 0, ray.r+(mapY*mapS)+16, lineO);
+		t_line	line;
+		line = set_line(ray->r+(mapY*mapS), 0, ray->r+(mapY*mapS), lineO);
 		draw_line(vars, &line, rgb_to_hex(vars->mapdata.ceiling_color[0],
 				vars->mapdata.ceiling_color[1],
 				vars->mapdata.ceiling_color[2]));
 
 		// floor
-		line = set_line(ray.r+(mapY*mapS)+16, lineH+lineO, ray.r+(mapY*mapS)+16, lineH+lineO+lineO);
+		line = set_line(ray->r+(mapY*mapS), (render->lineH + lineO), ray->r+(mapY*mapS), (render->lineH + lineO*2));
 		draw_line(vars, &line, rgb_to_hex(vars->mapdata.floor_color[0],
 				vars->mapdata.floor_color[1],
 				vars->mapdata.floor_color[2]));
 
 		// loop for each ray at next radian
-		ray.ra += DR / 12;
-		if (ray.ra < 0)
-			ray.ra += 2 * PI;
-		if (ray.ra > 2 * PI)
-			ray.ra -= 2 * PI;
+		ray->ra += DR / 12;
+		if (ray->ra < 0)
+			ray->ra += 2 * PI;
+		if (ray->ra > 2 * PI)
+			ray->ra -= 2 * PI;
 	}
 }

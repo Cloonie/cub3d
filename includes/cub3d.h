@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/19 03:35:36 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/19 04:38:52 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 #  define D 100
 #  define LEFT 65361
 #  define RIGHT 65363
+#  define SHIFT 65505
 # endif
 
 // variables
@@ -60,11 +61,12 @@
 # define screenWidth 960*2
 # define screenHeight 640*2
 # define rendersize 700
-# define PI 3.14159265359
-# define P2 PI/2		// 90 degrees
-# define P3 3*PI/2		// 270 degrees
-# define DR 0.0174533	// one degree in radians
-# define FPS 1
+# define PI 3.14159265359	// 0/360 degrees
+# define D90 (PI/2)			// 90 degrees
+# define D270 (3*PI/2)		// 270 degrees
+# define DR 0.0174533		// one degree in radians
+# define RUN_SPEED 1
+# define ROTATION_SPEED 1.5
 
 static int map[mapY][mapX]=
 {
@@ -84,6 +86,7 @@ typedef struct s_mapdata
 	void	*south_texture;
 	void	*west_texture;
 	void	*east_texture;
+	int		mlx_size;
 	int		floor_color[3];
 	int		ceiling_color[3];
 	int		map[mapX][mapY];
@@ -99,20 +102,60 @@ typedef struct s_key
 	int	right;
 }				t_key;
 
+typedef struct s_ray
+{
+	int		r;
+	int		mx;
+	int		my;
+	int		mp;
+	int		dof;
+	float	rx;
+	float	ry;
+	float	ra;
+	float	xo;
+	float	yo;
+
+	float	hdis;
+	float	hx;
+	float	hy;
+	float	a_tan;
+
+	float	vdis;
+	float	vx;
+	float	vy;
+	float	n_tan;
+
+	float	tdis;
+	int		shade;
+}				t_ray;
+
+typedef struct s_render
+{
+	float	ca;
+	float	lineH;
+	float	ty_step;
+	float	ty_off;
+	float	lineO;
+	float	ty;
+	float	tx;
+}				t_render;
+
 typedef struct s_vars
 {
-	void	*mlx;
-	void	*win;
-	float	px;
-	float	py;
-	float	pdx;
-	float	pdy;
-	float	pa;
-	int		player_size;
-	void	*img;
+	void		*mlx;
+	void		*win;
+	float		px;
+	float		py;
+	float		pdx;
+	float		pdy;
+	float		pa;
+	int			player_size;
+	void		*img;
+	int			run;
 	t_mapdata	mapdata;
 	t_key		key;
-	int		size;
+	t_ray		ray;
+	t_render	render;
 }				t_vars;
 
 typedef struct s_pixel
@@ -144,36 +187,7 @@ typedef struct s_line
 	int	sy;
 	int	err;
 	int	err2;
-	char	*red;
-	char	*green;
-	char	*blue;
 }				t_line;
-
-typedef struct s_ray
-{
-	int		r;
-	int		mx;
-	int		my;
-	int		mp;
-	int		dof;
-	float	rx;
-	float	ry;
-	float	ra;
-	float	xo;
-	float	yo;
-
-	float	hdis;
-	float	hx;
-	float	hy;
-	float	a_tan;
-
-	float	vdis;
-	float	vx;
-	float	vy;
-	float	n_tan;
-
-	float	tdis;
-}				t_ray;
 
 // init.c
 
