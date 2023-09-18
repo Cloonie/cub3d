@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/18 21:23:01 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/19 03:35:36 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,14 +194,14 @@ void	open_map_file(t_vars *vars);
 // drawing.c
 
 void	hex_to_rgb(int hex_color, int *red, int *green, int *blue);
+int		rgb_to_hex(int red, int green, int blue);
+
 void	draw_pixel(t_vars *vars, int x, int y, int color);
 void	draw_square(t_vars *vars, int x, int y, int color);
 void	draw_player(t_vars *vars);
 void	draw_bg(t_vars *vars);
 t_line	set_line(int x0, int y0, int x1, int y1);
 void	draw_line(t_vars *vars, t_line *line, int color);
-
-void	draw_texture(t_vars *vars, int x, int y, int r, int g, int b);
 
 // raycasting.c
 

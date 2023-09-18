@@ -28,6 +28,13 @@ void	hex_to_rgb(int hex_color, int *red, int *green, int *blue)
 	*blue = hex_color & 0xFF;
 }
 
+int	rgb_to_hex(int red, int green, int blue)
+{
+	return (((int)red << 16)
+		| ((int)green << 8)
+		| (int)blue);
+}
+
 /*
 	After using mlx_get_data_addr to get the return value of an image address
 	use this formula:
@@ -55,18 +62,6 @@ void	draw_pixel(t_vars *vars, int x, int y, int color)
 	pixel.addr[pixel.pos] = pixel.b;
 	pixel.addr[pixel.pos + 1] = pixel.g;
 	pixel.addr[pixel.pos + 2] = pixel.r;
-}
-
-void	draw_texture(t_vars *vars, int x, int y, int r, int g, int b)
-{
-	t_pixel	pixel;
-
-	pixel.addr = mlx_get_data_addr(vars->img, &pixel.bits_per_pixel,
-			&pixel.size_line, &pixel.endian);
-	pixel.pos = y * pixel.size_line + x * (pixel.bits_per_pixel / 8);
-	pixel.addr[pixel.pos] = b;
-	pixel.addr[pixel.pos + 1] = g;
-	pixel.addr[pixel.pos + 2] = r;
 }
 
 void	draw_square(t_vars *vars, int x, int y, int color)
