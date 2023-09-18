@@ -1,7 +1,7 @@
-NO ./textures/north.xpm
-SO ./textures/south.xpm
-WE ./textures/west.xpm
-EA ./textures/east.xpm
+NO ./textures/brickwall.xpm
+SO ./textures/bluebrick.xpm
+WE ./textures/grassblock.xpm
+EA ./textures/stonewall.xpm
 
 F 245,245,220
 C 135,206,235

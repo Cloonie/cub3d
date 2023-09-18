@@ -23,7 +23,6 @@ int	main(int argc, char **argv)
 	}
 	start_init(&vars);
 	open_map_file(&vars);
-	// put_whole_image(&vars);
 	mlx_loop_hook(vars.mlx, put_whole_image, &vars);
 	mlx_hook(vars.win, 2, 1L << 0, key_press, &vars);
 	mlx_hook(vars.win, 3, 1L << 1, key_release, &vars);

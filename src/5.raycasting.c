@@ -15,23 +15,10 @@
 void	init_rays(t_ray *ray)
 {
 	ray->r = -1;
-	// ray->mx = 0;
-	// ray->my = 0;
-	// ray->mp = 0;
-	// ray->dof = 0;
 	ray->rx = 0;
 	ray->ry = 0;
-	// ray->ra = 0;
 	ray->xo = 0;
 	ray->yo = 0;
-	// ray->hdis = 0;
-	// ray->hx = 0;
-	// ray->hy = 0;
-	// ray->a_tan = 0;
-	// ray->vdis = 0;
-	// ray->vx = 0;
-	// ray->vy = 0;
-	// ray->n_tan = 0;
 	ray->tdis = 0;
 }
 
@@ -144,19 +131,19 @@ void	draw_rays(t_vars *vars)
 				ray.dof += 1;
 			}
 		}
-		int shade = 0;
+		int shade = 1;
 		if (ray.vdis < ray.hdis)
 		{
 			ray.rx = ray.vx;
 			ray.ry = ray.vy;
 			ray.tdis = ray.vdis;
+			shade = 0.5;
 		}
 		if (ray.hdis < ray.vdis)
 		{
 			ray.rx = ray.hx;
 			ray.ry = ray.hy;
 			ray.tdis = ray.hdis;
-			shade = 1;
 		}
 	
 		t_line	line;
@@ -183,23 +170,36 @@ void	draw_rays(t_vars *vars)
 		// walls
 		float	ty = ty_off * ty_step;
 		float	tx;
+		t_pixel	texture;
 		if (shade == 1)
 		{
 			tx = (int)(ray.rx) % 64;
-			if (ray.ra > PI)
+			if (ray.ra < PI)
+			{
 				tx = 63 - tx;
+				// north
+				texture.addr = mlx_get_data_addr(vars->mapdata.north_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
+			}
+			if (ray.ra > PI)
+				texture.addr = mlx_get_data_addr(vars->mapdata.south_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
 		}
 		else
 		{
 			tx = (int)(ray.ry) % 64;
 			if (ray.ra > P2 && ray.ra < P3)
+			{
 				tx = 63 - tx;
+				// east
+				texture.addr = mlx_get_data_addr(vars->mapdata.east_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
+			}
+			if (ray.ra < P2 || ray.ra > P3)
+				texture.addr = mlx_get_data_addr(vars->mapdata.west_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
 		}
 		for (int y = 0; y < lineH; y++)
 		{
-			t_pixel	texture;
-			texture.addr = mlx_get_data_addr(vars->mapdata.east_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
+			// texture.addr = mlx_get_data_addr(vars->mapdata.west_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
 			texture.pos = (int)ty * texture.size_line + (int)tx * (texture.bits_per_pixel / 8);
+			// printf("texture pos red: %d\n", texture.addr[texture.pos + 2]);
 			draw_texture(vars, ray.r+(mapY*mapS)+16, y+lineO, texture.addr[texture.pos + 2], texture.addr[texture.pos + 1], texture.addr[texture.pos]);
 			// draw_pixel(vars, ray.r+(mapY*mapS)+16, y+lineO, 0xFF0000);
 			ty += ty_step;

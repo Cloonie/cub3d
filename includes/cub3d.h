@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/18 14:29:49 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/18 21:23:01 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,22 @@
 # define mapS 64
 # define mapX 8
 # define mapY 8
-# define screenWidth (mapX*mapS)*3
-# define screenHeight (mapY*mapS)*1.5
+# define screenWidth 960*2
+# define screenHeight 640*2
 # define rendersize 700
 # define PI 3.14159265359
 # define P2 PI/2		// 90 degrees
 # define P3 3*PI/2		// 270 degrees
 # define DR 0.0174533	// one degree in radians
+# define FPS 1
 
 static int map[mapY][mapX]=
 {
 	{1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,1},
+	{1,0,1,1,1,1,0,1},
 	{1,0,0,0,0,1,0,1},
 	{1,0,0,1,0,1,0,1},
-	{1,0,0,0,0,1,0,1},
 	{1,0,0,0,0,1,0,1},
 	{1,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1},
@@ -108,11 +109,9 @@ typedef struct s_vars
 	float	pdy;
 	float	pa;
 	int		player_size;
-	int		bg_size;
 	void	*img;
 	t_mapdata	mapdata;
 	t_key		key;
-	void	*new_xpm;
 	int		size;
 }				t_vars;
 

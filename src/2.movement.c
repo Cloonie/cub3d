@@ -14,7 +14,6 @@
 
 void	rotation(t_vars *vars)
 {
-	int FPS = 1;
 	if (vars->key.left == 1)
 	{
 		if (vars->pa < 0)
@@ -35,10 +34,8 @@ void	rotation(t_vars *vars)
 
 void	movement(t_vars *vars)
 {
-	int FPS = 1;
 	// int xo	= 0; if (vars->pdx < 0) { xo =- 20 } else { xo =+ 20 }
 	// int yo	= 0; if (vars->pdy < 0) { yo =- 20 } else { yo =+ 20 }
-
 	if (vars->key.w == 1)
 	{
 		vars->px += cos(vars->pa) * FPS;
@@ -80,6 +77,7 @@ int	key_press(int keycode, t_vars *vars)
 		vars->key.left = 1;
 	if (keycode == RIGHT)
 		vars->key.right = 1;
+	return (0);
 }
 
 int	key_release(int keycode, t_vars *vars)
@@ -96,4 +94,5 @@ int	key_release(int keycode, t_vars *vars)
 		vars->key.left = 0;
 	if (keycode == RIGHT)
 		vars->key.right = 0;
+	return (0);
 }

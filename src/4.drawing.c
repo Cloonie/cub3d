@@ -75,10 +75,10 @@ void	draw_square(t_vars *vars, int x, int y, int color)
 	int	yy;
 
 	yy = y;
-	while (yy < (y + vars->bg_size))
+	while (yy < (y + mapS))
 	{
 		xx = x;
-		while (xx < (x + vars->bg_size))
+		while (xx < (x + mapS))
 		{
 			draw_pixel(vars, xx, yy, color);
 			xx++;
