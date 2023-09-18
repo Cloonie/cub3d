@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/16 18:15:17 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/18 14:29:49 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 # define mapY 8
 # define screenWidth (mapX*mapS)*3
 # define screenHeight (mapY*mapS)*1.5
+# define rendersize 700
 # define PI 3.14159265359
 # define P2 PI/2		// 90 degrees
 # define P3 3*PI/2		// 270 degrees
@@ -201,7 +202,7 @@ void	draw_bg(t_vars *vars);
 t_line	set_line(int x0, int y0, int x1, int y1);
 void	draw_line(t_vars *vars, t_line *line, int color);
 
-void	set_texture(t_vars *vars, t_pixel *pixel, char *texturefile);
+void	draw_texture(t_vars *vars, int x, int y, int r, int g, int b);
 
 // raycasting.c
 

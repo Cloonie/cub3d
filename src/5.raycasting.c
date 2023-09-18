@@ -14,7 +14,7 @@
 
 void	init_rays(t_ray *ray)
 {
-	// ray->r = 0;
+	ray->r = -1;
 	// ray->mx = 0;
 	// ray->my = 0;
 	// ray->mp = 0;
@@ -38,18 +38,18 @@ void	init_rays(t_ray *ray)
 void	draw_rays(t_vars *vars)
 {
 	t_ray	ray;
-	t_line	line;
 
 	init_rays(&ray);
+	// starting angle position
 	ray.ra = vars->pa - (DR * 30);
+	// resets angle if exceeds 360 or less than 0
 	if (ray.ra < 0)
 		ray.ra += 2 * PI;
 	if (ray.ra > 2 * PI)
 		ray.ra -= 2 * PI;
 
 	// loop for each ray
-	ray.r = -1;
-	while (++ray.r < 360)
+	while (++ray.r < 720)
 	{
 		// horizonal lines
 		ray.dof = 0;
@@ -158,7 +158,8 @@ void	draw_rays(t_vars *vars)
 			ray.tdis = ray.hdis;
 			shade = 1;
 		}
-		// printf("vertical rx: %f ry: %f\n", ray.rx, ray.ry);
+	
+		t_line	line;
 		line = set_line(vars->px, vars->py, ray.rx, ray.ry);
 		draw_line(vars, &line, 0xFF0000);
 
@@ -169,46 +170,57 @@ void	draw_rays(t_vars *vars)
 		if (ca > 2 * PI)
 			ca -= 2 * PI;
 		ray.tdis = ray.tdis * cos(ca);
-		float lineH = (mapS * 700) / ray.tdis;
-		float	ty_step = 32/(float)lineH;
+		float lineH = (mapS * rendersize) / ray.tdis;
+		float	ty_step = 64/(float)lineH;
 		float	ty_off = 0;
-		if (lineH > 700)
+		if (lineH > rendersize)
 		{
-			ty_off = (lineH - 320)/2.0;
-			lineH = 700;
+			ty_off = (lineH - rendersize)/2.0;
+			lineH = rendersize;
 		}
-		float lineO = 350 - lineH / 2;
-		for (int d = 0; d < 2; d++)
+		float lineO = (rendersize / 2) - lineH / 2;
+
+		// walls
+		float	ty = ty_off * ty_step;
+		float	tx;
+		if (shade == 1)
 		{
-			// walls
-			float	ty = ty_off * ty_step;
-			for (int y = 0; y < lineH; y++)
-			{
-				// t_pixel	texture;
-				// texture.addr = mlx_get_data_addr(vars->mapdata.south_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
-				// texture.pos = ty * texture.size_line + ray.r*2
-				// 	* (texture.bits_per_pixel / 8);
-				draw_pixel(vars, ray.r*2+d+(mapY*mapS)+16, y+lineO, 0xFF0000);
-				ty += ty_step;
-			}
-
-			// ceiling
-			line = set_line(ray.r*2+d+(mapY*mapS)+16, 0, ray.r*2+d+(mapY*mapS)+16, lineO);
-			// line.red = vars->mapdata.ceiling_color[0];
-			// line.green = vars->mapdata.ceiling_color[1];
-			// line.blue = vars->mapdata.ceiling_color[2];
-			draw_line(vars, &line, 0x00FFFF);
-
-			// floor
-			line = set_line(ray.r*2+d+(mapY*mapS)+16, lineH+lineO, ray.r*2+d+(mapY*mapS)+16, lineH+lineO+lineO);
-			// line.red = vars->mapdata.floor_color[0];
-			// line.green = vars->mapdata.floor_color[1];
-			// line.blue = vars->mapdata.floor_color[2];
-			draw_line(vars, &line, 0xFFFFFF);
+			tx = (int)(ray.rx) % 64;
+			if (ray.ra > PI)
+				tx = 63 - tx;
 		}
+		else
+		{
+			tx = (int)(ray.ry) % 64;
+			if (ray.ra > P2 && ray.ra < P3)
+				tx = 63 - tx;
+		}
+		for (int y = 0; y < lineH; y++)
+		{
+			t_pixel	texture;
+			texture.addr = mlx_get_data_addr(vars->mapdata.east_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
+			texture.pos = (int)ty * texture.size_line + (int)tx * (texture.bits_per_pixel / 8);
+			draw_texture(vars, ray.r+(mapY*mapS)+16, y+lineO, texture.addr[texture.pos + 2], texture.addr[texture.pos + 1], texture.addr[texture.pos]);
+			// draw_pixel(vars, ray.r+(mapY*mapS)+16, y+lineO, 0xFF0000);
+			ty += ty_step;
+		}
+
+		// ceiling
+		line = set_line(ray.r+(mapY*mapS)+16, 0, ray.r+(mapY*mapS)+16, lineO);
+		// line.red = vars->mapdata.ceiling_color[0];
+		// line.green = vars->mapdata.ceiling_color[1];
+		// line.blue = vars->mapdata.ceiling_color[2];
+		draw_line(vars, &line, 0x00FFFF);
+
+		// floor
+		line = set_line(ray.r+(mapY*mapS)+16, lineH+lineO, ray.r+(mapY*mapS)+16, lineH+lineO+lineO);
+		// line.red = vars->mapdata.floor_color[0];
+		// line.green = vars->mapdata.floor_color[1];
+		// line.blue = vars->mapdata.floor_color[2];
+		draw_line(vars, &line, 0xFFFFFF);
 
 		// loop for each ray at next radian
-		ray.ra += DR / 6;
+		ray.ra += DR / 12;
 		if (ray.ra < 0)
 			ray.ra += 2 * PI;
 		if (ray.ra > 2 * PI)

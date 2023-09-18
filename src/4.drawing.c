@@ -57,6 +57,18 @@ void	draw_pixel(t_vars *vars, int x, int y, int color)
 	pixel.addr[pixel.pos + 2] = pixel.r;
 }
 
+void	draw_texture(t_vars *vars, int x, int y, int r, int g, int b)
+{
+	t_pixel	pixel;
+
+	pixel.addr = mlx_get_data_addr(vars->img, &pixel.bits_per_pixel,
+			&pixel.size_line, &pixel.endian);
+	pixel.pos = y * pixel.size_line + x * (pixel.bits_per_pixel / 8);
+	pixel.addr[pixel.pos] = b;
+	pixel.addr[pixel.pos + 1] = g;
+	pixel.addr[pixel.pos + 2] = r;
+}
+
 void	draw_square(t_vars *vars, int x, int y, int color)
 {
 	int	xx;
@@ -207,16 +219,3 @@ void	draw_line(t_vars *vars, t_line *line, int color)
 		}
 	}
 }
-
-// void	set_texture(t_vars *vars, t_pixel *pixel, char *texturefile)
-// {
-// 	t_pixel	texture;
-
-// 	texture.addr = mlx_get_data_addr(vars->mapdata.north_texture, &texture.bits_per_pixel, &texture.size_line, &texture.endian);
-// 	texture.pos = pixel->y * texture.size_line + pixel->x
-// 		* (texture.bits_per_pixel / 8);
-// 	pixel->addr[pixel->pos] = texture.addr[texture.pos];
-// 	pixel->addr[pixel->pos + 1] = texture.addr[texture.pos + 1];
-// 	pixel->addr[pixel->pos + 2] = texture.addr[texture.pos + 2];
-// 	// pixel->addr[pixel->pos + 3] = 255;
-// }
