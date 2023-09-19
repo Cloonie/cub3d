@@ -39,7 +39,6 @@ void	render_walls(t_vars *vars, t_ray *ray, t_render *render)
 	t_pixel	tex;
 
 	render->ty = render->ty_off * render->ty_step;
-	render->tx;
 	if (ray->shade == 1)
 	{
 		render->tx = (int)(ray->rx) % 64;

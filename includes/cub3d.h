@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/19 14:27:00 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/19 15:25:05 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 #  define D 2
 #  define LEFT 123
 #  define RIGHT 124
+#  define SHIFT 57
+
 # else
 
 // key_hook keycodes for windows //
@@ -100,6 +102,7 @@ typedef struct s_key
 	int	d;
 	int	left;
 	int	right;
+	int	shift;
 }				t_key;
 
 typedef struct s_ray
@@ -126,7 +129,7 @@ typedef struct s_ray
 	float	n_tan;
 
 	float	tdis;
-	int		shade;
+	float	shade;
 }				t_ray;
 
 typedef struct s_render
@@ -151,7 +154,6 @@ typedef struct s_vars
 	float		pa;
 	int			player_size;
 	void		*img;
-	int			run;
 	t_mapdata	mapdata;
 	t_key		key;
 	t_ray		ray;
@@ -189,7 +191,7 @@ typedef struct s_line
 	int	err2;
 }				t_line;
 
-// init.c
+// main.c
 
 void	start_init(t_vars	*vars);
 int		put_whole_image(t_vars *vars);

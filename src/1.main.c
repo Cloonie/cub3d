@@ -22,7 +22,13 @@ void	start_init(t_vars *vars)
 	vars->player_size = 10;
 	vars->px = 64+32;
 	vars->py = (6*64)+32;
-	vars->run = RUN_SPEED;
+	vars->key.w = 0;
+	vars->key.a = 0;
+	vars->key.s = 0;
+	vars->key.d = 0;
+	vars->key.left = 0;
+	vars->key.right = 0;
+	vars->key.shift = RUN_SPEED;
 
 	// vars->pa = D270; // N
 	// vars->pa = PI/2; // S
