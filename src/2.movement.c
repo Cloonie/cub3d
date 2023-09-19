@@ -67,7 +67,7 @@ void	movement(t_vars *vars)
 			&& map[((int)vars->py - yo) / mapS][((int)vars->px) / mapS] == 0)
 			vars->py += sin(vars->pa - (PI / 2.0)) * vars->key.shift;
 	}
-	if (vars->key.d == 1)
+	else if (vars->key.d == 1)
 	{
 		if (map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == 0
 			&& map[((int)vars->py) / mapS][((int)vars->px - xo) / mapS] == 0)
@@ -98,7 +98,7 @@ int	key_press(int keycode, t_vars *vars)
 	if (keycode == RIGHT)
 		vars->key.right = 1;
 	if (keycode == SHIFT)
-		vars->key.shift = 2;
+		vars->key.shift = RUN_SPEED * 2;
 	return (0);
 }
 

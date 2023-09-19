@@ -6,7 +6,7 @@
 /*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/19 15:25:05 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/19 16:52:50 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 #  define D 2
 #  define LEFT 123
 #  define RIGHT 124
-#  define SHIFT 57
+#  define SHIFT 257
 
 # else
 
@@ -60,8 +60,8 @@
 # define mapS 64
 # define mapX 8
 # define mapY 8
-# define screenWidth 960*2
-# define screenHeight 640*2
+# define screenWidth (8*64)+720//960*2
+# define screenHeight 800//640*2
 # define rendersize 700
 # define PI 3.14159265359	// 0/360 degrees
 # define D90 (PI/2)			// 90 degrees
