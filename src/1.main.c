@@ -20,8 +20,8 @@ void	start_init(t_vars *vars)
 	vars->mlx = mlx_init();
 	vars->win = mlx_new_window(vars->mlx, screenWidth, screenHeight, "cub3d");
 	vars->player_size = 10;
-	vars->px = 64+32;
-	vars->py = (6*64)+32;
+	vars->px = mapS+32;
+	vars->py = (6*mapS)+32;
 	vars->key.w = 0;
 	vars->key.a = 0;
 	vars->key.s = 0;

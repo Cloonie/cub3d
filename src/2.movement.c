@@ -34,12 +34,12 @@ void	rotation(t_vars *vars)
 
 void	movement(t_vars *vars)
 {
-	int xo	= 0;
+	int xo	=  0;
+	int yo	= 0;
 	if (vars->pdx < 0)
 		xo -= 10;
 	else
 		xo += 10;
-	int yo	= 0;
 	if (vars->pdy < 0)
 		yo -= 10;
 	else
@@ -60,20 +60,20 @@ void	movement(t_vars *vars)
 	}
 	if (vars->key.a == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == 0
-			&& map[((int)vars->py) / mapS][((int)vars->px - xo) / mapS] == 0)
+		if (map[((int)vars->py) / mapS][((int)vars->px + xo -1) / mapS] == 0
+			&& map[((int)vars->py) / mapS][((int)vars->px - xo -1) / mapS] == 0)
 			vars->px += cos(vars->pa - (PI / 2.0)) * vars->key.shift;
-		if (map[((int)vars->py + yo) / mapS][((int)vars->px) / mapS] == 0
-			&& map[((int)vars->py - yo) / mapS][((int)vars->px) / mapS] == 0)
+		if (map[((int)vars->py + yo -1) / mapS][((int)vars->px) / mapS] == 0
+			&& map[((int)vars->py - yo -1) / mapS][((int)vars->px) / mapS] == 0)
 			vars->py += sin(vars->pa - (PI / 2.0)) * vars->key.shift;
 	}
 	else if (vars->key.d == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == 0
-			&& map[((int)vars->py) / mapS][((int)vars->px - xo) / mapS] == 0)
+		if (map[((int)vars->py) / mapS][((int)vars->px + xo +1) / mapS] == 0
+			&& map[((int)vars->py) / mapS][((int)vars->px - xo +1) / mapS] == 0)
 			vars->px += cos(vars->pa + (PI / 2.0)) * vars->key.shift;
-		if (map[((int)vars->py + yo) / mapS][((int)vars->px) / mapS] == 0
-			&& map[((int)vars->py - yo) / mapS][((int)vars->px) / mapS] == 0)
+		if (map[((int)vars->py + yo +1) / mapS][((int)vars->px) / mapS] == 0
+			&& map[((int)vars->py - yo +1) / mapS][((int)vars->px) / mapS] == 0)
 			vars->py += sin(vars->pa + (PI / 2.0)) * vars->key.shift;
 	}
 }

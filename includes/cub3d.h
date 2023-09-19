@@ -6,7 +6,7 @@
 /*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/19 16:52:50 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/19 18:58:26 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@
 # define mapS 64
 # define mapX 8
 # define mapY 8
-# define screenWidth (8*64)+720//960*2
-# define screenHeight 800//640*2
-# define rendersize 700
+# define textureS 64
+# define screenWidth (20*64)//960*2
+# define screenHeight 805//640*2
+# define rendersize 640
 # define PI 3.14159265359	// 0/360 degrees
 # define D90 (PI/2)			// 90 degrees
 # define D270 (3*PI/2)		// 270 degrees

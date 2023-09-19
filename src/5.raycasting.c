@@ -39,16 +39,16 @@ void	horizon_rays(t_vars *vars, t_ray *ray)
 	ray->a_tan = -1 / tan(ray->ra);
 	if (ray->ra > PI) // looking up
 	{
-		ray->ry = (((int)vars->py / 64) * 64) - 0.0001;
+		ray->ry = (((int)vars->py / mapS) * mapS) - 0.0001;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
-		ray->yo = -64;
+		ray->yo = -mapS;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
 	if (ray->ra < PI) // looking down
 	{
-		ray->ry = (((int)vars->py / 64) * 64) + 64;
+		ray->ry = (((int)vars->py / mapS) * mapS) + mapS;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
-		ray->yo = 64;
+		ray->yo = mapS;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
 	// if (ray->ra == 0 || ray->ra == PI) // looking left or right
@@ -63,8 +63,8 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 {
 	while (ray->dof < 8)
 	{
-		ray->mx = (int)(ray->rx) / 64;
-		ray->my = (int)(ray->ry) / 64;
+		ray->mx = (int)(ray->rx) / mapS;
+		ray->my = (int)(ray->ry) / mapS;
 		ray->mp = ray->my * mapX + ray->mx;
 		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
 			&& map[ray->my][ray->mx] == 1)
@@ -92,16 +92,16 @@ void	vertical_rays(t_vars *vars, t_ray *ray)
 	ray->n_tan = -tan(ray->ra);
 	if (ray->ra > D90 && ray->ra < D270) // looking left
 	{
-		ray->rx = (((int)vars->px / 64) * 64) - 0.0001;
+		ray->rx = (((int)vars->px / mapS) * mapS) - 0.0001;
 		ray->ry = (vars->px - ray->rx) * ray->n_tan + vars->py;
-		ray->xo = -64;
+		ray->xo = -mapS;
 		ray->yo = -ray->xo * ray->n_tan;
 	}
 	if (ray->ra < D90 || ray->ra > D270) // looking right
 	{
-		ray->rx = (((int)vars->px / 64) * 64) + 64;
+		ray->rx = (((int)vars->px / mapS) * mapS) + mapS;
 		ray->ry = (vars->px - ray->rx) * ray->n_tan + vars->py;
-		ray->xo = 64;
+		ray->xo = mapS;
 		ray->yo = -ray->xo * ray->n_tan;
 	}
 	// if (ray->ra == 0 || ray->ra == PI) // looking up or down
@@ -116,8 +116,8 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 {
 	while (ray->dof < 8)
 	{
-		ray->mx = (int)(ray->rx) / 64;
-		ray->my = (int)(ray->ry) / 64;
+		ray->mx = (int)(ray->rx) / mapS;
+		ray->my = (int)(ray->ry) / mapS;
 		ray->mp = ray->my * mapX + ray->mx;
 		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
 			&& map[ray->my][ray->mx] == 1)
