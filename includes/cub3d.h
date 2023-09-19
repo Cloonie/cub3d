@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/19 04:38:52 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/19 14:27:00 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,10 +205,12 @@ int		key_release(int keycode, t_vars *vars);
 
 void	open_map_file(t_vars *vars);
 
-// drawing.c
+// color.c
 
 void	hex_to_rgb(int hex_color, int *red, int *green, int *blue);
 int		rgb_to_hex(int red, int green, int blue);
+
+// drawing.c
 
 void	draw_pixel(t_vars *vars, int x, int y, int color);
 void	draw_square(t_vars *vars, int x, int y, int color);
@@ -219,7 +221,20 @@ void	draw_line(t_vars *vars, t_line *line, int color);
 
 // raycasting.c
 
+void	init_rays(t_vars *vars, t_ray *ray);
+void	horizon_rays(t_vars *vars, t_ray *ray);
+void	horizon_dof(t_vars *vars, t_ray *ray);
+void	vertical_rays(t_vars *vars, t_ray *ray);
+void	vertical_dof(t_vars *vars, t_ray *ray);
+void	get_nearest_ray(t_vars *vars, t_ray *ray);
 void	draw_rays(t_vars *vars);
+
+// rendering.c
+
+void	render_ceiling(t_vars *vars, t_ray *ray, t_render *render);
+void	render_floor(t_vars *vars, t_ray *ray, t_render *render);
+void	render_walls(t_vars *vars, t_ray *ray, t_render *render);
+void	rendering(t_vars *vars, t_ray *ray);
 
 // utils.c
 
