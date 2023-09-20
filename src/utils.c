@@ -14,6 +14,7 @@
 
 void	quit(t_vars *vars, char *msg)
 {
+	printf("Error\n");
 	perror(msg);
 	exit(1);
 }
@@ -21,7 +22,7 @@ void	quit(t_vars *vars, char *msg)
 int	window_close(t_vars *vars)
 {
 	(void)vars;
-	printf("Window closed.\n");
+	printf("Window closed: close window button.\n");
 	exit(0);
 }
 

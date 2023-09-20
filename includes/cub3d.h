@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/20 17:23:09 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/20 18:02:22 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ int		key_release(int keycode, t_vars *vars);
 
 // parasing.c
 
-void	open_map_file(t_vars *vars);
+void	open_map_file(t_vars *vars, char *file);
 
 // color.c
 

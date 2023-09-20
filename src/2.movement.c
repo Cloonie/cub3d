@@ -34,10 +34,11 @@ void	rotation(t_vars *vars)
 
 void	movement(t_vars *vars)
 {
-	char **map = vars->mapdata.map;
-
+	char	**map;
 	int xo	=  0;
 	int yo	= 0;
+
+	map = vars->mapdata.map;
 	if (vars->pdx < 0)
 		xo -= 10;
 	else
@@ -86,6 +87,7 @@ int	key_press(int keycode, t_vars *vars)
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(vars->mlx, vars->win);
+		printf("Window closed: ESC button\n");
 		exit(0);
 	}
 	if (keycode == W)
@@ -132,7 +134,5 @@ int	key_release(int keycode, t_vars *vars)
 		vars->key.shift = RUN_SPEED;
 	if (keycode == E)
 		vars->key.e = 0;
-	// if (keycode == M)
-	// 	vars->key.m = 0;
 	return (0);
 }

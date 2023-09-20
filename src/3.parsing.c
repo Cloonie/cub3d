@@ -40,14 +40,14 @@ void	spawn_direction(t_vars *vars)
 		quit(vars, "Spawn direction");
 }
 
-void	open_map_file(t_vars *vars)
+void	open_map_file(t_vars *vars, char *file)
 {
 	int		i;
 	int		fd;
 	char	buf[1000];
 	char	**array;
 
-	fd = open("maps/map.cub", O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		perror("fd cant open");
 	i = read(fd, buf, 1000);
@@ -93,7 +93,7 @@ void	open_map_file(t_vars *vars)
 			vars->mapdata.map = malloc(sizeof(char **) * (j - i + 1));
 			j = -1;
 			while (array[i])
-				vars->mapdata.map[++j] = ft_strdup(array[i++]);
+				vars->mapdata.map[++j] = ft_strtrim(array[i++], "\r");
 			handle_map(vars, vars->mapdata.map);
 			break ;
 		}
@@ -120,7 +120,7 @@ void	handle_map(t_vars *vars, char **map)
 	}
 	while (map[++y])
 	{
-		if (map[y][0] != '1' || map[y][ft_strlen(map[y]) - 2] != '1')
+		if (map[y][0] != '1' || map[y][ft_strlen(map[y]) - 1] != '1')
 			perror("map sides not closed");
 		x = -1;
 		while (map[y][++x])
@@ -140,7 +140,7 @@ void	handle_map(t_vars *vars, char **map)
 			}
 			else if (map[y][x] != '0' && map[y][x] != '1'
 				&& map[y][x] != 'N' && map[y][x] != 'S'
-				&& map[y][x] != 'E' && map[y][x] != 'W' && map[y][x] != '\r')
+				&& map[y][x] != 'E' && map[y][x] != 'W')
 				quit(vars, "Invalid character in map");
 		}
 		if (map[y + 1] == NULL)
