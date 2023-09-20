@@ -1,5 +1,5 @@
-NO ./textures/brickwall.xpm
-SO ./textures/brickwall.xpm
+NO ./textures/north.xpm
+SO ./textures/south.xpm
 EA ./textures/brickwall.xpm
 WE ./textures/brickwall.xpm
 
@@ -11,6 +11,6 @@ C 135,206,235
 10111101
 10000001
 10000001
-100E0101
+100N0101
 10000001
 11111111

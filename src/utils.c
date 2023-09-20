@@ -14,6 +14,12 @@
 
 void	quit(t_vars *vars, char *msg)
 {
+	int	i;
+
+	i = -1;
+	while (vars->mapdata.map[++i])
+		free(vars->mapdata.map[i]);
+	free(vars->mapdata.map);
 	printf("Error\n");
 	perror(msg);
 	exit(1);
@@ -21,9 +27,8 @@ void	quit(t_vars *vars, char *msg)
 
 int	window_close(t_vars *vars)
 {
-	(void)vars;
-	printf("Window closed: close window button.\n");
-	exit(0);
+	quit(vars, "Window closed: close window button.\n");
+	return (0);
 }
 
 float	dist(float ax, float ay, float bx, float by)

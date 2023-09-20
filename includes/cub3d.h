@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/20 18:02:22 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/21 03:41:13 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 #  define LEFT 123
 #  define RIGHT 124
 #  define SHIFT 257
+#  define E 14
+#  define M 46
 
 # else
 
@@ -58,7 +60,6 @@
 
 // variables
 
-# define MAX_PATH_LENGTH 100
 # define mapS 64
 # define mapX 8
 # define mapY 8
@@ -66,24 +67,14 @@
 # define screenWidth mapS*mapX*2
 # define screenHeight mapS*mapY*2
 # define RAYOFFSET (screenWidth/60)
+
 # define PI 3.14159265359	// 0/360 degrees
 # define D90 (PI/2)			// 90 degrees
 # define D270 (3*PI/2)		// 270 degrees
 # define DR 0.0174533		// one degree in radians
+
 # define RUN_SPEED 1
 # define ROTATION_SPEED 1.5
-
-// static int map[mapY][mapX]=
-// {
-// 	{1,1,1,1,1,1,1,1},
-// 	{1,0,0,0,0,0,0,1},
-// 	{1,0,1,1,1,1,0,1},
-// 	{1,0,0,0,0,1,0,1},
-// 	{1,0,0,1,0,1,0,1},
-// 	{1,0,0,0,0,1,0,1},
-// 	{1,0,0,0,0,0,0,1},
-// 	{1,1,1,1,1,1,1,1},
-// };
 
 typedef struct s_mapdata
 {

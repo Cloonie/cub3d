@@ -34,38 +34,46 @@ void	render_floor(t_vars *vars, t_ray *ray, t_render *render)
 			vars->mapdata.floor_color[2]));
 }
 
+void	texture_ns(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
+{
+	render->tx = (int)(ray->rx) % textureS;
+	if (ray->ra < PI)
+	{
+		render->tx = (textureS - 1) - render->tx; // flip image horizontally
+		tex->addr = mlx_get_data_addr(vars->mapdata.north_texture,
+				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
+	}
+	if (ray->ra > PI)
+		tex->addr = mlx_get_data_addr(vars->mapdata.south_texture,
+				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
+}
+
+void	texture_we(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
+{
+	render->tx = (int)(ray->ry) % textureS;
+	if (ray->ra > D90 && ray->ra < D270)
+	{
+		render->tx = (textureS - 1) - render->tx; // flip image horizontally
+		tex->addr = mlx_get_data_addr(vars->mapdata.east_texture,
+				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
+	}
+	if (ray->ra < D90 || ray->ra > D270)
+		tex->addr = mlx_get_data_addr(vars->mapdata.west_texture,
+				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
+}
+
 void	render_walls(t_vars *vars, t_ray *ray, t_render *render)
 {
 	t_pixel	tex;
+	int		y;
 
+	y = -1;
 	render->ty = render->ty_off * render->ty_step;
 	if (ray->shade == 1)
-	{
-		render->tx = (int)(ray->rx) % textureS;
-		if (ray->ra < PI)
-		{
-			render->tx = ((textureS)-1) - render->tx; // flip image horizontally
-			tex.addr = mlx_get_data_addr(vars->mapdata.north_texture,
-					&tex.bits_per_pixel, &tex.size_line, &tex.endian);
-		}
-		if (ray->ra > PI)
-			tex.addr = mlx_get_data_addr(vars->mapdata.south_texture,
-					&tex.bits_per_pixel, &tex.size_line, &tex.endian);
-	}
+		texture_ns(vars, ray, render, &tex);
 	else
-	{
-		render->tx = (int)(ray->ry) % textureS;
-		if (ray->ra > D90 && ray->ra < D270)
-		{
-			render->tx = (textureS-1) - render->tx; // flip image horizontally
-			tex.addr = mlx_get_data_addr(vars->mapdata.east_texture,
-					&tex.bits_per_pixel, &tex.size_line, &tex.endian);
-		}
-		if (ray->ra < D90 || ray->ra > D270)
-			tex.addr = mlx_get_data_addr(vars->mapdata.west_texture,
-					&tex.bits_per_pixel, &tex.size_line, &tex.endian);
-	}
-	for (int y = 0; y < render->lineH; y++)
+		texture_we(vars, ray, render, &tex);
+	while (++y < render->lineH)
 	{
 		tex.pos = (int)render->ty * tex.size_line + (int)render->tx
 			* (tex.bits_per_pixel / 8);
@@ -96,8 +104,7 @@ void	rendering(t_vars *vars, t_ray *ray)
 		render->lineH = screenHeight;
 	}
 	render->lineO = (screenHeight / 2) - render->lineH / 2;
-
-	render_walls(vars, ray, render);
 	render_ceiling(vars, ray, render);
+	render_walls(vars, ray, render);
 	render_floor(vars, ray, render);
 }

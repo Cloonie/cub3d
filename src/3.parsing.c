@@ -49,12 +49,10 @@ void	open_map_file(t_vars *vars, char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		perror("fd cant open");
+		quit(vars, "File not found");
 	i = read(fd, buf, 1000);
 	buf[i] = '\0';
-
 	// printf("%s\n", buf);
-
 	array = ft_split(buf, '\n');
 	i = -1;
 	while (array[++i])
@@ -94,17 +92,23 @@ void	open_map_file(t_vars *vars, char *file)
 			j = -1;
 			while (array[i])
 				vars->mapdata.map[++j] = ft_strtrim(array[i++], "\r");
+			for (int x = 0; vars->mapdata.map[x]; x++)
+				printf("%s\n", vars->mapdata.map[x]);
 			handle_map(vars, vars->mapdata.map);
 			break ;
 		}
 		else
 		{
-			perror("error");
+			quit(vars, "");
 			break ;
 		}
 	}
 	unvalid_texture_file(vars);
 	spawn_direction(vars);
+	i = -1;
+	while (array[++i])
+		free(array[i]);
+	free(array);
 }
 
 void	handle_map(t_vars *vars, char **map)
@@ -112,16 +116,17 @@ void	handle_map(t_vars *vars, char **map)
 	int	y;
 	int	x;
 
+	y = 0;
 	x = -1;
 	while (map[y][++x])
 	{
 		if (map[y][x] != '1' && map[y][x] != '\r')
-			perror("map top not closed");
+			quit(vars, "Map top not closed");
 	}
 	while (map[++y])
 	{
 		if (map[y][0] != '1' || map[y][ft_strlen(map[y]) - 1] != '1')
-			perror("map sides not closed");
+			quit(vars, "Map sides not closed");
 		x = -1;
 		while (map[y][++x])
 		{
@@ -150,6 +155,6 @@ void	handle_map(t_vars *vars, char **map)
 	while (map[y][++x])
 	{
 		if (map[y][x] != '1')
-			perror("map bottom not closed");
+			quit(vars, "map bottom not closed");
 	}
 }

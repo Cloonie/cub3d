@@ -39,8 +39,6 @@ void	start_init(t_vars *vars)
 */
 int	put_whole_image(t_vars *vars)
 {
-	t_line	line;
-
 	vars->img = mlx_new_image(vars->mlx, screenWidth, screenHeight);
 	movement(vars);
 	rotation(vars);
@@ -61,7 +59,7 @@ int	main(int argc, char **argv)
 	t_vars		vars;
 
 	if (argc != 2)
-		quit(&vars, "Error, please input ./cub3d [path_to_map_file]");
+		quit(&vars, "Please input ./cub3d [path_to_map_file]");
 	start_init(&vars);
 	open_map_file(&vars, argv[1]);
 	mlx_loop_hook(vars.mlx, put_whole_image, &vars);
