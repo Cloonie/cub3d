@@ -20,8 +20,6 @@ void	start_init(t_vars *vars)
 	vars->mlx = mlx_init();
 	vars->win = mlx_new_window(vars->mlx, screenWidth, screenHeight, "cub3d");
 	vars->player_size = 10;
-	vars->px = mapS+32;
-	vars->py = (6*mapS)+32;
 	vars->key.w = 0;
 	vars->key.a = 0;
 	vars->key.s = 0;
@@ -31,11 +29,7 @@ void	start_init(t_vars *vars)
 	vars->key.shift = RUN_SPEED;
 	vars->key.e = 0;
 	vars->key.m = 0;
-
-	// vars->pa = D270; // N
-	// vars->pa = PI/2; // S
-	vars->pa = 0; // E
-	// vars->pa = PI; // W
+	vars->pspawn_dir = 0;
 }
 
 /*
@@ -66,11 +60,11 @@ int	main(int argc, char **argv)
 {
 	t_vars		vars;
 
-	if (argc != 2)
-	{
-		printf("Error, please input ./cub3d [path_to_map_file]\n");
-		// return (0);
-	}
+	// if (argc != 2)
+	// {
+	// 	printf("Error, please input ./cub3d [path_to_map_file]\n");
+	// 	return (0);
+	// }
 	start_init(&vars);
 	open_map_file(&vars);
 	mlx_loop_hook(vars.mlx, put_whole_image, &vars);

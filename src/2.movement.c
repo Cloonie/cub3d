@@ -34,6 +34,8 @@ void	rotation(t_vars *vars)
 
 void	movement(t_vars *vars)
 {
+	char **map = vars->mapdata.map;
+
 	int xo	=  0;
 	int yo	= 0;
 	if (vars->pdx < 0)
@@ -46,34 +48,34 @@ void	movement(t_vars *vars)
 		yo += 10;
 	if (vars->key.w == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == 0)
+		if (map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == '0')
 			vars->px += cos(vars->pa) * vars->key.shift;
-		if (map[((int)vars->py + yo) / mapS][((int)vars->px) / mapS] == 0)
+		if (map[((int)vars->py + yo) / mapS][((int)vars->px) / mapS] == '0')
 			vars->py += sin(vars->pa) * vars->key.shift;
 	}
 	if (vars->key.s == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px - xo) / mapS] == 0)
+		if (map[((int)vars->py) / mapS][((int)vars->px - xo) / mapS] == '0')
 			vars->px -= cos(vars->pa) * vars->key.shift;
-		if (map[((int)vars->py - yo) / mapS][((int)vars->px) / mapS] == 0)
+		if (map[((int)vars->py - yo) / mapS][((int)vars->px) / mapS] == '0')
 			vars->py -= sin(vars->pa) * vars->key.shift;
 	}
 	if (vars->key.a == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px + xo -1) / mapS] == 0
-			&& map[((int)vars->py) / mapS][((int)vars->px - xo -1) / mapS] == 0)
+		if (map[((int)vars->py) / mapS][((int)vars->px + xo -1) / mapS] == '0'
+			&& map[((int)vars->py) / mapS][((int)vars->px - xo -1) / mapS] == '0')
 			vars->px += cos(vars->pa - (PI / 2.0)) * vars->key.shift;
-		if (map[((int)vars->py + yo -1) / mapS][((int)vars->px) / mapS] == 0
-			&& map[((int)vars->py - yo -1) / mapS][((int)vars->px) / mapS] == 0)
+		if (map[((int)vars->py + yo -1) / mapS][((int)vars->px) / mapS] == '0'
+			&& map[((int)vars->py - yo -1) / mapS][((int)vars->px) / mapS] == '0')
 			vars->py += sin(vars->pa - (PI / 2.0)) * vars->key.shift;
 	}
 	else if (vars->key.d == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px + xo +1) / mapS] == 0
-			&& map[((int)vars->py) / mapS][((int)vars->px - xo +1) / mapS] == 0)
+		if (map[((int)vars->py) / mapS][((int)vars->px + xo +1) / mapS] == '0'
+			&& map[((int)vars->py) / mapS][((int)vars->px - xo +1) / mapS] == '0')
 			vars->px += cos(vars->pa + (PI / 2.0)) * vars->key.shift;
-		if (map[((int)vars->py + yo +1) / mapS][((int)vars->px) / mapS] == 0
-			&& map[((int)vars->py - yo +1) / mapS][((int)vars->px) / mapS] == 0)
+		if (map[((int)vars->py + yo +1) / mapS][((int)vars->px) / mapS] == '0'
+			&& map[((int)vars->py - yo +1) / mapS][((int)vars->px) / mapS] == '0')
 			vars->py += sin(vars->pa + (PI / 2.0)) * vars->key.shift;
 	}
 }

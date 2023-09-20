@@ -67,7 +67,7 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 		ray->my = (int)(ray->ry) / mapS;
 		ray->mp = ray->my * mapX + ray->mx;
 		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
-			&& map[ray->my][ray->mx] == 1)
+			&& vars->mapdata.map[ray->my][ray->mx] == '1')
 		{
 			ray->hx = ray->rx;
 			ray->hy = ray->ry;
@@ -120,7 +120,7 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 		ray->my = (int)(ray->ry) / mapS;
 		ray->mp = ray->my * mapX + ray->mx;
 		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
-			&& map[ray->my][ray->mx] == 1)
+			&& vars->mapdata.map[ray->my][ray->mx] == '1')
 		{
 			ray->vx = ray->rx;
 			ray->vy = ray->ry;
@@ -196,7 +196,7 @@ void	draw_rays(t_vars *vars)
 		vertical_rays(vars, ray);
 		vertical_dof(vars, ray);
 		get_nearest_ray(vars, ray);
-		ray->ra += DR / 12;
+		ray->ra += DR / RAYOFFSET;
 		if (ray->ra < 0)
 			ray->ra += 2 * PI;
 		if (ray->ra > 2 * PI)

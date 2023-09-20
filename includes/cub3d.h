@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/20 15:12:38 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/20 17:23:09 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,17 @@
 # define RUN_SPEED 1
 # define ROTATION_SPEED 1.5
 
-static int map[mapY][mapX]=
-{
-	{1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,1},
-	{1,0,1,1,1,1,0,1},
-	{1,0,0,0,0,1,0,1},
-	{1,0,0,1,0,1,0,1},
-	{1,0,0,0,0,1,0,1},
-	{1,0,0,0,0,0,0,1},
-	{1,1,1,1,1,1,1,1},
-};
+// static int map[mapY][mapX]=
+// {
+// 	{1,1,1,1,1,1,1,1},
+// 	{1,0,0,0,0,0,0,1},
+// 	{1,0,1,1,1,1,0,1},
+// 	{1,0,0,0,0,1,0,1},
+// 	{1,0,0,1,0,1,0,1},
+// 	{1,0,0,0,0,1,0,1},
+// 	{1,0,0,0,0,0,0,1},
+// 	{1,1,1,1,1,1,1,1},
+// };
 
 typedef struct s_mapdata
 {
@@ -94,7 +94,7 @@ typedef struct s_mapdata
 	int		mlx_size;
 	int		floor_color[3];
 	int		ceiling_color[3];
-	int		map[mapX][mapY];
+	char	**map;
 }				t_mapdata;
 
 typedef struct s_key
@@ -157,6 +157,7 @@ typedef struct s_vars
 	float		pdx;
 	float		pdy;
 	float		pa;
+	int			pspawn_dir;
 	int			player_size;
 	void		*img;
 	t_mapdata	mapdata;
@@ -247,6 +248,7 @@ void	rendering(t_vars *vars, t_ray *ray);
 
 // utils.c
 
+void	quit(t_vars *vars, char *msg);
 int		window_close(t_vars *vars);
 float	dist(float ax, float ay, float bx, float by);
 

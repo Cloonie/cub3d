@@ -12,6 +12,34 @@
 
 #include "cub3d.h"
 
+void	handle_map(t_vars *vars, char **array);
+
+void	unvalid_texture_file(t_vars *vars)
+{
+	if (vars->mapdata.north_texture == 0)
+		quit(vars, "north_texture");
+	if (vars->mapdata.south_texture == 0)
+		quit(vars, "south_texture");
+	if (vars->mapdata.east_texture == 0)
+		quit(vars, "east_texture");
+	if (vars->mapdata.west_texture == 0)
+		quit(vars, "west_texture");
+}
+
+void	spawn_direction(t_vars *vars)
+{
+	if (vars->pspawn_dir == 'N')
+		vars->pa = D270; // N
+	else if (vars->pspawn_dir == 'S')
+		vars->pa = PI/2; // S
+	else if (vars->pspawn_dir == 'E')
+		vars->pa = 0; // E
+	else if (vars->pspawn_dir == 'W')
+		vars->pa = PI; // W
+	else
+		quit(vars, "Spawn direction");
+}
+
 void	open_map_file(t_vars *vars)
 {
 	int		i;
@@ -56,31 +84,18 @@ void	open_map_file(t_vars *vars)
 		}
 		else if (!ft_strncmp(array[i], "1", 1))
 		{
-			int j = -1;
-			while (array[i][++j])
-			{
-				if (array[i][j] != '1' && array[i][j] != '\r')
-					perror("map top not closed");
-			}
-			while (array[++i])
-			{
-				if (array[i][0] != '1' || array[i][ft_strlen(array[i]) - 2] != '1')
-					perror("map sides not closed");
-				// int player_found = 0;
-				j = -1;
-				// while (array[i][++j])
-				// {
-				// 	if (array[i][j] == 'N' || array[i][j] == 'S');
-				// }
-				if (array[i + 1] == NULL)
-					break ;
-			}
+			int	j;
+
+			j = i;
+			while (array[j])
+				j++;
+			// printf("j: %d\n", (j - i + 1));
+			vars->mapdata.map = malloc(sizeof(char **) * (j - i + 1));
 			j = -1;
-			while (array[i][++j])
-			{
-				if (array[i][j] != '1')
-					perror("map bottom not closed");
-			}
+			while (array[i])
+				vars->mapdata.map[++j] = ft_strdup(array[i++]);
+			handle_map(vars, vars->mapdata.map);
+			break ;
 		}
 		else
 		{
@@ -88,5 +103,53 @@ void	open_map_file(t_vars *vars)
 			break ;
 		}
 	}
+	unvalid_texture_file(vars);
+	spawn_direction(vars);
 }
 
+void	handle_map(t_vars *vars, char **map)
+{
+	int	y;
+	int	x;
+
+	x = -1;
+	while (map[y][++x])
+	{
+		if (map[y][x] != '1' && map[y][x] != '\r')
+			perror("map top not closed");
+	}
+	while (map[++y])
+	{
+		if (map[y][0] != '1' || map[y][ft_strlen(map[y]) - 2] != '1')
+			perror("map sides not closed");
+		x = -1;
+		while (map[y][++x])
+		{
+			if (vars->pspawn_dir != 0
+				&& (map[y][x] == 'N' || map[y][x] == 'S'
+				|| map[y][x] == 'E' || map[y][x] == 'W'))
+				quit(vars, "Multiple player spawn point");
+			else if (vars->pspawn_dir == 0
+				&& (map[y][x] == 'N' || map[y][x] == 'S'
+				|| map[y][x] == 'E' || map[y][x] == 'W'))
+			{
+				vars->pspawn_dir = map[y][x];
+				vars->px = (x * mapS) + (mapS / 2);
+				vars->py = (y * mapS) + (mapS / 2);
+				map[y][x] = '0';
+			}
+			else if (map[y][x] != '0' && map[y][x] != '1'
+				&& map[y][x] != 'N' && map[y][x] != 'S'
+				&& map[y][x] != 'E' && map[y][x] != 'W' && map[y][x] != '\r')
+				quit(vars, "Invalid character in map");
+		}
+		if (map[y + 1] == NULL)
+			break ;
+	}
+	x = -1;
+	while (map[y][++x])
+	{
+		if (map[y][x] != '1')
+			perror("map bottom not closed");
+	}
+}

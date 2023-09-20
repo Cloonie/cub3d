@@ -12,10 +12,16 @@
 
 #include "cub3d.h"
 
+void	quit(t_vars *vars, char *msg)
+{
+	perror(msg);
+	exit(1);
+}
+
 int	window_close(t_vars *vars)
 {
 	(void)vars;
-	printf("window close\n");
+	printf("Window closed.\n");
 	exit(0);
 }
 
