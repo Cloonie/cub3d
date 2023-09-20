@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 void	render_ceiling(t_vars *vars, t_ray *ray, t_render *render)
 {
 	t_line	line;
 
-	line = set_line(ray->r + (mapY * textureS), 0,
-			ray->r + (mapY * textureS), render->lineO);
+	line = set_line(ray->r, 0,
+			ray->r, render->lineO);
 	draw_line(vars, &line, rgb_to_hex(vars->mapdata.ceiling_color[0],
 			vars->mapdata.ceiling_color[1],
 			vars->mapdata.ceiling_color[2]));
@@ -27,8 +27,8 @@ void	render_floor(t_vars *vars, t_ray *ray, t_render *render)
 {
 	t_line	line;
 
-	line = set_line(ray->r + (mapY * textureS), (render->lineH + render->lineO),
-			ray->r + (mapY * textureS), (render->lineH + (render->lineO * 2)));
+	line = set_line(ray->r, (render->lineH + render->lineO),
+			ray->r, (render->lineH + (render->lineO * 2)));
 	draw_line(vars, &line, rgb_to_hex(vars->mapdata.floor_color[0],
 			vars->mapdata.floor_color[1],
 			vars->mapdata.floor_color[2]));
@@ -69,7 +69,7 @@ void	render_walls(t_vars *vars, t_ray *ray, t_render *render)
 	{
 		tex.pos = (int)render->ty * tex.size_line + (int)render->tx
 			* (tex.bits_per_pixel / 8);
-		draw_pixel(vars, ray->r + (mapY * textureS), (y + render->lineO),
+		draw_pixel(vars, ray->r, (y + render->lineO),
 			rgb_to_hex(tex.addr[tex.pos + 2], tex.addr[tex.pos + 1],
 				tex.addr[tex.pos]));
 		render->ty += render->ty_step;
@@ -87,15 +87,15 @@ void	rendering(t_vars *vars, t_ray *ray)
 	if (render->ca > 2 * PI)
 		render->ca -= 2 * PI;
 	ray->tdis = ray->tdis * cos(render->ca);
-	render->lineH = (textureS * rendersize) / ray->tdis;
+	render->lineH = (textureS * screenHeight) / ray->tdis;
 	render->ty_step = textureS / (float)render->lineH;
 	render->ty_off = 0;
-	if (render->lineH > rendersize)
+	if (render->lineH > screenHeight)
 	{
-		render->ty_off = (render->lineH - rendersize) / 2;
-		render->lineH = rendersize;
+		render->ty_off = (render->lineH - screenHeight) / 2;
+		render->lineH = screenHeight;
 	}
-	render->lineO = (rendersize / 2) - render->lineH / 2;
+	render->lineO = (screenHeight / 2) - render->lineH / 2;
 
 	render_walls(vars, ray, render);
 	render_ceiling(vars, ray, render);

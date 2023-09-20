@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 /*
 	Initialize variables required for the start of program.
@@ -29,6 +29,8 @@ void	start_init(t_vars *vars)
 	vars->key.left = 0;
 	vars->key.right = 0;
 	vars->key.shift = RUN_SPEED;
+	vars->key.e = 0;
+	vars->key.m = 0;
 
 	// vars->pa = D270; // N
 	// vars->pa = PI/2; // S
@@ -43,12 +45,18 @@ void	start_init(t_vars *vars)
 */
 int	put_whole_image(t_vars *vars)
 {
+	t_line	line;
+
 	vars->img = mlx_new_image(vars->mlx, screenWidth, screenHeight);
 	movement(vars);
 	rotation(vars);
-	draw_bg(vars);
-	draw_player(vars);
-	draw_rays(vars);
+	raycasting(vars);
+	if (vars->key.m == 1)
+	{
+		draw_bg(vars);
+		draw_player(vars);
+		draw_rays(vars);
+	}
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img, 0, 0);
 	mlx_destroy_image(vars->mlx, vars->img);
 	return (0);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 void	init_rays(t_vars *vars, t_ray *ray)
 {
@@ -154,8 +154,33 @@ void	get_nearest_ray(t_vars *vars, t_ray *ray)
 		ray->tdis = ray->hdis;
 		ray->shade = 1;
 	}
-	line = set_line(vars->px, vars->py, ray->rx, ray->ry);
-	draw_line(vars, &line, 0xFF0000);
+	if (vars->key.m == 1)
+	{
+		line = set_line(vars->px, vars->py, ray->rx, ray->ry);
+		draw_line(vars, &line, 0xFF0000);
+	}
+}
+
+void	raycasting(t_vars *vars)
+{
+	t_ray	*ray;
+
+	ray = &vars->ray;
+	init_rays(vars, ray);
+	while (++ray->r < screenWidth) // loop for each ray
+	{
+		horizon_rays(vars, ray);
+		horizon_dof(vars, ray);
+		vertical_rays(vars, ray);
+		vertical_dof(vars, ray);
+		get_nearest_ray(vars, ray);
+		rendering(vars, ray);
+		ray->ra += DR / RAYOFFSET;
+		if (ray->ra < 0)
+			ray->ra += 2 * PI;
+		if (ray->ra > 2 * PI)
+			ray->ra -= 2 * PI;
+	}
 }
 
 void	draw_rays(t_vars *vars)
@@ -164,15 +189,13 @@ void	draw_rays(t_vars *vars)
 
 	ray = &vars->ray;
 	init_rays(vars, ray);
-	while (++ray->r < 720) // loop for each ray
+	while (++ray->r < screenWidth) // loop for each ray
 	{
 		horizon_rays(vars, ray);
 		horizon_dof(vars, ray);
 		vertical_rays(vars, ray);
 		vertical_dof(vars, ray);
 		get_nearest_ray(vars, ray);
-		rendering(vars, ray);
-		// loop for each ray at next radian
 		ray->ra += DR / 12;
 		if (ray->ra < 0)
 			ray->ra += 2 * PI;

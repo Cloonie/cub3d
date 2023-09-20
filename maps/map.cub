@@ -1,6 +1,6 @@
-NO ./textures/bluebrick.xpm
-SO ./textures/south.xpm
-EA ./textures/stonewall.xpm
+NO ./textures/brickwall.xpm
+SO ./textures/brickwall.xpm
+EA ./textures/brickwall.xpm
 WE ./textures/brickwall.xpm
 
 F 245,245,220

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "cub3d.h"
 
 void	rotation(t_vars *vars)
 {
@@ -80,6 +80,7 @@ void	movement(t_vars *vars)
 
 int	key_press(int keycode, t_vars *vars)
 {
+	// printf("keycode %d\n", keycode);
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(vars->mlx, vars->win);
@@ -99,6 +100,15 @@ int	key_press(int keycode, t_vars *vars)
 		vars->key.right = 1;
 	if (keycode == SHIFT)
 		vars->key.shift = RUN_SPEED * 2;
+	if (keycode == E)
+		vars->key.e = 1;
+	if (keycode == M)
+	{
+		if (vars->key.m == 0)
+			vars->key.m = 1;
+		else if (vars->key.m == 1)
+			vars->key.m = 0;
+	}
 	return (0);
 }
 
@@ -118,5 +128,9 @@ int	key_release(int keycode, t_vars *vars)
 		vars->key.right = 0;
 	if (keycode == SHIFT)
 		vars->key.shift = RUN_SPEED;
+	if (keycode == E)
+		vars->key.e = 0;
+	// if (keycode == M)
+	// 	vars->key.m = 0;
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
+/*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/19 18:58:26 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/20 15:12:38 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@
 #  define LEFT 65361
 #  define RIGHT 65363
 #  define SHIFT 65505
+#  define E 101
+#  define M 109
 # endif
 
 // variables
@@ -61,9 +63,9 @@
 # define mapX 8
 # define mapY 8
 # define textureS 64
-# define screenWidth (20*64)//960*2
-# define screenHeight 805//640*2
-# define rendersize 640
+# define screenWidth mapS*mapX*2
+# define screenHeight mapS*mapY*2
+# define RAYOFFSET (screenWidth/60)
 # define PI 3.14159265359	// 0/360 degrees
 # define D90 (PI/2)			// 90 degrees
 # define D270 (3*PI/2)		// 270 degrees
@@ -104,6 +106,8 @@ typedef struct s_key
 	int	left;
 	int	right;
 	int	shift;
+	int	e;
+	int	m;
 }				t_key;
 
 typedef struct s_ray
@@ -230,6 +234,8 @@ void	horizon_dof(t_vars *vars, t_ray *ray);
 void	vertical_rays(t_vars *vars, t_ray *ray);
 void	vertical_dof(t_vars *vars, t_ray *ray);
 void	get_nearest_ray(t_vars *vars, t_ray *ray);
+void	raycasting(t_vars *vars);
+
 void	draw_rays(t_vars *vars);
 
 // rendering.c
