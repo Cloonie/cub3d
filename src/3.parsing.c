@@ -24,6 +24,8 @@ void	unvalid_texture_file(t_vars *vars)
 		quit(vars, "east_texture");
 	if (vars->mapdata.west_texture == 0)
 		quit(vars, "west_texture");
+	if (vars->mapdata.door_texture == 0)
+		quit(vars, "door_texture");
 }
 
 void	spawn_direction(t_vars *vars)
@@ -68,6 +70,8 @@ void	open_map_file(t_vars *vars, char *file)
 			vars->mapdata.west_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->mapdata.mlx_size, &vars->mapdata.mlx_size);
 		else if (!ft_strncmp(array[i], "EA ", 3))
 			vars->mapdata.east_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->mapdata.mlx_size, &vars->mapdata.mlx_size);
+		else if (!ft_strncmp(array[i], "DO ", 3))
+			vars->mapdata.door_texture = mlx_xpm_file_to_image(vars->mlx, ft_strtrim(ft_strchr(array[i], '.'), "\r"), &vars->mapdata.mlx_size, &vars->mapdata.mlx_size);
 		else if (!ft_strncmp(array[i], "F ", 2))
 		{
 			vars->mapdata.floor_color[0] = ft_atoi(&array[i][2]);
@@ -92,6 +96,7 @@ void	open_map_file(t_vars *vars, char *file)
 			j = -1;
 			while (array[i])
 				vars->mapdata.map[++j] = ft_strtrim(array[i++], "\r");
+			// vars->mapdata.map[++j] = NULL;
 			for (int x = 0; vars->mapdata.map[x]; x++)
 				printf("%s\n", vars->mapdata.map[x]);
 			handle_map(vars, vars->mapdata.map);
@@ -143,7 +148,7 @@ void	handle_map(t_vars *vars, char **map)
 				vars->py = (y * mapS) + (mapS / 2);
 				map[y][x] = '0';
 			}
-			else if (map[y][x] != '0' && map[y][x] != '1'
+			else if (map[y][x] != '0' && map[y][x] != '1' && map[y][x] != '2'
 				&& map[y][x] != 'N' && map[y][x] != 'S'
 				&& map[y][x] != 'E' && map[y][x] != 'W')
 				quit(vars, "Invalid character in map");
@@ -157,4 +162,8 @@ void	handle_map(t_vars *vars, char **map)
 		if (map[y][x] != '1')
 			quit(vars, "map bottom not closed");
 	}
+	// printf("%d\n", x);
+	// printf("%d\n", y);
+	// vars->mapdata.x = x;
+	// vars->mapdata.y = y;
 }

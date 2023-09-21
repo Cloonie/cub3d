@@ -17,9 +17,16 @@ void	quit(t_vars *vars, char *msg)
 	int	i;
 
 	i = -1;
-	while (vars->mapdata.map[++i])
-		free(vars->mapdata.map[i]);
-	free(vars->mapdata.map);
+	if (&vars->mapdata)
+	{
+		if (vars->mapdata.map)
+		{
+			printf("hi\n");
+			while (vars->mapdata.map[++i])
+				free(vars->mapdata.map[i]);
+			free(vars->mapdata.map);
+		}
+	}
 	printf("Error\n");
 	perror(msg);
 	exit(1);

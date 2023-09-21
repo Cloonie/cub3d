@@ -46,6 +46,9 @@ void	texture_ns(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
 	if (ray->ra > PI)
 		tex->addr = mlx_get_data_addr(vars->mapdata.south_texture,
 				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
+	if (ray->hd == 1)
+		tex->addr = mlx_get_data_addr(vars->mapdata.door_texture,
+				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
 }
 
 void	texture_we(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
@@ -60,6 +63,9 @@ void	texture_we(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
 	if (ray->ra < D90 || ray->ra > D270)
 		tex->addr = mlx_get_data_addr(vars->mapdata.west_texture,
 				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
+	if (ray->vd == 1)
+		tex->addr = mlx_get_data_addr(vars->mapdata.door_texture,
+				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
 }
 
 void	render_walls(t_vars *vars, t_ray *ray, t_render *render)
@@ -69,6 +75,8 @@ void	render_walls(t_vars *vars, t_ray *ray, t_render *render)
 
 	y = -1;
 	render->ty = render->ty_off * render->ty_step;
+	// printf("debug: %d\n", ray->r);
+	// printf("|%c|, my: %d, mx %d\n", vars->mapdata.map[ray->my][ray->mx], ray->my, ray->mx);
 	if (ray->shade == 1)
 		texture_ns(vars, ray, render, &tex);
 	else

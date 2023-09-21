@@ -63,12 +63,16 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 {
 	while (ray->dof < 8)
 	{
+		ray->hd = 0;
 		ray->mx = (int)(ray->rx) / mapS;
 		ray->my = (int)(ray->ry) / mapS;
 		ray->mp = ray->my * mapX + ray->mx;
 		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
-			&& vars->mapdata.map[ray->my][ray->mx] == '1')
+			&& (vars->mapdata.map[ray->my][ray->mx] == '1'
+			|| vars->mapdata.map[ray->my][ray->mx] == '2'))
 		{
+			if (vars->mapdata.map[ray->my][ray->mx] == '2')
+				ray->hd = 1;
 			ray->hx = ray->rx;
 			ray->hy = ray->ry;
 			ray->hdis = dist(vars->px, vars->py, ray->hx, ray->hy);
@@ -116,12 +120,16 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 {
 	while (ray->dof < 8)
 	{
+		ray->vd = 0;
 		ray->mx = (int)(ray->rx) / mapS;
 		ray->my = (int)(ray->ry) / mapS;
 		ray->mp = ray->my * mapX + ray->mx;
 		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
-			&& vars->mapdata.map[ray->my][ray->mx] == '1')
+			&& (vars->mapdata.map[ray->my][ray->mx] == '1'
+			|| vars->mapdata.map[ray->my][ray->mx] == '2'))
 		{
+			if (vars->mapdata.map[ray->my][ray->mx] == '2')
+				ray->vd = 1;
 			ray->vx = ray->rx;
 			ray->vy = ray->ry;
 			ray->vdis = dist(vars->px, vars->py, ray->vx, ray->vy);

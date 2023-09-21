@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/21 03:41:13 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/22 02:45:30 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,13 @@ typedef struct s_mapdata
 	void	*south_texture;
 	void	*west_texture;
 	void	*east_texture;
+	void	*door_texture;
 	int		mlx_size;
 	int		floor_color[3];
 	int		ceiling_color[3];
 	char	**map;
+	int		y;
+	int		x;
 }				t_mapdata;
 
 typedef struct s_key
@@ -126,6 +129,8 @@ typedef struct s_ray
 
 	float	tdis;
 	float	shade;
+	int		hd;
+	int		vd;
 }				t_ray;
 
 typedef struct s_render

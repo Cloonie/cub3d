@@ -100,6 +100,8 @@ void	draw_bg(t_vars *vars)
 				draw_pixel(vars, x, y, 0x0F0F0F);
 			else if (vars->mapdata.map[y / mapS][x / mapS] == '1')
 				draw_pixel(vars, x, y, 0xFFFFFF);
+			else if (vars->mapdata.map[y / mapS][x / mapS] == '2')
+				draw_pixel(vars, x, y, 0xFFFF00);
 			else
 				draw_pixel(vars, x, y, 0x999999);
 		}

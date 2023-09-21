@@ -40,13 +40,13 @@ void	movement(t_vars *vars)
 
 	map = vars->mapdata.map;
 	if (vars->pdx < 0)
-		xo -= 10;
+		xo -= 15;
 	else
-		xo += 10;
+		xo += 15;
 	if (vars->pdy < 0)
-		yo -= 10;
+		yo -= 15;
 	else
-		yo += 10;
+		yo += 15;
 	if (vars->key.w == 1)
 	{
 		if (map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == '0')
@@ -105,7 +105,22 @@ int	key_press(int keycode, t_vars *vars)
 	if (keycode == SHIFT)
 		vars->key.shift = RUN_SPEED * 2;
 	if (keycode == E)
-		vars->key.e = 1;
+	{
+		int xo = 0;
+		int yo = 0;
+		if (vars->pdx < 0)
+			xo -= 25;
+		else
+			xo += 25;
+		if (vars->pdy < 0)
+			yo -= 25;
+		else
+			yo += 25;
+		if (vars->mapdata.map[((int)vars->py + yo) / mapS]
+			[((int)vars->px + xo) / mapS] == '2')
+			vars->mapdata.map[((int)vars->py + yo) / mapS]
+			[((int)vars->px + xo) / mapS] = '0';
+	}
 	if (keycode == M)
 	{
 		if (vars->key.m == 0)
