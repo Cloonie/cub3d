@@ -55,13 +55,13 @@ void	horizon_rays(t_vars *vars, t_ray *ray)
 	// {
 	// 	ray->rx = vars->px;
 	// 	ray->ry = vars->py;
-	// 	ray->dof = 8;
+	// 	ray->dof = mapX;
 	// }
 }
 
 void	horizon_dof(t_vars *vars, t_ray *ray)
 {
-	while (ray->dof < 8)
+	while (ray->dof < mapX)
 	{
 		ray->hd = 0;
 		ray->mx = (int)(ray->rx) / mapS;
@@ -76,7 +76,7 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 			ray->hx = ray->rx;
 			ray->hy = ray->ry;
 			ray->hdis = dist(vars->px, vars->py, ray->hx, ray->hy);
-			ray->dof = 8;
+			ray->dof = mapX;
 		}
 		else
 		{
@@ -112,13 +112,13 @@ void	vertical_rays(t_vars *vars, t_ray *ray)
 	// {
 	// 	ray->rx = vars->px;
 	// 	ray->ry = vars->py;
-	// 	ray->dof = 8;
+	// 	ray->dof = mapY;
 	// }
 }
 
 void	vertical_dof(t_vars *vars, t_ray *ray)
 {
-	while (ray->dof < 8)
+	while (ray->dof < mapY)
 	{
 		ray->vd = 0;
 		ray->mx = (int)(ray->rx) / mapS;
@@ -133,7 +133,7 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 			ray->vx = ray->rx;
 			ray->vy = ray->ry;
 			ray->vdis = dist(vars->px, vars->py, ray->vx, ray->vy);
-			ray->dof = 8;
+			ray->dof = mapY;
 		}
 		else
 		{

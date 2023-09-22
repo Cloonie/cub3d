@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/22 02:45:30 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/22 16:16:14 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@
 // variables
 
 # define mapS 64
-# define mapX 8
-# define mapY 8
+# define mapX 12
+# define mapY 12
 # define textureS 64
-# define screenWidth mapS*mapX*2
-# define screenHeight mapS*mapY*2
+# define screenWidth 960
+# define screenHeight 960
 # define RAYOFFSET (screenWidth/60)
 
 # define PI 3.14159265359	// 0/360 degrees
