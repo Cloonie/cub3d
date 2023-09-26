@@ -177,19 +177,19 @@ void	handle_map(t_vars *vars, char **map)
 				if (x - 1 > 0)
 					if (map[y][x - 1] != '1' && map[y][x - 1] != ' ' && map[y][x - 1] != '\r')
 						printf("3map[y:%d][x:%d]\n", y, x);
-				if (y - 1 > 0)
+				if (y - 1 > 0 && map[y - 1][x])
 					if (map[y - 1][x] != '1' && map[y - 1][x] != ' ' && map[y - 1][x] != '\r')
 						printf("4map[y:%d][x:%d]\n", y, x);
 				if (map[y + 1] && map[y][x + 1])
 					if (map[y + 1][x + 1] != '1' && map[y + 1][x + 1] != ' ' && map[y + 1][x + 1] != '\r')
 						printf("5map[y:%d][x:%d]\n", y, x);
-				if (map[y + 1] && x - 1 > 0)
+				if (map[y + 1] && x - 1 > 0 && map[y + 1][x - 1])
 					if (map[y + 1][x - 1] != '1' && map[y + 1][x - 1] != ' ' && map[y + 1][x - 1] != '\r')
 						printf("6map[y:%d][x:%d]\n", y, x);
 				if (y - 1 > 0 && map[y - 1][x + 1])
 					if (map[y - 1][x + 1] != '1' && map[y - 1][x + 1] != ' ' && map[y - 1][x + 1] != '\r')
 						printf("7map[y:%d][x:%d]\n", y, x);
-				if (y - 1 > 0 && x - 1 > 0)
+				if (y - 1 > 0 && x - 1 > 0 && map[y - 1][x - 1])
 					if (map[y - 1][x - 1] != '1' && map[y - 1][x - 1] != ' ' && map[y - 1][x - 1] != '\r')
 						printf("8map[y:%d][x:%d]\n", y, x);
 
@@ -246,8 +246,6 @@ void	handle_map(t_vars *vars, char **map)
 		if (map[y][x] != '1' && map[y][x] != ' ')
 			quit(vars, "map bottom not closed");
 	}
-	// vars->mapdata.x = x;
-	// vars->mapdata.y = ++y;
 	printf("x: %d\n", vars->mapdata.x);
 	printf("y: %d\n", vars->mapdata.y);
 	vars->map_size = 64;
