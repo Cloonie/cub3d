@@ -103,15 +103,15 @@ void	rendering(t_vars *vars, t_ray *ray)
 	if (render->ca > 2 * PI)
 		render->ca -= 2 * PI;
 	ray->tdis = ray->tdis * cos(render->ca);
-	render->lineH = (textureS * screenHeight) / ray->tdis;
+	render->lineH = (textureS * vars->win_height) / ray->tdis;
 	render->ty_step = textureS / (float)render->lineH;
 	render->ty_off = 0;
-	if (render->lineH > screenHeight)
+	if (render->lineH > vars->win_height)
 	{
-		render->ty_off = (render->lineH - screenHeight) / 2;
-		render->lineH = screenHeight;
+		render->ty_off = (render->lineH - vars->win_height) / 2;
+		render->lineH = vars->win_height;
 	}
-	render->lineO = (screenHeight / 2) - render->lineH / 2;
+	render->lineO = (vars->win_height / 2) - render->lineH / 2;
 	render_ceiling(vars, ray, render);
 	render_walls(vars, ray, render);
 	render_floor(vars, ray, render);

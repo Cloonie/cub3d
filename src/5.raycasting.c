@@ -55,19 +55,19 @@ void	horizon_rays(t_vars *vars, t_ray *ray)
 	// {
 	// 	ray->rx = vars->px;
 	// 	ray->ry = vars->py;
-	// 	ray->dof = mapX;
+	// 	ray->dof = vars->mapdata.y;
 	// }
 }
 
 void	horizon_dof(t_vars *vars, t_ray *ray)
 {
-	while (ray->dof < mapX)
+	while (ray->dof < vars->mapdata.y)
 	{
 		ray->hd = 0;
 		ray->mx = (int)(ray->rx) / mapS;
 		ray->my = (int)(ray->ry) / mapS;
-		ray->mp = ray->my * mapX + ray->mx;
-		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
+		ray->mp = ray->my * vars->mapdata.x + ray->mx;
+		if (ray->mp > 0 && ray->mx < vars->mapdata.x && ray->my < vars->mapdata.y
 			&& (vars->mapdata.map[ray->my][ray->mx] == '1'
 			|| vars->mapdata.map[ray->my][ray->mx] == '2'))
 		{
@@ -76,7 +76,7 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 			ray->hx = ray->rx;
 			ray->hy = ray->ry;
 			ray->hdis = dist(vars->px, vars->py, ray->hx, ray->hy);
-			ray->dof = mapX;
+			ray->dof = vars->mapdata.y;
 		}
 		else
 		{
@@ -112,19 +112,19 @@ void	vertical_rays(t_vars *vars, t_ray *ray)
 	// {
 	// 	ray->rx = vars->px;
 	// 	ray->ry = vars->py;
-	// 	ray->dof = mapY;
+	// 	ray->dof = vars->mapdata.x;
 	// }
 }
 
 void	vertical_dof(t_vars *vars, t_ray *ray)
 {
-	while (ray->dof < mapY)
+	while (ray->dof < vars->mapdata.x)
 	{
 		ray->vd = 0;
 		ray->mx = (int)(ray->rx) / mapS;
 		ray->my = (int)(ray->ry) / mapS;
-		ray->mp = ray->my * mapX + ray->mx;
-		if (ray->mp > 0 && ray->mx < mapX && ray->my < mapY
+		ray->mp = ray->my * vars->mapdata.x + ray->mx;
+		if (ray->mp > 0 && ray->mx < vars->mapdata.x && ray->my < vars->mapdata.y
 			&& (vars->mapdata.map[ray->my][ray->mx] == '1'
 			|| vars->mapdata.map[ray->my][ray->mx] == '2'))
 		{
@@ -133,7 +133,7 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 			ray->vx = ray->rx;
 			ray->vy = ray->ry;
 			ray->vdis = dist(vars->px, vars->py, ray->vx, ray->vy);
-			ray->dof = mapY;
+			ray->dof = vars->mapdata.x;
 		}
 		else
 		{
@@ -175,7 +175,7 @@ void	raycasting(t_vars *vars)
 
 	ray = &vars->ray;
 	init_rays(vars, ray);
-	while (++ray->r < screenWidth) // loop for each ray
+	while (++ray->r < vars->win_width) // loop for each ray
 	{
 		horizon_rays(vars, ray);
 		horizon_dof(vars, ray);
@@ -197,7 +197,7 @@ void	draw_rays(t_vars *vars)
 
 	ray = &vars->ray;
 	init_rays(vars, ray);
-	while (++ray->r < screenWidth) // loop for each ray
+	while (++ray->r < vars->win_width) // loop for each ray
 	{
 		horizon_rays(vars, ray);
 		horizon_dof(vars, ray);

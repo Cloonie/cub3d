@@ -92,9 +92,9 @@ void	draw_bg(t_vars *vars)
 
 	x = -1;
 	y = -1;
-	while (++y < (mapY * mapS))
+	while (++y < (vars->mapdata.y * mapS))
 	{
-		while (++x < (mapX * mapS))
+		while (++x < (vars->mapdata.x * mapS))
 		{
 			if (y % mapS == 0 || x % mapS == 0)
 				draw_pixel(vars, x, y, 0x0F0F0F);

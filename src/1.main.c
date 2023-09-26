@@ -15,10 +15,12 @@
 /*
 	Initialize variables required for the start of program.
 */
-void	start_init(t_vars *vars)
+void	start_init(t_vars *vars, char *file)
 {
 	vars->mlx = mlx_init();
-	vars->win = mlx_new_window(vars->mlx, screenWidth, screenHeight, "cub3d");
+	vars->pspawn_dir = 0;
+	parsing(vars, file);
+	vars->win = mlx_new_window(vars->mlx, vars->win_width, vars->win_height, "cub3d");
 	vars->player_size = 10;
 	vars->key.w = 0;
 	vars->key.a = 0;
@@ -29,7 +31,6 @@ void	start_init(t_vars *vars)
 	vars->key.shift = RUN_SPEED;
 	vars->key.e = 0;
 	vars->key.m = 0;
-	vars->pspawn_dir = 0;
 }
 
 /*
@@ -39,7 +40,7 @@ void	start_init(t_vars *vars)
 */
 int	put_whole_image(t_vars *vars)
 {
-	vars->img = mlx_new_image(vars->mlx, screenWidth, screenHeight);
+	vars->img = mlx_new_image(vars->mlx, vars->win_width, vars->win_height);
 	movement(vars);
 	rotation(vars);
 	raycasting(vars);
@@ -60,9 +61,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		quit(&vars, "Please input ./cub3d [path_to_map_file]");
-	start_init(&vars);
-	open_map_file(&vars, argv[1]);
-	printf("%p\n", vars.mapdata.door_texture);
+	start_init(&vars, argv[1]);
 	mlx_loop_hook(vars.mlx, put_whole_image, &vars);
 	mlx_hook(vars.win, 2, 1L << 0, key_press, &vars);
 	mlx_hook(vars.win, 3, 1L << 1, key_release, &vars);

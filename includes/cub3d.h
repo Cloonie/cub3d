@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/22 16:16:14 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/25 23:37:57 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,8 @@
 // variables
 
 # define mapS 64
-# define mapX 12
-# define mapY 12
 # define textureS 64
-# define screenWidth 960
-# define screenHeight 960
-# define RAYOFFSET (screenWidth/60)
+# define RAYOFFSET (vars->win_width/60)
 
 # define PI 3.14159265359	// 0/360 degrees
 # define D90 (PI/2)			// 90 degrees
@@ -148,6 +144,9 @@ typedef struct s_vars
 {
 	void		*mlx;
 	void		*win;
+	int			win_height;
+	int			win_width;
+	int			map_size;
 	float		px;
 	float		py;
 	float		pdx;
@@ -195,7 +194,7 @@ typedef struct s_line
 
 // main.c
 
-void	start_init(t_vars	*vars);
+void	start_init(t_vars *vars, char *file);
 int		put_whole_image(t_vars *vars);
 
 // movement.c
@@ -207,7 +206,7 @@ int		key_release(int keycode, t_vars *vars);
 
 // parasing.c
 
-void	open_map_file(t_vars *vars, char *file);
+void	parsing(t_vars *vars, char *file);
 
 // color.c
 
