@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/25 23:37:57 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/27 17:18:53 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@
 # define textureS 64
 # define RAYOFFSET (vars->win_width/60)
 
-# define PI 3.14159265359	// 0/360 degrees
-# define D90 (PI/2)			// 90 degrees
-# define D270 (3*PI/2)		// 270 degrees
-# define DR 0.0174533		// one degree in radians
+# define D0			6.28318530718
+# define D90		1.57079632679
+# define D180_PI	3.14159265359
+# define D270		4.71238898038
+# define DR			0.0174533
 
 # define RUN_SPEED 1
 # define ROTATION_SPEED 1.5
@@ -204,9 +205,24 @@ void	rotation(t_vars *vars);
 int		key_press(int keycode, t_vars *vars);
 int		key_release(int keycode, t_vars *vars);
 
-// parasing.c
+// parsing.c
 
 void	parsing(t_vars *vars, char *file);
+
+// parsing2.c
+
+void	spawn_direction(t_vars *vars);
+int		init_texture(t_vars *vars, char *str);
+void	unvalid_texture_file(t_vars *vars);
+int		init_floor_ceiling_color(t_vars *vars, char *str);
+
+// parsing3_map.c
+
+void	create_map(t_vars *vars, char **array, int i);
+void	handle_map(t_vars *vars, char **map);
+void	handle_spaces(char **map, int y, int x);
+void	handle_spawn(t_vars *vars, char **map, int y, int x);
+void	check_walls(t_vars *vars, char **map, int y, int x);
 
 // color.c
 

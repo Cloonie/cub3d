@@ -25,9 +25,9 @@ void	init_rays(t_vars *vars, t_ray *ray)
 	ray->ra = vars->pa - (DR * 30);
 	// resets angle if exceeds 360 or less than 0
 	if (ray->ra < 0)
-		ray->ra += 2 * PI;
-	if (ray->ra > 2 * PI)
-		ray->ra -= 2 * PI;
+		ray->ra += 2 * D180_PI;
+	if (ray->ra > 2 * D180_PI)
+		ray->ra -= 2 * D180_PI;
 }
 
 void	horizon_rays(t_vars *vars, t_ray *ray)
@@ -37,26 +37,26 @@ void	horizon_rays(t_vars *vars, t_ray *ray)
 	ray->hx = vars->px;
 	ray->hy = vars->py;
 	ray->a_tan = -1 / tan(ray->ra);
-	if (ray->ra > PI) // looking up
+	if (ray->ra > D180_PI) // looking up
 	{
 		ray->ry = (((int)vars->py / mapS) * mapS) - 0.0001;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
 		ray->yo = -mapS;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
-	if (ray->ra < PI) // looking down
+	if (ray->ra < D180_PI) // looking down
 	{
 		ray->ry = (((int)vars->py / mapS) * mapS) + mapS;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
 		ray->yo = mapS;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
-	// if (ray->ra == 0 || ray->ra == PI) // looking left or right
-	// {
-	// 	ray->rx = vars->px;
-	// 	ray->ry = vars->py;
-	// 	ray->dof = vars->mapdata.y;
-	// }
+	if (ray->ra == 0 || ray->ra == D180_PI) // looking left or right
+	{
+		ray->rx = vars->px;
+		ray->ry = vars->py;
+		ray->dof = vars->mapdata.y;
+	}
 }
 
 void	horizon_dof(t_vars *vars, t_ray *ray)
@@ -108,12 +108,12 @@ void	vertical_rays(t_vars *vars, t_ray *ray)
 		ray->xo = mapS;
 		ray->yo = -ray->xo * ray->n_tan;
 	}
-	// if (ray->ra == 0 || ray->ra == PI) // looking up or down
-	// {
-	// 	ray->rx = vars->px;
-	// 	ray->ry = vars->py;
-	// 	ray->dof = vars->mapdata.x;
-	// }
+	if (ray->ra == 0 || ray->ra == D180_PI) // looking up or down
+	{
+		ray->rx = vars->px;
+		ray->ry = vars->py;
+		ray->dof = vars->mapdata.x;
+	}
 }
 
 void	vertical_dof(t_vars *vars, t_ray *ray)
@@ -185,9 +185,9 @@ void	raycasting(t_vars *vars)
 		rendering(vars, ray);
 		ray->ra += DR / RAYOFFSET;
 		if (ray->ra < 0)
-			ray->ra += 2 * PI;
-		if (ray->ra > 2 * PI)
-			ray->ra -= 2 * PI;
+			ray->ra += 2 * D180_PI;
+		if (ray->ra > 2 * D180_PI)
+			ray->ra -= 2 * D180_PI;
 	}
 }
 
@@ -206,8 +206,8 @@ void	draw_rays(t_vars *vars)
 		get_nearest_ray(vars, ray);
 		ray->ra += DR / RAYOFFSET;
 		if (ray->ra < 0)
-			ray->ra += 2 * PI;
-		if (ray->ra > 2 * PI)
-			ray->ra -= 2 * PI;
+			ray->ra += 2 * D180_PI;
+		if (ray->ra > 2 * D180_PI)
+			ray->ra -= 2 * D180_PI;
 	}
 }

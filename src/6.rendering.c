@@ -37,13 +37,13 @@ void	render_floor(t_vars *vars, t_ray *ray, t_render *render)
 void	texture_ns(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
 {
 	render->tx = (int)(ray->rx) % textureS;
-	if (ray->ra < PI)
+	if (ray->ra < D180_PI)
 	{
 		render->tx = (textureS - 1) - render->tx; // flip image horizontally
 		tex->addr = mlx_get_data_addr(vars->mapdata.north_texture,
 				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
 	}
-	if (ray->ra > PI)
+	if (ray->ra > D180_PI)
 		tex->addr = mlx_get_data_addr(vars->mapdata.south_texture,
 				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
 	if (ray->hd == 1)
@@ -99,9 +99,9 @@ void	rendering(t_vars *vars, t_ray *ray)
 	render = &vars->render;
 	render->ca = vars->pa - ray->ra;
 	if (render->ca < 0)
-		render->ca += 2 * PI;
-	if (render->ca > 2 * PI)
-		render->ca -= 2 * PI;
+		render->ca += 2 * D180_PI;
+	if (render->ca > 2 * D180_PI)
+		render->ca -= 2 * D180_PI;
 	ray->tdis = ray->tdis * cos(render->ca);
 	render->lineH = (textureS * vars->win_height) / ray->tdis;
 	render->ty_step = textureS / (float)render->lineH;

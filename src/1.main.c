@@ -19,7 +19,17 @@ void	start_init(t_vars *vars, char *file)
 {
 	vars->mlx = mlx_init();
 	vars->pspawn_dir = 0;
+	vars->mapdata.x = 0;
+	vars->mapdata.y = 0;
+	vars->mapdata.north_texture = 0;
+	vars->mapdata.south_texture = 0;
+	vars->mapdata.east_texture = 0;
+	vars->mapdata.west_texture = 0;
+	vars->mapdata.door_texture = 0;
 	parsing(vars, file);
+	vars->map_size = 64;
+	vars->win_height = vars->map_size * vars->mapdata.y;
+	vars->win_width = vars->map_size * vars->mapdata.x;
 	vars->win = mlx_new_window(vars->mlx, vars->win_width, vars->win_height, "cub3d");
 	vars->player_size = 10;
 	vars->key.w = 0;
