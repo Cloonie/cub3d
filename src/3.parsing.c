@@ -24,7 +24,8 @@ char	**open_file(t_vars *vars, char *file)
 	if (fd == -1)
 		quit(vars, "File not found");
 	i = read(fd, buf, 1000);
-	buf[i] = '\0';
+	buf[i] = '\r';
+	buf[i + 1] = '\0';
 	array = ft_split(buf, '\n');
 	return (array);
 }
@@ -39,9 +40,8 @@ void	parsing(t_vars *vars, char *file)
 	while (array[++i])
 	{
 		// printf("array[%d]: %s\n", i, array[i]);
-		if (!ft_strncmp(array[i], "\r", 1))
-			;
-		else if (init_texture(vars, array[i]) == 0
+		if (!ft_strncmp(array[i], "\r", 1)
+			|| init_texture(vars, array[i]) == 0
 			|| init_floor_ceiling_color(vars, array[i]) == 0)
 			;
 		else if (!ft_strncmp(array[i], " ", 1) || !ft_strncmp(array[i], "1", 1))
@@ -51,11 +51,10 @@ void	parsing(t_vars *vars, char *file)
 			break ;
 		}
 		else
-		{
-			quit(vars, "Else Error");
-			break ;
-		}
+			quit(vars, "Invalid Colour for floor / ceiling");
 	}
+	if (vars->mapdata.map == 0)
+		quit (vars, "Map not found");
 	unvalid_texture_file(vars);
 	spawn_direction(vars);
 	i = -1;

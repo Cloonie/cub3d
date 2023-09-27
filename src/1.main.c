@@ -26,6 +26,7 @@ void	start_init(t_vars *vars, char *file)
 	vars->mapdata.east_texture = 0;
 	vars->mapdata.west_texture = 0;
 	vars->mapdata.door_texture = 0;
+	vars->mapdata.map = 0;
 	parsing(vars, file);
 	vars->map_size = 64;
 	vars->win_height = vars->map_size * vars->mapdata.y;

@@ -21,7 +21,6 @@ void	quit(t_vars *vars, char *msg)
 	{
 		if (vars->mapdata.map)
 		{
-			printf("hi\n");
 			while (vars->mapdata.map[++i])
 				free(vars->mapdata.map[i]);
 			free(vars->mapdata.map);

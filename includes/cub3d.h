@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/27 20:17:55 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/28 01:35:17 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ int		init_floor_ceiling_color(t_vars *vars, char *str);
 
 void	create_map(t_vars *vars, char **array, int i);
 void	handle_map(t_vars *vars, char **map);
-void	handle_spaces(char **map, int y, int x);
+void	handle_spaces(t_vars *vars, char **map, int y, int x);
 void	handle_spawn(t_vars *vars, char **map, int y, int x);
 void	check_walls(t_vars *vars, char **map, int y, int x);
 

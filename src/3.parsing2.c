@@ -90,14 +90,22 @@ void	unvalid_texture_file(t_vars *vars)
 
 int	init_floor_ceiling_color(t_vars *vars, char *str)
 {
-	if (!ft_strncmp(str, "F ", 2))
+	int	i;
+	int	comma;
+
+	i = 0;
+	comma = 0;
+	while (str[++i])
+		if (str[i] == ',')
+			comma++;
+	if (!ft_strncmp(str, "F ", 2) && comma == 2)
 	{
 		vars->mapdata.floor_color[0] = ft_atoi(&str[2]);
 		vars->mapdata.floor_color[1] = ft_atoi(ft_strchr(&str[2], ',') + 1);
 		vars->mapdata.floor_color[2] = ft_atoi
 			(ft_strchr(ft_strchr(&str[2], ',') + 1, ',') + 1);
 	}
-	else if (!ft_strncmp(str, "C ", 2))
+	else if (!ft_strncmp(str, "C ", 2) && comma == 2)
 	{
 		vars->mapdata.ceiling_color[0] = ft_atoi(&str[2]);
 		vars->mapdata.ceiling_color[1] = ft_atoi(ft_strchr(&str[2], ',') + 1);

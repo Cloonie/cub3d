@@ -39,14 +39,22 @@ void	handle_map(t_vars *vars, char **map)
 	y = -1;
 	while (map[++y])
 	{
+		if (!ft_strncmp(map[y], "\r", 1))
+			quit(vars, "Empty line in between map");
 		x = -1;
 		while (map[y][++x])
 		{
 			if (map[y][x] == ' ' || map[y][x] == '\r')
-				handle_spaces(map, y, x);
+				handle_spaces(vars, map, y, x);
 			handle_spawn(vars, map, y, x);
 			if (x > vars->mapdata.x)
 				vars->mapdata.x = x;
+			if (map[y + 1] == NULL && map[y][x + 1] == 0)
+			{
+				if (x > vars->mapdata.x)
+					vars->mapdata.x = x + 1;
+				break ;
+			}
 		}
 	}
 	check_walls(vars, map, y, x);
@@ -54,12 +62,14 @@ void	handle_map(t_vars *vars, char **map)
 	printf("map y: %d\n", vars->mapdata.y);
 }
 
-void	handle_spaces(char **map, int y, int x)
+// printf("1[x:%d] [y:%d]\n", x, y);
+void	handle_spaces(t_vars *vars, char **map, int y, int x)
 {
+	(void)vars;
 	if (map[y][x + 1])
 		if (map[y][x + 1] != '1' && map[y][x + 1] != ' ' && map[y][x + 1] != '\r')
 			printf("1[x:%d] [y:%d]\n", x, y);
-	if (map[y + 1] && map[y + 1][x])
+	if (map[y + 1] && map[y + 1][x] && x < ft_strlen(map[y + 1]))
 		if (map[y + 1][x] != '1' && map[y + 1][x] != ' ' && map[y + 1][x] != '\r')
 			printf("2[x:%d] [y:%d]\n", x, y);
 	if (x - 1 > 0)
@@ -100,7 +110,10 @@ void	handle_spawn(t_vars *vars, char **map, int y, int x)
 	else if (map[y][x] != '0' && map[y][x] != '1' && map[y][x] != '2'
 		&& map[y][x] != 'N' && map[y][x] != 'S' && map[y][x] != '\r'
 		&& map[y][x] != 'E' && map[y][x] != 'W' && map[y][x] != ' ')
+	{
+		printf("%c\n", map[y][x]);
 		quit(vars, "Invalid character in map");
+	}
 }
 
 /*
@@ -120,13 +133,14 @@ void	check_walls(t_vars *vars, char **map, int y, int x)
 	while (map[vars->mapdata.y - 1][++x])
 	{
 		if (map[vars->mapdata.y - 1][x] != '1'
-			&& map[vars->mapdata.y - 1][x] != ' ')
+			&& map[vars->mapdata.y - 1][x] != ' '
+			&& map[vars->mapdata.y - 1][x] != '\r')
 			quit(vars, "map bottom not closed");
 	}
 	y = -1;
 	while (map[++y] && map[y][0])
 	{
-		if (map[y][0] != '1' && map[y][0] != ' ')
+		if (map[y][0] != '1' && map[y][0] != ' ' && map[y][0] != '\r')
 			quit(vars, "map left side not closed");
 	}
 }
