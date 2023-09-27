@@ -19,15 +19,15 @@ void	create_map(t_vars *vars, char **array, int i)
 	j = i;
 	while (array[j])
 		j++;
-	printf("j: %d\n", (j - i + 1));
+	// printf("j: %d\n", (j - i + 1));
 	vars->mapdata.y = j - i;
 	vars->mapdata.map = malloc(sizeof(char **) * (j - i + 1));
 	j = -1;
 	while (array[i])
 		vars->mapdata.map[++j] = ft_strdup(array[i++]);
 	vars->mapdata.map[++j] = NULL;
-	for (int x = 0; vars->mapdata.map[x]; x++)
-		printf("%s\n", vars->mapdata.map[x]);
+	// for (int x = 0; vars->mapdata.map[x]; x++)
+	// 	printf("%s\n", vars->mapdata.map[x]);
 }
 
 void	handle_map(t_vars *vars, char **map)
@@ -50,8 +50,8 @@ void	handle_map(t_vars *vars, char **map)
 		}
 	}
 	check_walls(vars, map, y, x);
-	printf("x: %d\n", vars->mapdata.x);
-	printf("y: %d\n", vars->mapdata.y);
+	printf("map x: %d\n", vars->mapdata.x);
+	printf("map y: %d\n", vars->mapdata.y);
 }
 
 void	handle_spaces(char **map, int y, int x)

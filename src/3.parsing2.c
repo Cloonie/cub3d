@@ -22,13 +22,29 @@
 void	spawn_direction(t_vars *vars)
 {
 	if (vars->pspawn_dir == 'N')
+	{
 		vars->pa = D270; // N
+		vars->pdx = 0;
+		vars->pdy = -1;
+	}
 	else if (vars->pspawn_dir == 'S')
+	{
 		vars->pa = D90; // S
+		vars->pdx = 0;
+		vars->pdy = 1;
+	}
 	else if (vars->pspawn_dir == 'E')
+	{
 		vars->pa = 0; // E
+		vars->pdx = 1;
+		vars->pdy = 0;
+	}
 	else if (vars->pspawn_dir == 'W')
+	{
 		vars->pa = D180_PI; // W
+		vars->pdx = -1;
+		vars->pdy = 0;
+	}
 	else
 		quit(vars, "Spawn direction");
 }

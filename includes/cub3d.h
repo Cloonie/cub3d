@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/27 17:18:53 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/27 20:17:55 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@
 # define DR			0.0174533
 
 # define RUN_SPEED 1
-# define ROTATION_SPEED 1.5
+# define ROTATION_SPEED 0.5
 
 typedef struct s_mapdata
 {
@@ -200,7 +200,7 @@ int		put_whole_image(t_vars *vars);
 
 // movement.c
 
-void	movement(t_vars *vars);
+void	movement(t_vars *vars, char **map, int xo, int yo);
 void	rotation(t_vars *vars);
 int		key_press(int keycode, t_vars *vars);
 int		key_release(int keycode, t_vars *vars);

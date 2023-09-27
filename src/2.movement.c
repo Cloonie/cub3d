@@ -32,21 +32,8 @@ void	rotation(t_vars *vars)
 	}
 }
 
-void	movement(t_vars *vars)
+void	up_down(t_vars *vars, char **map, int xo, int yo)
 {
-	char	**map;
-	int xo	= 0;
-	int yo	= 0;
-
-	map = vars->mapdata.map;
-	if (vars->pdx < 0)
-		xo -= 20;
-	else
-		xo += 20;
-	if (vars->pdy < 0)
-		yo -= 20;
-	else
-		yo += 20;
 	if (vars->key.w == 1)
 	{
 		if (map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == '0'
@@ -65,24 +52,42 @@ void	movement(t_vars *vars)
 			|| map[((int)vars->py - yo) / mapS][((int)vars->px) / mapS] == '3')
 			vars->py -= sin(vars->pa) * vars->key.shift;
 	}
+}
+
+void	left_right(t_vars *vars, char **map, int xo, int yo)
+{
 	if (vars->key.a == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px + xo -1) / mapS] == '0'
-			&& map[((int)vars->py) / mapS][((int)vars->px - xo -1) / mapS] == '0')
-			vars->px += cos(vars->pa - (D180_PI / 2.0)) * vars->key.shift;
-		if (map[((int)vars->py + yo -1) / mapS][((int)vars->px) / mapS] == '0'
-			&& map[((int)vars->py - yo -1) / mapS][((int)vars->px) / mapS] == '0')
-			vars->py += sin(vars->pa - (D180_PI / 2.0)) * vars->key.shift;
+		if ((map[((int)vars->py) / mapS][((int)vars->px + xo -1) / mapS] == '0'
+			&& map[((int)vars->py) / mapS][((int)vars->px - xo -1) / mapS] == '0'))
+			vars->px += cos(vars->pa - D90) * vars->key.shift;
+		if ((map[((int)vars->py + yo -1) / mapS][((int)vars->px) / mapS] == '0'
+			&& map[((int)vars->py - yo -1) / mapS][((int)vars->px) / mapS] == '0'))
+			vars->py += sin(vars->pa - D90) * vars->key.shift;
 	}
 	else if (vars->key.d == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px + xo +1) / mapS] == '0'
-			&& map[((int)vars->py) / mapS][((int)vars->px - xo +1) / mapS] == '0')
-			vars->px += cos(vars->pa + (D180_PI / 2.0)) * vars->key.shift;
-		if (map[((int)vars->py + yo +1) / mapS][((int)vars->px) / mapS] == '0'
-			&& map[((int)vars->py - yo +1) / mapS][((int)vars->px) / mapS] == '0')
-			vars->py += sin(vars->pa + (D180_PI / 2.0)) * vars->key.shift;
+		if ((map[((int)vars->py) / mapS][((int)vars->px + xo +1) / mapS] == '0'
+			&& map[((int)vars->py) / mapS][((int)vars->px - xo +1) / mapS] == '0'))
+			vars->px += cos(vars->pa + D90) * vars->key.shift;
+		if ((map[((int)vars->py + yo +1) / mapS][((int)vars->px) / mapS] == '0'
+			&& map[((int)vars->py - yo +1) / mapS][((int)vars->px) / mapS] == '0'))
+			vars->py += sin(vars->pa + D90) * vars->key.shift;
 	}
+}
+
+void	movement(t_vars *vars, char **map, int xo, int yo)
+{
+	if (vars->pdx < 0)
+		xo -= 10;
+	else
+		xo += 10;
+	if (vars->pdy < 0)
+		yo -= 10;
+	else
+		yo += 10;
+	up_down(vars, map, xo, yo);
+	left_right(vars, map, xo, yo);
 }
 
 void	open_close_door(t_vars *vars)
@@ -135,15 +140,6 @@ int	key_press(int keycode, t_vars *vars)
 		vars->key.right = 1;
 	if (keycode == SHIFT)
 		vars->key.shift = RUN_SPEED * 2;
-	if (keycode == E)
-		open_close_door(vars);
-	if (keycode == M)
-	{
-		if (vars->key.m == 0)
-			vars->key.m = 1;
-		else if (vars->key.m == 1)
-			vars->key.m = 0;
-	}
 	return (0);
 }
 
@@ -163,7 +159,14 @@ int	key_release(int keycode, t_vars *vars)
 		vars->key.right = 0;
 	if (keycode == SHIFT)
 		vars->key.shift = RUN_SPEED;
+	if (keycode == M)
+	{
+		if (vars->key.m == 0)
+			vars->key.m = 1;
+		else if (vars->key.m == 1)
+			vars->key.m = 0;
+	}
 	if (keycode == E)
-		vars->key.e = 0;
+		open_close_door(vars);
 	return (0);
 }

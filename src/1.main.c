@@ -30,7 +30,8 @@ void	start_init(t_vars *vars, char *file)
 	vars->map_size = 64;
 	vars->win_height = vars->map_size * vars->mapdata.y;
 	vars->win_width = vars->map_size * vars->mapdata.x;
-	vars->win = mlx_new_window(vars->mlx, vars->win_width, vars->win_height, "cub3d");
+	vars->win = mlx_new_window(vars->mlx, vars->win_width,
+			vars->win_height, "cub3d");
 	vars->player_size = 10;
 	vars->key.w = 0;
 	vars->key.a = 0;
@@ -51,7 +52,7 @@ void	start_init(t_vars *vars, char *file)
 int	put_whole_image(t_vars *vars)
 {
 	vars->img = mlx_new_image(vars->mlx, vars->win_width, vars->win_height);
-	movement(vars);
+	movement(vars, vars->mapdata.map, 0, 0);
 	rotation(vars);
 	raycasting(vars);
 	if (vars->key.m == 1)
