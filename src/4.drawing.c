@@ -41,24 +41,6 @@ void	draw_pixel(t_vars *vars, int x, int y, int color)
 	pixel.addr[pixel.pos + 2] = pixel.r;
 }
 
-void	draw_square(t_vars *vars, int x, int y, int color)
-{
-	int	xx;
-	int	yy;
-
-	yy = y;
-	while (yy < (y + mapS))
-	{
-		xx = x;
-		while (xx < (x + mapS))
-		{
-			draw_pixel(vars, xx, yy, color);
-			xx++;
-		}
-		yy++;
-	}
-}
-
 /*
 	Takes the current coordinates of the player and prints a square around it.
 */
@@ -110,7 +92,6 @@ void	draw_bg(t_vars *vars)
 		x = -1;
 	}
 }
-
 
 /*
 	Variable initialization for Bresenham's line algorithm for draw_line function

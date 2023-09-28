@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/28 15:36:38 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/28 15:46:05 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@
 # define D270		4.71238898038
 # define DR			0.0174533
 
-# define RUN_SPEED 3
-# define ROTATION_SPEED 1.5
+# define RUN_SPEED 1
+# define ROTATION_SPEED 1
 
 typedef struct s_mapdata
 {

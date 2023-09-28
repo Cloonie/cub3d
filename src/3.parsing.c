@@ -48,16 +48,14 @@ void	create_map(t_vars *vars, char **array, int i)
 	vars->mapdata.map[++j] = NULL;
 }
 
-void	parsing(t_vars *vars, char *file)
+// printf("array[%d]: %s\n", i, array[i]);
+void	parsing_loop(t_vars *vars, char **array)
 {
-	int		i;
-	char	**array;
+	int	i;
 
-	array = open_file(vars, file);
 	i = -1;
 	while (array[++i])
 	{
-		// printf("array[%d]: %s\n", i, array[i]);
 		if (!ft_strncmp(array[i], "\r", 1)
 			|| init_texture(vars, array[i]) == 0
 			|| init_floor_ceiling_color(vars, array[i]) == 0)
@@ -71,6 +69,15 @@ void	parsing(t_vars *vars, char *file)
 		else
 			quit(vars, "Invalid Colour for floor / ceiling");
 	}
+}
+
+void	parsing(t_vars *vars, char *file)
+{
+	int		i;
+	char	**array;
+
+	array = open_file(vars, file);
+	parsing_loop(vars, array);
 	if (vars->mapdata.map == 0)
 		quit (vars, "Map not found");
 	unvalid_texture_file(vars);

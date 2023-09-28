@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "cub3d.h"
 
 void	handle_map(t_vars *vars, char **map, int x, int y)

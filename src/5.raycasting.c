@@ -12,6 +12,9 @@
 
 #include "cub3d.h"
 
+// starting angle position from middle minus 30 radians
+// then cast rays in 60 radians
+// resets angle if exceeds 360 or less than 0
 void	init_rays(t_vars *vars, t_ray *ray)
 {
 	ray->r = -1;
@@ -21,15 +24,18 @@ void	init_rays(t_vars *vars, t_ray *ray)
 	ray->yo = 0;
 	ray->tdis = 0;
 	ray->shade = 1;
-	// starting angle position from middle minus 30 radians then cast rays in 60 radians
 	ray->ra = vars->pa - (DR * 30);
-	// resets angle if exceeds 360 or less than 0
 	if (ray->ra < 0)
 		ray->ra += 2 * D180_PI;
 	if (ray->ra > 2 * D180_PI)
 		ray->ra -= 2 * D180_PI;
 }
 
+/*
+	if (ray->ra > D180_PI) looking up
+	if (ray->ra < D180_PI) looking down
+	if (ray->ra == 0 || ray->ra == D180_PI) looking left or right
+*/
 void	horizon_rays(t_vars *vars, t_ray *ray)
 {
 	ray->dof = 0;
@@ -37,21 +43,21 @@ void	horizon_rays(t_vars *vars, t_ray *ray)
 	ray->hx = vars->px;
 	ray->hy = vars->py;
 	ray->a_tan = -1 / tan(ray->ra);
-	if (ray->ra > D180_PI) // looking up
+	if (ray->ra > D180_PI)
 	{
 		ray->ry = (((int)vars->py / mapS) * mapS) - 0.0001;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
 		ray->yo = -mapS;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
-	if (ray->ra < D180_PI) // looking down
+	if (ray->ra < D180_PI)
 	{
 		ray->ry = (((int)vars->py / mapS) * mapS) + mapS;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
 		ray->yo = mapS;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
-	if (ray->ra == 0 || ray->ra == D180_PI) // looking left or right
+	if (ray->ra == 0 || ray->ra == D180_PI)
 	{
 		ray->rx = vars->px;
 		ray->ry = vars->py;
@@ -67,7 +73,8 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 		ray->mx = (int)(ray->rx) / mapS;
 		ray->my = (int)(ray->ry) / mapS;
 		ray->mp = ray->my * vars->mapdata.x + ray->mx;
-		if (ray->mp > 0 && ray->mx < vars->mapdata.x && ray->my < vars->mapdata.y
+		if (ray->mp > 0 && ray->mx < vars->mapdata.x
+			&& ray->my < vars->mapdata.y
 			&& (vars->mapdata.map[ray->my][ray->mx] == '1'
 			|| vars->mapdata.map[ray->my][ray->mx] == '2'))
 		{
@@ -87,6 +94,11 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 	}
 }
 
+/*
+	if (ray->ra > D90 && ray->ra < D270) looking left
+	if (ray->ra < D90 || ray->ra > D270) looking right
+	if (ray->ra == 0 || ray->ra == D180_PI) looking up or down
+*/
 void	vertical_rays(t_vars *vars, t_ray *ray)
 {
 	ray->dof = 0;
@@ -94,21 +106,21 @@ void	vertical_rays(t_vars *vars, t_ray *ray)
 	ray->vx = vars->px;
 	ray->vy = vars->py;
 	ray->n_tan = -tan(ray->ra);
-	if (ray->ra > D90 && ray->ra < D270) // looking left
+	if (ray->ra > D90 && ray->ra < D270)
 	{
 		ray->rx = (((int)vars->px / mapS) * mapS) - 0.0001;
 		ray->ry = (vars->px - ray->rx) * ray->n_tan + vars->py;
 		ray->xo = -mapS;
 		ray->yo = -ray->xo * ray->n_tan;
 	}
-	if (ray->ra < D90 || ray->ra > D270) // looking right
+	if (ray->ra < D90 || ray->ra > D270)
 	{
 		ray->rx = (((int)vars->px / mapS) * mapS) + mapS;
 		ray->ry = (vars->px - ray->rx) * ray->n_tan + vars->py;
 		ray->xo = mapS;
 		ray->yo = -ray->xo * ray->n_tan;
 	}
-	if (ray->ra == 0 || ray->ra == D180_PI) // looking up or down
+	if (ray->ra == 0 || ray->ra == D180_PI)
 	{
 		ray->rx = vars->px;
 		ray->ry = vars->py;
@@ -124,7 +136,8 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 		ray->mx = (int)(ray->rx) / mapS;
 		ray->my = (int)(ray->ry) / mapS;
 		ray->mp = ray->my * vars->mapdata.x + ray->mx;
-		if (ray->mp > 0 && ray->mx < vars->mapdata.x && ray->my < vars->mapdata.y
+		if (ray->mp > 0 && ray->mx < vars->mapdata.x
+			&& ray->my < vars->mapdata.y
 			&& (vars->mapdata.map[ray->my][ray->mx] == '1'
 			|| vars->mapdata.map[ray->my][ray->mx] == '2'))
 		{
@@ -141,73 +154,5 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 			ray->ry += ray->yo;
 			ray->dof += 1;
 		}
-	}
-}
-
-void	get_nearest_ray(t_vars *vars, t_ray *ray)
-{
-	t_line	line;
-
-	if (ray->vdis < ray->hdis)
-	{
-		ray->rx = ray->vx;
-		ray->ry = ray->vy;
-		ray->tdis = ray->vdis;
-		ray->shade = 0.5;
-	}
-	if (ray->hdis < ray->vdis)
-	{
-		ray->rx = ray->hx;
-		ray->ry = ray->hy;
-		ray->tdis = ray->hdis;
-		ray->shade = 1;
-	}
-	if (vars->key.m == 1)
-	{
-		line = set_line(vars->px, vars->py, ray->rx, ray->ry);
-		draw_line(vars, &line, 0xFF0000);
-	}
-}
-
-void	raycasting(t_vars *vars)
-{
-	t_ray	*ray;
-
-	ray = &vars->ray;
-	init_rays(vars, ray);
-	while (++ray->r < vars->win_width) // loop for each ray
-	{
-		horizon_rays(vars, ray);
-		horizon_dof(vars, ray);
-		vertical_rays(vars, ray);
-		vertical_dof(vars, ray);
-		get_nearest_ray(vars, ray);
-		rendering(vars, ray);
-		ray->ra += DR / RAYOFFSET;
-		if (ray->ra < 0)
-			ray->ra += 2 * D180_PI;
-		if (ray->ra > 2 * D180_PI)
-			ray->ra -= 2 * D180_PI;
-	}
-}
-
-void	draw_rays(t_vars *vars)
-{
-	t_ray	*ray;
-
-	ray = &vars->ray;
-	init_rays(vars, ray);
-	while (++ray->r < vars->win_width) // loop for each ray
-	{
-		horizon_rays(vars, ray);
-		horizon_dof(vars, ray);
-		vertical_rays(vars, ray);
-		vertical_dof(vars, ray);
-		get_nearest_ray(vars, ray);
-		ray->ra += DR / RAYOFFSET;
-		if (ray->ra < 0)
-			ray->ra += 2 * D180_PI;
-		if (ray->ra > 2 * D180_PI)
-			ray->ra -= 2 * D180_PI;
 	}
 }

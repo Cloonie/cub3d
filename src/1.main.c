@@ -12,6 +12,25 @@
 
 #include "cub3d.h"
 
+void	init_after_parsing(t_vars *vars)
+{
+	vars->map_size = 64;
+	vars->win_height = vars->map_size * vars->mapdata.y;
+	vars->win_width = vars->map_size * vars->mapdata.x;
+	vars->win = mlx_new_window(vars->mlx, vars->win_width,
+			vars->win_height, "cub3d");
+	vars->player_size = 10;
+	vars->key.w = 0;
+	vars->key.a = 0;
+	vars->key.s = 0;
+	vars->key.d = 0;
+	vars->key.left = 0;
+	vars->key.right = 0;
+	vars->key.shift = RUN_SPEED;
+	vars->key.e = 0;
+	vars->key.m = 0;
+}
+
 /*
 	Initialize variables required for the start of program.
 */
@@ -28,21 +47,7 @@ void	start_init(t_vars *vars, char *file)
 	vars->mapdata.door_texture = 0;
 	vars->mapdata.map = 0;
 	parsing(vars, file);
-	vars->map_size = 64;
-	vars->win_height = vars->map_size * vars->mapdata.y;
-	vars->win_width = vars->map_size * vars->mapdata.x;
-	vars->win = mlx_new_window(vars->mlx, vars->win_width,
-			vars->win_height, "cub3d");
-	vars->player_size = 10;
-	vars->key.w = 0;
-	vars->key.a = 0;
-	vars->key.s = 0;
-	vars->key.d = 0;
-	vars->key.left = 0;
-	vars->key.right = 0;
-	vars->key.shift = RUN_SPEED;
-	vars->key.e = 0;
-	vars->key.m = 0;
+	init_after_parsing(vars);
 }
 
 /*
