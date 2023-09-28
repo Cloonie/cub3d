@@ -67,7 +67,7 @@ void	parsing_loop(t_vars *vars, char **array)
 			break ;
 		}
 		else
-			quit(vars, "Invalid Colour for floor / ceiling");
+			quit(vars, "Map first char / Color");
 	}
 }
 

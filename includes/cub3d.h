@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/28 15:46:05 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/28 16:13:15 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,29 +195,33 @@ typedef struct s_line
 
 // main.c
 
+void	init_after_parsing(t_vars *vars);
 void	start_init(t_vars *vars, char *file);
 int		put_whole_image(t_vars *vars);
 
-// movement.c
+// key.c
 
 void	open_close_door(t_vars *vars);
 int		key_press(int keycode, t_vars *vars);
 int		key_release(int keycode, t_vars *vars);
 
-// collision.c
+// movement.c
 
 void	rotation(t_vars *vars);
 void	up_down(t_vars *vars, char **map, int xo, int yo);
 void	left_right(t_vars *vars, char **map);
 void	movement(t_vars *vars, char **map, int xo, int yo);
 
-
 // parsing.c
 
+char	**open_file(t_vars *vars, char *file);
+void	create_map(t_vars *vars, char **array, int i);
+void	parsing_loop(t_vars *vars, char **array);
 void	parsing(t_vars *vars, char *file);
 
 // parsing2.c
 
+void	assign_dir(t_vars *vars, float pa, float pdx, float pdy);
 void	spawn_direction(t_vars *vars);
 int		init_texture(t_vars *vars, char *str);
 void	unvalid_texture_file(t_vars *vars);
@@ -225,7 +229,6 @@ int		init_floor_ceiling_color(t_vars *vars, char *str);
 
 // parsing3_map.c
 
-void	create_map(t_vars *vars, char **array, int i);
 void	handle_map(t_vars *vars, char **map, int x, int y);
 void	handle_spaces(char **map, int y, int x);
 void	spaces_diagonal(char **map, int y, int x);
@@ -240,7 +243,6 @@ int		rgb_to_hex(int red, int green, int blue);
 // drawing.c
 
 void	draw_pixel(t_vars *vars, int x, int y, int color);
-void	draw_square(t_vars *vars, int x, int y, int color);
 void	draw_player(t_vars *vars);
 void	draw_bg(t_vars *vars);
 t_line	set_line(int x0, int y0, int x1, int y1);
@@ -253,15 +255,22 @@ void	horizon_rays(t_vars *vars, t_ray *ray);
 void	horizon_dof(t_vars *vars, t_ray *ray);
 void	vertical_rays(t_vars *vars, t_ray *ray);
 void	vertical_dof(t_vars *vars, t_ray *ray);
+
+// raycasting2.c
+
 void	get_nearest_ray(t_vars *vars, t_ray *ray);
 void	raycasting(t_vars *vars);
-
 void	draw_rays(t_vars *vars);
 
 // rendering.c
 
 void	render_ceiling(t_vars *vars, t_ray *ray, t_render *render);
 void	render_floor(t_vars *vars, t_ray *ray, t_render *render);
+void	texture_ns(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex);
+void	texture_we(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex);
+
+// rendering2.c
+
 void	render_walls(t_vars *vars, t_ray *ray, t_render *render);
 void	rendering(t_vars *vars, t_ray *ray);
 
