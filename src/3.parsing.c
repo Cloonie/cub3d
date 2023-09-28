@@ -30,6 +30,24 @@ char	**open_file(t_vars *vars, char *file)
 	return (array);
 }
 
+// printf("j: %d\n", (j - i + 1));
+// for (int x = 0; vars->mapdata.map[x]; x++)
+// 	printf("%s\n", vars->mapdata.map[x]);
+void	create_map(t_vars *vars, char **array, int i)
+{
+	int	j;
+
+	j = i;
+	while (array[j])
+		j++;
+	vars->mapdata.y = j - i;
+	vars->mapdata.map = malloc(sizeof(char **) * (j - i + 1));
+	j = -1;
+	while (array[i])
+		vars->mapdata.map[++j] = ft_strdup(array[i++]);
+	vars->mapdata.map[++j] = NULL;
+}
+
 void	parsing(t_vars *vars, char *file)
 {
 	int		i;
@@ -47,7 +65,7 @@ void	parsing(t_vars *vars, char *file)
 		else if (!ft_strncmp(array[i], " ", 1) || !ft_strncmp(array[i], "1", 1))
 		{
 			create_map(vars, array, i);
-			handle_map(vars, vars->mapdata.map);
+			handle_map(vars, vars->mapdata.map, -1, -1);
 			break ;
 		}
 		else

@@ -1,42 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3.parsing3.c                                       :+:      :+:    :+:   */
+/*   3.parsing3_map.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/27 16:15:09 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/27 16:15:09 by mliew            ###   ########.fr       */
+/*   Created: 2023/09/28 15:26:40 by mliew             #+#    #+#             */
+/*   Updated: 2023/09/28 15:26:40 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "cub3d.h"
 
-void	create_map(t_vars *vars, char **array, int i)
+void	handle_map(t_vars *vars, char **map, int x, int y)
 {
-	int	j;
-
-	j = i;
-	while (array[j])
-		j++;
-	// printf("j: %d\n", (j - i + 1));
-	vars->mapdata.y = j - i;
-	vars->mapdata.map = malloc(sizeof(char **) * (j - i + 1));
-	j = -1;
-	while (array[i])
-		vars->mapdata.map[++j] = ft_strdup(array[i++]);
-	vars->mapdata.map[++j] = NULL;
-	// for (int x = 0; vars->mapdata.map[x]; x++)
-	// 	printf("%s\n", vars->mapdata.map[x]);
-}
-
-void	handle_map(t_vars *vars, char **map)
-{
-	int	y;
-	int	x;
-
-	x = -1;
-	y = -1;
 	while (map[++y])
 	{
 		if (!ft_strncmp(map[y], "\r", 1))
@@ -45,7 +23,7 @@ void	handle_map(t_vars *vars, char **map)
 		while (map[y][++x])
 		{
 			if (map[y][x] == ' ' || map[y][x] == '\r')
-				handle_spaces(vars, map, y, x);
+				handle_spaces(map, y, x);
 			handle_spawn(vars, map, y, x);
 			if (x > vars->mapdata.x)
 				vars->mapdata.x = x;
@@ -63,32 +41,46 @@ void	handle_map(t_vars *vars, char **map)
 }
 
 // printf("1[x:%d] [y:%d]\n", x, y);
-void	handle_spaces(t_vars *vars, char **map, int y, int x)
+void	handle_spaces(char **map, int y, int x)
 {
-	(void)vars;
 	if (map[y][x + 1])
-		if (map[y][x + 1] != '1' && map[y][x + 1] != ' ' && map[y][x + 1] != '\r')
+		if (map[y][x + 1] != '1' && map[y][x + 1] != ' '
+		&& map[y][x + 1] != '\r')
 			printf("1[x:%d] [y:%d]\n", x, y);
 	if (map[y + 1] && map[y + 1][x] && x < ft_strlen(map[y + 1]))
-		if (map[y + 1][x] != '1' && map[y + 1][x] != ' ' && map[y + 1][x] != '\r')
+		if (map[y + 1][x] != '1' && map[y + 1][x] != ' '
+		&& map[y + 1][x] != '\r')
 			printf("2[x:%d] [y:%d]\n", x, y);
 	if (x - 1 > 0)
-		if (map[y][x - 1] != '1' && map[y][x - 1] != ' ' && map[y][x - 1] != '\r')
+		if (map[y][x - 1] != '1' && map[y][x - 1] != ' '
+		&& map[y][x - 1] != '\r')
 			printf("3[x:%d] [y:%d]\n", x, y);
-	if (y - 1 > 0 && map[y - 1][x])
-		if (map[y - 1][x] != '1' && map[y - 1][x] != ' ' && map[y - 1][x] != '\r')
+	if (y - 1 > 0 && map[y - 1][x] && x < ft_strlen(map[y - 1]))
+		if (map[y - 1][x] != '1' && map[y - 1][x] != ' '
+		&& map[y - 1][x] != '\r')
 			printf("4[x:%d] [y:%d]\n", x, y);
+	spaces_diagonal(map, y, x);
+}
+
+void	spaces_diagonal(char **map, int y, int x)
+{
 	if (map[y + 1] && map[y][x + 1])
-		if (map[y + 1][x + 1] != '1' && map[y + 1][x + 1] != ' ' && map[y + 1][x + 1] != '\r')
+		if (map[y + 1][x + 1] != '1' && map[y + 1][x + 1] != ' '
+		&& map[y + 1][x + 1] != '\r')
 			printf("5[x:%d] [y:%d]\n", x, y);
-	if (map[y + 1] && map[y + 1][x - 1] && x - 1 > 0 && x < ft_strlen(map[y + 1]))
-		if (map[y + 1][x - 1] != '1' && map[y + 1][x - 1] != ' ' && map[y + 1][x - 1] != '\r')
+	if (map[y + 1] && map[y + 1][x - 1] && x - 1 > 0
+		&& x < ft_strlen(map[y + 1]))
+		if (map[y + 1][x - 1] != '1' && map[y + 1][x - 1] != ' '
+		&& map[y + 1][x - 1] != '\r')
 			printf("6[x:%d] [y:%d] %c\n", x, y, map[y + 1][x - 1]);
-	if (y - 1 > 0 && map[y - 1][x + 1])
-		if (map[y - 1][x + 1] != '1' && map[y - 1][x + 1] != ' ' && map[y - 1][x + 1] != '\r')
+	if (y - 1 > 0 && map[y - 1][x + 1] && x < ft_strlen(map[y - 1]))
+		if (map[y - 1][x + 1] != '1' && map[y - 1][x + 1] != ' '
+		&& map[y - 1][x + 1] != '\r')
 			printf("7[x:%d] [y:%d]\n", x, y);
-	if (y - 1 > 0 && x - 1 > 0 && x < ft_strlen(map[y - 1]) && map[y - 1][x - 1])
-		if (map[y - 1][x - 1] != '1' && map[y - 1][x - 1] != ' ' && map[y - 1][x - 1] != '\r')
+	if (y - 1 > 0 && x - 1 > 0 && x < ft_strlen(map[y - 1])
+		&& map[y - 1][x - 1])
+		if (map[y - 1][x - 1] != '1' && map[y - 1][x - 1] != ' '
+		&& map[y - 1][x - 1] != '\r')
 			printf("8[x:%d] [y:%d]\n", x, y);
 }
 

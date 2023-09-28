@@ -6,7 +6,7 @@
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/28 01:35:17 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/28 15:36:38 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@
 # define D270		4.71238898038
 # define DR			0.0174533
 
-# define RUN_SPEED 1
-# define ROTATION_SPEED 0.5
+# define RUN_SPEED 3
+# define ROTATION_SPEED 1.5
 
 typedef struct s_mapdata
 {
@@ -200,10 +200,17 @@ int		put_whole_image(t_vars *vars);
 
 // movement.c
 
-void	movement(t_vars *vars, char **map, int xo, int yo);
-void	rotation(t_vars *vars);
+void	open_close_door(t_vars *vars);
 int		key_press(int keycode, t_vars *vars);
 int		key_release(int keycode, t_vars *vars);
+
+// collision.c
+
+void	rotation(t_vars *vars);
+void	up_down(t_vars *vars, char **map, int xo, int yo);
+void	left_right(t_vars *vars, char **map);
+void	movement(t_vars *vars, char **map, int xo, int yo);
+
 
 // parsing.c
 
@@ -219,8 +226,9 @@ int		init_floor_ceiling_color(t_vars *vars, char *str);
 // parsing3_map.c
 
 void	create_map(t_vars *vars, char **array, int i);
-void	handle_map(t_vars *vars, char **map);
-void	handle_spaces(t_vars *vars, char **map, int y, int x);
+void	handle_map(t_vars *vars, char **map, int x, int y);
+void	handle_spaces(char **map, int y, int x);
+void	spaces_diagonal(char **map, int y, int x);
 void	handle_spawn(t_vars *vars, char **map, int y, int x);
 void	check_walls(t_vars *vars, char **map, int y, int x);
 

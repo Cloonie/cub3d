@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 18:59:00 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/11 18:59:00 by mliew            ###   ########.fr       */
+/*   Created: 2023/09/28 15:24:44 by mliew             #+#    #+#             */
+/*   Updated: 2023/09/28 15:24:44 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,119 +54,45 @@ void	up_down(t_vars *vars, char **map, int xo, int yo)
 	}
 }
 
-void	left_right(t_vars *vars, char **map, int xo, int yo)
+void	left_right(t_vars *vars, char **map)
 {
+	float	new_px;
+	float	new_py;
+
 	if (vars->key.a == 1)
 	{
-		if ((map[((int)vars->py) / mapS][((int)vars->px + xo -1) / mapS] == '0'
-			&& map[((int)vars->py) / mapS][((int)vars->px - xo -1) / mapS] == '0'))
-			vars->px += cos(vars->pa - D90) * vars->key.shift;
-		if ((map[((int)vars->py + yo -1) / mapS][((int)vars->px) / mapS] == '0'
-			&& map[((int)vars->py - yo -1) / mapS][((int)vars->px) / mapS] == '0'))
-			vars->py += sin(vars->pa - D90) * vars->key.shift;
+		new_px = vars->px - cos(vars->pa + D90) * vars->key.shift;
+		new_py = vars->py - sin(vars->pa + D90) * vars->key.shift;
+		if (map[(int)(new_py / mapS)][(int)(new_px / mapS)] == '0'
+			|| map[(int)(new_py / mapS)][(int)(new_px / mapS)] == '3')
+		{
+			vars->px = new_px;
+			vars->py = new_py;
+		}
 	}
 	else if (vars->key.d == 1)
 	{
-		if ((map[((int)vars->py) / mapS][((int)vars->px + xo +1) / mapS] == '0'
-			&& map[((int)vars->py) / mapS][((int)vars->px - xo +1) / mapS] == '0'))
-			vars->px += cos(vars->pa + D90) * vars->key.shift;
-		if ((map[((int)vars->py + yo +1) / mapS][((int)vars->px) / mapS] == '0'
-			&& map[((int)vars->py - yo +1) / mapS][((int)vars->px) / mapS] == '0'))
-			vars->py += sin(vars->pa + D90) * vars->key.shift;
+		new_px = vars->px + cos(vars->pa + D90) * vars->key.shift;
+		new_py = vars->py + sin(vars->pa + D90) * vars->key.shift;
+		if (map[(int)(new_py / mapS)][(int)(new_px / mapS)] == '0'
+			|| map[(int)(new_py / mapS)][(int)(new_px / mapS)] == '3')
+		{
+			vars->px = new_px;
+			vars->py = new_py;
+		}
 	}
 }
 
 void	movement(t_vars *vars, char **map, int xo, int yo)
 {
 	if (vars->pdx < 0)
-		xo -= 10;
+		xo -= 5;
 	else
-		xo += 10;
+		xo += 5;
 	if (vars->pdy < 0)
-		yo -= 10;
+		yo -= 5;
 	else
-		yo += 10;
+		yo += 5;
 	up_down(vars, map, xo, yo);
-	left_right(vars, map, xo, yo);
-}
-
-void	open_close_door(t_vars *vars)
-{
-	int	xo;
-	int	yo;
-
-	xo = 0;
-	yo = 0;
-	if (vars->pdx < 0)
-		xo -= 25;
-	else
-		xo += 25;
-	if (vars->pdy < 0)
-		yo -= 25;
-	else
-		yo += 25;
-	if (vars->mapdata.map[((int)vars->py + yo) / mapS]
-		[((int)vars->px + xo) / mapS] == '2')
-		vars->mapdata.map[((int)vars->py + yo) / mapS]
-		[((int)vars->px + xo) / mapS] = '3';
-	else if (vars->mapdata.map[(int)vars->py / mapS]
-		[(int)vars->px / mapS] != '3'
-		&& vars->mapdata.map[((int)vars->py + yo) / mapS]
-		[((int)vars->px + xo) / mapS] == '3')
-		vars->mapdata.map[((int)vars->py + yo) / mapS]
-		[((int)vars->px + xo) / mapS] = '2';
-}
-
-int	key_press(int keycode, t_vars *vars)
-{
-	// printf("keycode %d\n", keycode);
-	if (keycode == ESC)
-	{
-		mlx_destroy_window(vars->mlx, vars->win);
-		printf("Window closed: ESC button\n");
-		exit(0);
-	}
-	if (keycode == W)
-		vars->key.w = 1;
-	if (keycode == A)
-		vars->key.a = 1;
-	if (keycode == S)
-		vars->key.s = 1;
-	if (keycode == D)
-		vars->key.d = 1;
-	if (keycode == LEFT)
-		vars->key.left = 1;
-	if (keycode == RIGHT)
-		vars->key.right = 1;
-	if (keycode == SHIFT)
-		vars->key.shift = RUN_SPEED * 2;
-	return (0);
-}
-
-int	key_release(int keycode, t_vars *vars)
-{
-	if (keycode == W)
-		vars->key.w = 0;
-	if (keycode == A)
-		vars->key.a = 0;
-	if (keycode == S)
-		vars->key.s = 0;
-	if (keycode == D)
-		vars->key.d = 0;
-	if (keycode == LEFT)
-		vars->key.left = 0;
-	if (keycode == RIGHT)
-		vars->key.right = 0;
-	if (keycode == SHIFT)
-		vars->key.shift = RUN_SPEED;
-	if (keycode == M)
-	{
-		if (vars->key.m == 0)
-			vars->key.m = 1;
-		else if (vars->key.m == 1)
-			vars->key.m = 0;
-	}
-	if (keycode == E)
-		open_close_door(vars);
-	return (0);
+	left_right(vars, map);
 }
