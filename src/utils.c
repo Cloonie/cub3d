@@ -24,8 +24,7 @@ void	quit(t_vars *vars, char *msg)
 			free(vars->mapdata.map[i]);
 		free(vars->mapdata.map);
 	}
-	printf("Error\n");
-	perror(msg);
+	printf("Error\n%s\n", msg);
 	exit(1);
 }
 

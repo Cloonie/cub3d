@@ -12,6 +12,8 @@
 
 #include "cub3d.h"
 
+// printf("map x: %d\n", vars->mapdata.x);
+// printf("map y: %d\n", vars->mapdata.y);
 void	handle_map(t_vars *vars, char **map, int x, int y)
 {
 	y = -1;
@@ -36,8 +38,6 @@ void	handle_map(t_vars *vars, char **map, int x, int y)
 		}
 	}
 	check_walls(vars, map, y, x);
-	printf("map x: %d\n", vars->mapdata.x);
-	printf("map y: %d\n", vars->mapdata.y);
 }
 
 // printf("1[x:%d] [y:%d]\n", x, y);
