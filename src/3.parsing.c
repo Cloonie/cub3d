@@ -18,7 +18,7 @@ char	**open_file(t_vars *vars, char *file)
 	int		i;
 	int		fd;
 	char	**array;
-	char	buf[1000];
+	char	buf[MAX_READ];
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
@@ -27,7 +27,7 @@ char	**open_file(t_vars *vars, char *file)
 		quit(vars, "File doesn't have a [.]");
 	if (ft_strncmp(ft_strchr(file, '.'), ".cub", 5))
 		quit(vars, "File doesn't end with [.cub]");
-	i = read(fd, buf, 1000);
+	i = read(fd, buf, MAX_READ);
 	buf[i] = '\r';
 	buf[i + 1] = '\0';
 	array = ft_split(buf, '\n');

@@ -48,6 +48,9 @@ void	draw_player(t_vars *vars)
 {
 	t_pixel	player;
 
+	// vars->px = vars->px;
+	// vars->py = vars->py;
+	printf("test: px: %f, py: %f\n", vars->px, vars->py);
 	player.x = vars->px - (vars->player_size / 2);
 	player.y = vars->py - (vars->player_size / 2);
 	player.addr = mlx_get_data_addr(vars->img, &player.bits_per_pixel,

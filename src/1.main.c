@@ -33,8 +33,8 @@ void	draw_minimap(t_vars *vars, int size)
 				draw_pixel(vars, x, y, 0xFFFF00);
 			else
 				draw_pixel(vars, x, y, 0x999999);
-			// else if (vars->mapdata.map[((int)vars->py)][((int)vars->px)] == '0')
-			// 	draw_pixel(vars, x, y, 0x00FF00);
+			// if ((int)vars->py == y && (int)vars->px == x)
+			// 	printf("x: %d, y: %d\n", x, y);
 		}
 		x = -1;
 	}

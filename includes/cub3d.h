@@ -6,7 +6,7 @@
 /*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/29 15:25:31 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/29 17:14:19 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 
 // variables
 
+# define MAX_READ 1000
 # define mapS 64
 # define textureS 64
 
