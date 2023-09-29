@@ -42,24 +42,27 @@ void	spawn_direction(t_vars *vars)
 
 int	init_texture(t_vars *vars, char *str)
 {
-	int	s;
+	int		s;
+	char	*tmp;
 
 	s = vars->mapdata.mlx_size;
+	tmp = str;
+	tmp[ft_strlen(tmp) - 1] = 0;
 	if (!ft_strncmp(str, "NO ", 3))
 		vars->mapdata.north_texture = mlx_xpm_file_to_image(vars->mlx,
-				ft_strtrim(ft_strchr(str, '.'), "\r"), &s, &s);
+				ft_strchr(tmp, '.'), &s, &s);
 	else if (!ft_strncmp(str, "SO ", 3))
 		vars->mapdata.south_texture = mlx_xpm_file_to_image(vars->mlx,
-				ft_strtrim(ft_strchr(str, '.'), "\r"), &s, &s);
+				ft_strchr(tmp, '.'), &s, &s);
 	else if (!ft_strncmp(str, "WE ", 3))
 		vars->mapdata.west_texture = mlx_xpm_file_to_image(vars->mlx,
-				ft_strtrim(ft_strchr(str, '.'), "\r"), &s, &s);
+				ft_strchr(tmp, '.'), &s, &s);
 	else if (!ft_strncmp(str, "EA ", 3))
 		vars->mapdata.east_texture = mlx_xpm_file_to_image(vars->mlx,
-				ft_strtrim(ft_strchr(str, '.'), "\r"), &s, &s);
+				ft_strchr(tmp, '.'), &s, &s);
 	else if (!ft_strncmp(str, "DO ", 3))
 		vars->mapdata.door_texture = mlx_xpm_file_to_image(vars->mlx,
-				ft_strtrim(ft_strchr(str, '.'), "\r"), &s, &s);
+				ft_strchr(tmp, '.'), &s, &s);
 	else
 		return (1);
 	return (0);

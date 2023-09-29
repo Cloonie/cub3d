@@ -17,17 +17,15 @@ void	quit(t_vars *vars, char *msg)
 	int	i;
 
 	i = -1;
-	if (&vars->mapdata)
+	if (vars->mapdata.map)
 	{
-		if (vars->mapdata.map)
-		{
-			while (vars->mapdata.map[++i])
-				free(vars->mapdata.map[i]);
-			free(vars->mapdata.map);
-		}
+		while (vars->mapdata.map[++i])
+			free(vars->mapdata.map[i]);
+		free(vars->mapdata.map);
 	}
 	printf("Error\n");
 	perror(msg);
+	system("leaks cub3d");
 	exit(1);
 }
 

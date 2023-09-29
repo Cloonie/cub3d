@@ -53,7 +53,7 @@ void	rendering(t_vars *vars, t_ray *ray)
 		render->ty_off = (render->lineH - vars->win_height) / 2;
 		render->lineH = vars->win_height;
 	}
-	render->lineO = (vars->win_height / 2) - render->lineH / 2;
+	render->lineO = (vars->win_height / 2) - (render->lineH / 2) - 1;
 	render_ceiling(vars, ray, render);
 	render_walls(vars, ray, render);
 	render_floor(vars, ray, render);

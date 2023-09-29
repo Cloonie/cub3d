@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mliew <mliew@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/28 16:13:15 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/29 15:25:31 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@
 
 # define mapS 64
 # define textureS 64
-# define RAYOFFSET (vars->win_width/60)
 
 # define D0			6.28318530718
 # define D90		1.57079632679
@@ -70,8 +69,8 @@
 # define D270		4.71238898038
 # define DR			0.0174533
 
-# define RUN_SPEED 1
-# define ROTATION_SPEED 1
+# define RUN_SPEED 2
+# define ROTATION_SPEED 3
 
 typedef struct s_mapdata
 {
@@ -230,8 +229,8 @@ int		init_floor_ceiling_color(t_vars *vars, char *str);
 // parsing3_map.c
 
 void	handle_map(t_vars *vars, char **map, int x, int y);
-void	handle_spaces(char **map, int y, int x);
-void	spaces_diagonal(char **map, int y, int x);
+void	handle_spaces(t_vars *vars, char **map, int y, int x);
+void	spaces_diagonal(t_vars *vars, char **map, int y, int x);
 void	handle_spawn(t_vars *vars, char **map, int y, int x);
 void	check_walls(t_vars *vars, char **map, int y, int x);
 

@@ -55,7 +55,7 @@ void	raycasting(t_vars *vars)
 		vertical_dof(vars, ray);
 		get_nearest_ray(vars, ray);
 		rendering(vars, ray);
-		ray->ra += DR / RAYOFFSET;
+		ray->ra += DR / (vars->win_width / 60);
 		if (ray->ra < 0)
 			ray->ra += 2 * D180_PI;
 		if (ray->ra > 2 * D180_PI)
@@ -79,7 +79,7 @@ void	draw_rays(t_vars *vars)
 		vertical_rays(vars, ray);
 		vertical_dof(vars, ray);
 		get_nearest_ray(vars, ray);
-		ray->ra += DR / RAYOFFSET;
+		ray->ra += DR / (vars->win_width / 60);
 		if (ray->ra < 0)
 			ray->ra += 2 * D180_PI;
 		if (ray->ra > 2 * D180_PI)

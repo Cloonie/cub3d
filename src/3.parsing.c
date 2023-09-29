@@ -23,6 +23,10 @@ char	**open_file(t_vars *vars, char *file)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		quit(vars, "File not found");
+	if (ft_strchr(file, '.') == NULL)
+		quit(vars, "File doesn't have a [.]");
+	if (ft_strncmp(ft_strchr(file, '.'), ".cub", 5))
+		quit(vars, "File doesn't end with [.cub]");
 	i = read(fd, buf, 1000);
 	buf[i] = '\r';
 	buf[i + 1] = '\0';
@@ -32,7 +36,7 @@ char	**open_file(t_vars *vars, char *file)
 
 // printf("j: %d\n", (j - i + 1));
 // for (int x = 0; vars->mapdata.map[x]; x++)
-// 	printf("%s\n", vars->mapdata.map[x]);
+// 	printf("map[%d] %s\n", x, vars->mapdata.map[x]);
 void	create_map(t_vars *vars, char **array, int i)
 {
 	int	j;
@@ -46,6 +50,7 @@ void	create_map(t_vars *vars, char **array, int i)
 	while (array[i])
 		vars->mapdata.map[++j] = ft_strdup(array[i++]);
 	vars->mapdata.map[++j] = NULL;
+	ft_strlcat(vars->mapdata.map[0], "\r\0", ft_strlen(vars->mapdata.map[0]) + 2);
 }
 
 // printf("array[%d]: %s\n", i, array[i]);

@@ -14,6 +14,7 @@
 
 void	handle_map(t_vars *vars, char **map, int x, int y)
 {
+	y = -1;
 	while (map[++y])
 	{
 		if (!ft_strncmp(map[y], "\r", 1))
@@ -22,7 +23,7 @@ void	handle_map(t_vars *vars, char **map, int x, int y)
 		while (map[y][++x])
 		{
 			if (map[y][x] == ' ' || map[y][x] == '\r')
-				handle_spaces(map, y, x);
+				handle_spaces(vars, map, y, x);
 			handle_spawn(vars, map, y, x);
 			if (x > vars->mapdata.x)
 				vars->mapdata.x = x;
@@ -40,47 +41,48 @@ void	handle_map(t_vars *vars, char **map, int x, int y)
 }
 
 // printf("1[x:%d] [y:%d]\n", x, y);
-void	handle_spaces(char **map, int y, int x)
+void	handle_spaces(t_vars *vars, char **map, int y, int x)
 {
 	if (map[y][x + 1])
 		if (map[y][x + 1] != '1' && map[y][x + 1] != ' '
 		&& map[y][x + 1] != '\r')
-			printf("1[x:%d] [y:%d]\n", x, y);
+			quit(vars, "Map not fully closed horizonally/vertically");
 	if (map[y + 1] && map[y + 1][x] && x < ft_strlen(map[y + 1]))
 		if (map[y + 1][x] != '1' && map[y + 1][x] != ' '
 		&& map[y + 1][x] != '\r')
-			printf("2[x:%d] [y:%d]\n", x, y);
+			quit(vars, "Map not fully closed horizonally/vertically");
 	if (x - 1 > 0)
 		if (map[y][x - 1] != '1' && map[y][x - 1] != ' '
 		&& map[y][x - 1] != '\r')
-			printf("3[x:%d] [y:%d]\n", x, y);
+			quit(vars, "Map not fully closed horizonally/vertically");
 	if (y - 1 > 0 && map[y - 1][x] && x < ft_strlen(map[y - 1]))
 		if (map[y - 1][x] != '1' && map[y - 1][x] != ' '
 		&& map[y - 1][x] != '\r')
-			printf("4[x:%d] [y:%d]\n", x, y);
-	spaces_diagonal(map, y, x);
+			quit(vars, "Map not fully closed horizonally/vertically");
+	spaces_diagonal(vars, map, y, x);
 }
 
-void	spaces_diagonal(char **map, int y, int x)
+void	spaces_diagonal(t_vars *vars, char **map, int y, int x)
 {
-	if (map[y + 1] && map[y][x + 1])
+	if (map[y + 1] && map[y][x + 1] && map[y + 1][x + 1]
+	&& x < ft_strlen(map[y + 1]))
 		if (map[y + 1][x + 1] != '1' && map[y + 1][x + 1] != ' '
 		&& map[y + 1][x + 1] != '\r')
-			printf("5[x:%d] [y:%d]\n", x, y);
+			quit(vars, "Map not fully closed diagonally");
 	if (map[y + 1] && map[y + 1][x - 1] && x - 1 > 0
 		&& x < ft_strlen(map[y + 1]))
 		if (map[y + 1][x - 1] != '1' && map[y + 1][x - 1] != ' '
 		&& map[y + 1][x - 1] != '\r')
-			printf("6[x:%d] [y:%d] %c\n", x, y, map[y + 1][x - 1]);
+			quit(vars, "Map not fully closed diagonally");
 	if (y - 1 > 0 && map[y - 1][x + 1] && x < ft_strlen(map[y - 1]))
 		if (map[y - 1][x + 1] != '1' && map[y - 1][x + 1] != ' '
 		&& map[y - 1][x + 1] != '\r')
-			printf("7[x:%d] [y:%d]\n", x, y);
+			quit(vars, "Map not fully closed diagonally");
 	if (y - 1 > 0 && x - 1 > 0 && x < ft_strlen(map[y - 1])
 		&& map[y - 1][x - 1])
 		if (map[y - 1][x - 1] != '1' && map[y - 1][x - 1] != ' '
 		&& map[y - 1][x - 1] != '\r')
-			printf("8[x:%d] [y:%d]\n", x, y);
+			quit(vars, "Map not fully closed diagonally");
 }
 
 void	handle_spawn(t_vars *vars, char **map, int y, int x)
