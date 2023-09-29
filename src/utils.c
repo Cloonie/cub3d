@@ -12,6 +12,7 @@
 
 #include "cub3d.h"
 
+// system("leaks cub3d");
 void	quit(t_vars *vars, char *msg)
 {
 	int	i;
@@ -25,7 +26,6 @@ void	quit(t_vars *vars, char *msg)
 	}
 	printf("Error\n");
 	perror(msg);
-	system("leaks cub3d");
 	exit(1);
 }
 
