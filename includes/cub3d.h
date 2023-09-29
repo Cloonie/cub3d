@@ -6,7 +6,7 @@
 /*   By: mliew < mliew@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 08:37:51 by mliew             #+#    #+#             */
-/*   Updated: 2023/09/29 17:14:19 by mliew            ###   ########.fr       */
+/*   Updated: 2023/09/29 18:41:24 by mliew            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,19 @@
 // variables
 
 # define MAX_READ 1000
-# define mapS 64
-# define textureS 64
+# define MINIMAP 15
+# define WIDTH 960
+# define HEIGHT 960
+# define RUN_SPEED 2
+# define ROTATION_SPEED 3
+
+# define MAP_S 64
 
 # define D0			6.28318530718
 # define D90		1.57079632679
 # define D180_PI	3.14159265359
 # define D270		4.71238898038
 # define DR			0.0174533
-
-# define RUN_SPEED 2
-# define ROTATION_SPEED 3
 
 typedef struct s_mapdata
 {
@@ -133,10 +135,10 @@ typedef struct s_ray
 typedef struct s_render
 {
 	float	ca;
-	float	lineH;
+	float	line_h;
 	float	ty_step;
 	float	ty_off;
-	float	lineO;
+	float	line_o;
 	float	ty;
 	float	tx;
 }				t_render;
@@ -279,5 +281,7 @@ void	rendering(t_vars *vars, t_ray *ray);
 void	quit(t_vars *vars, char *msg);
 int		window_close(t_vars *vars);
 float	dist(float ax, float ay, float bx, float by);
+void	draw_miniplayer(t_vars *vars, int size);
+void	draw_minimap(t_vars *vars, int size);
 
 #endif

@@ -12,10 +12,14 @@
 
 #include "cub3d.h"
 
+// if (vars->key.m == 1)
+// {
+// 	line = set_line(vars->px, vars->py, ray->rx, ray->ry);
+// 	draw_line(vars, &line, 0xFF0000);
+// }
 void	get_nearest_ray(t_vars *vars, t_ray *ray)
 {
-	t_line	line;
-
+	(void)vars;
 	if (ray->vdis < ray->hdis)
 	{
 		ray->rx = ray->vx;
@@ -29,11 +33,6 @@ void	get_nearest_ray(t_vars *vars, t_ray *ray)
 		ray->ry = ray->hy;
 		ray->tdis = ray->hdis;
 		ray->shade = 1;
-	}
-	if (vars->key.m == 1)
-	{
-		line = set_line(vars->px, vars->py, ray->rx, ray->ry);
-		draw_line(vars, &line, 0xFF0000);
 	}
 }
 

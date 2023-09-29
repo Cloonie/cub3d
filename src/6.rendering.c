@@ -17,7 +17,7 @@ void	render_ceiling(t_vars *vars, t_ray *ray, t_render *render)
 	t_line	line;
 
 	line = set_line(ray->r, 0,
-			ray->r, render->lineO);
+			ray->r, render->line_o);
 	draw_line(vars, &line, rgb_to_hex(vars->mapdata.ceiling_color[0],
 			vars->mapdata.ceiling_color[1],
 			vars->mapdata.ceiling_color[2]));
@@ -27,8 +27,8 @@ void	render_floor(t_vars *vars, t_ray *ray, t_render *render)
 {
 	t_line	line;
 
-	line = set_line(ray->r, (render->lineH + render->lineO),
-			ray->r, (render->lineH + (render->lineO * 2)));
+	line = set_line(ray->r, (render->line_h + render->line_o),
+			ray->r, (render->line_h + (render->line_o * 2)));
 	draw_line(vars, &line, rgb_to_hex(vars->mapdata.floor_color[0],
 			vars->mapdata.floor_color[1],
 			vars->mapdata.floor_color[2]));
@@ -41,10 +41,10 @@ void	render_floor(t_vars *vars, t_ray *ray, t_render *render)
 */
 void	texture_ns(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
 {
-	render->tx = (int)(ray->rx) % textureS;
+	render->tx = (int)(ray->rx) % MAP_S;
 	if (ray->ra < D180_PI)
 	{
-		render->tx = (textureS - 1) - render->tx;
+		render->tx = (MAP_S - 1) - render->tx;
 		tex->addr = mlx_get_data_addr(vars->mapdata.north_texture,
 				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
 	}
@@ -63,10 +63,10 @@ void	texture_ns(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
 */
 void	texture_we(t_vars *vars, t_ray *ray, t_render *render, t_pixel *tex)
 {
-	render->tx = (int)(ray->ry) % textureS;
+	render->tx = (int)(ray->ry) % MAP_S;
 	if (ray->ra > D90 && ray->ra < D270)
 	{
-		render->tx = (textureS - 1) - render->tx;
+		render->tx = (MAP_S - 1) - render->tx;
 		tex->addr = mlx_get_data_addr(vars->mapdata.east_texture,
 				&tex->bits_per_pixel, &tex->size_line, &tex->endian);
 	}

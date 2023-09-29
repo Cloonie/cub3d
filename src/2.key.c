@@ -27,16 +27,16 @@ void	open_close_door(t_vars *vars)
 		yo -= 25;
 	else
 		yo += 25;
-	if (vars->mapdata.map[((int)vars->py + yo) / mapS]
-		[((int)vars->px + xo) / mapS] == '2')
-		vars->mapdata.map[((int)vars->py + yo) / mapS]
-		[((int)vars->px + xo) / mapS] = '3';
-	else if (vars->mapdata.map[(int)vars->py / mapS]
-		[(int)vars->px / mapS] != '3'
-		&& vars->mapdata.map[((int)vars->py + yo) / mapS]
-		[((int)vars->px + xo) / mapS] == '3')
-		vars->mapdata.map[((int)vars->py + yo) / mapS]
-		[((int)vars->px + xo) / mapS] = '2';
+	if (vars->mapdata.map[((int)vars->py + yo) / MAP_S]
+		[((int)vars->px + xo) / MAP_S] == '2')
+		vars->mapdata.map[((int)vars->py + yo) / MAP_S]
+		[((int)vars->px + xo) / MAP_S] = '3';
+	else if (vars->mapdata.map[(int)vars->py / MAP_S]
+		[(int)vars->px / MAP_S] != '3'
+		&& vars->mapdata.map[((int)vars->py + yo) / MAP_S]
+		[((int)vars->px + xo) / MAP_S] == '3')
+		vars->mapdata.map[((int)vars->py + yo) / MAP_S]
+		[((int)vars->px + xo) / MAP_S] = '2';
 }
 
 int	key_press(int keycode, t_vars *vars)

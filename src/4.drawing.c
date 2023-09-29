@@ -48,9 +48,6 @@ void	draw_player(t_vars *vars)
 {
 	t_pixel	player;
 
-	// vars->px = vars->px;
-	// vars->py = vars->py;
-	printf("test: px: %f, py: %f\n", vars->px, vars->py);
 	player.x = vars->px - (vars->player_size / 2);
 	player.y = vars->py - (vars->player_size / 2);
 	player.addr = mlx_get_data_addr(vars->img, &player.bits_per_pixel,
@@ -77,17 +74,17 @@ void	draw_bg(t_vars *vars)
 
 	x = -1;
 	y = -1;
-	while (++y < (vars->mapdata.y * mapS))
+	while (++y < (vars->mapdata.y * MAP_S))
 	{
-		while (++x < (vars->mapdata.x * mapS))
+		while (++x < (vars->mapdata.x * MAP_S))
 		{
-			if (y % mapS == 0 || x % mapS == 0)
+			if (y % MAP_S == 0 || x % MAP_S == 0)
 				draw_pixel(vars, x, y, 0x0F0F0F);
-			else if (vars->mapdata.map[y / mapS][x / mapS] == '1')
+			else if (vars->mapdata.map[y / MAP_S][x / MAP_S] == '1')
 				draw_pixel(vars, x, y, 0xFFFFFF);
-			else if (vars->mapdata.map[y / mapS][x / mapS] == '2')
+			else if (vars->mapdata.map[y / MAP_S][x / MAP_S] == '2')
 				draw_pixel(vars, x, y, 0xFFFF00);
-			else if (vars->mapdata.map[y / mapS][x / mapS] == '3')
+			else if (vars->mapdata.map[y / MAP_S][x / MAP_S] == '3')
 				draw_pixel(vars, x, y, 0xFFFF00);
 			else
 				draw_pixel(vars, x, y, 0x999999);

@@ -45,16 +45,16 @@ void	horizon_rays(t_vars *vars, t_ray *ray)
 	ray->a_tan = -1 / tan(ray->ra);
 	if (ray->ra > D180_PI)
 	{
-		ray->ry = (((int)vars->py / mapS) * mapS) - 0.0001;
+		ray->ry = (((int)vars->py / MAP_S) * MAP_S) - 0.0001;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
-		ray->yo = -mapS;
+		ray->yo = -MAP_S;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
 	if (ray->ra < D180_PI)
 	{
-		ray->ry = (((int)vars->py / mapS) * mapS) + mapS;
+		ray->ry = (((int)vars->py / MAP_S) * MAP_S) + MAP_S;
 		ray->rx = (vars->py - ray->ry) * ray->a_tan + vars->px;
-		ray->yo = mapS;
+		ray->yo = MAP_S;
 		ray->xo = -ray->yo * ray->a_tan;
 	}
 	if (ray->ra == 0 || ray->ra == D180_PI)
@@ -70,8 +70,8 @@ void	horizon_dof(t_vars *vars, t_ray *ray)
 	while (ray->dof < vars->mapdata.y)
 	{
 		ray->hd = 0;
-		ray->mx = (int)(ray->rx) / mapS;
-		ray->my = (int)(ray->ry) / mapS;
+		ray->mx = (int)(ray->rx) / MAP_S;
+		ray->my = (int)(ray->ry) / MAP_S;
 		ray->mp = ray->my * vars->mapdata.x + ray->mx;
 		if (ray->mp > 0 && ray->mx < vars->mapdata.x
 			&& ray->my < vars->mapdata.y
@@ -108,16 +108,16 @@ void	vertical_rays(t_vars *vars, t_ray *ray)
 	ray->n_tan = -tan(ray->ra);
 	if (ray->ra > D90 && ray->ra < D270)
 	{
-		ray->rx = (((int)vars->px / mapS) * mapS) - 0.0001;
+		ray->rx = (((int)vars->px / MAP_S) * MAP_S) - 0.0001;
 		ray->ry = (vars->px - ray->rx) * ray->n_tan + vars->py;
-		ray->xo = -mapS;
+		ray->xo = -MAP_S;
 		ray->yo = -ray->xo * ray->n_tan;
 	}
 	if (ray->ra < D90 || ray->ra > D270)
 	{
-		ray->rx = (((int)vars->px / mapS) * mapS) + mapS;
+		ray->rx = (((int)vars->px / MAP_S) * MAP_S) + MAP_S;
 		ray->ry = (vars->px - ray->rx) * ray->n_tan + vars->py;
-		ray->xo = mapS;
+		ray->xo = MAP_S;
 		ray->yo = -ray->xo * ray->n_tan;
 	}
 	if (ray->ra == 0 || ray->ra == D180_PI)
@@ -133,8 +133,8 @@ void	vertical_dof(t_vars *vars, t_ray *ray)
 	while (ray->dof < vars->mapdata.x)
 	{
 		ray->vd = 0;
-		ray->mx = (int)(ray->rx) / mapS;
-		ray->my = (int)(ray->ry) / mapS;
+		ray->mx = (int)(ray->rx) / MAP_S;
+		ray->my = (int)(ray->ry) / MAP_S;
 		ray->mp = ray->my * vars->mapdata.x + ray->mx;
 		if (ray->mp > 0 && ray->mx < vars->mapdata.x
 			&& ray->my < vars->mapdata.y

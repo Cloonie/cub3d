@@ -96,8 +96,8 @@ void	handle_spawn(t_vars *vars, char **map, int y, int x)
 		|| map[y][x] == 'E' || map[y][x] == 'W'))
 	{
 		vars->pspawn_dir = map[y][x];
-		vars->px = (x * mapS) + (mapS / 2);
-		vars->py = (y * mapS) + (mapS / 2);
+		vars->px = (x * MAP_S) + (MAP_S / 2);
+		vars->py = (y * MAP_S) + (MAP_S / 2);
 		map[y][x] = '0';
 	}
 	else if (map[y][x] != '0' && map[y][x] != '1' && map[y][x] != '2'

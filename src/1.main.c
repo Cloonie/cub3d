@@ -12,39 +12,11 @@
 
 #include "cub3d.h"
 
-void	draw_minimap(t_vars *vars, int size)
-{
-	int	x;
-	int	y;
-
-	x = -1;
-	y = -1;
-	while (++y < (vars->mapdata.y * size))
-	{
-		while (++x < (vars->mapdata.x * size))
-		{
-			if (y % size == 0 || x % size == 0)
-				draw_pixel(vars, x, y, 0x0F0F0F);
-			else if (vars->mapdata.map[y / size][x / size] == '1')
-				draw_pixel(vars, x, y, 0xFFFFFF);
-			else if (vars->mapdata.map[y / size][x / size] == '2')
-				draw_pixel(vars, x, y, 0xFFFF00);
-			else if (vars->mapdata.map[y / size][x / size] == '3')
-				draw_pixel(vars, x, y, 0xFFFF00);
-			else
-				draw_pixel(vars, x, y, 0x999999);
-			// if ((int)vars->py == y && (int)vars->px == x)
-			// 	printf("x: %d, y: %d\n", x, y);
-		}
-		x = -1;
-	}
-}
-
 void	init_after_parsing(t_vars *vars)
 {
 	vars->map_size = 64;
-	vars->win_height = vars->map_size * vars->mapdata.y;
-	vars->win_width = vars->map_size * vars->mapdata.x;
+	vars->win_height = HEIGHT;
+	vars->win_width = WIDTH;
 	vars->win = mlx_new_window(vars->mlx, vars->win_width,
 			vars->win_height, "cub3d");
 	vars->player_size = 10;
@@ -56,7 +28,7 @@ void	init_after_parsing(t_vars *vars)
 	vars->key.right = 0;
 	vars->key.shift = RUN_SPEED;
 	vars->key.e = 0;
-	vars->key.m = 0;
+	vars->key.m = 1;
 }
 
 /*
@@ -82,6 +54,12 @@ void	start_init(t_vars *vars, char *file)
 	This function creates a new image and modifies each pixel to create
 	one whole image onto the window, this is done so to prevent the images
 	from blinking, rendering line by line which makes the game not smooth.
+	// if (vars->key.m == 1)
+	// {
+	// 	draw_bg(vars);
+	// 	draw_player(vars);
+	// 	draw_rays(vars);
+	// }
 */
 int	put_whole_image(t_vars *vars)
 {
@@ -91,14 +69,10 @@ int	put_whole_image(t_vars *vars)
 	raycasting(vars);
 	if (vars->key.m == 1)
 	{
-		draw_bg(vars);
-		draw_player(vars);
-		draw_rays(vars);
+		draw_minimap(vars, MINIMAP);
+		draw_miniplayer(vars, MINIMAP);
 	}
-	draw_minimap(vars, 10);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img, 0, 0);
-	// mlx_put_image_to_window(vars->mlx, vars->win,
-	// 	mlx_xpm_file_to_image(vars->mlx, "./textures/transparent_ele.xpm", &vars->mapdata.mlx_size, &vars->mapdata.mlx_size), 0, 0);
 	mlx_destroy_image(vars->mlx, vars->img);
 	return (0);
 }

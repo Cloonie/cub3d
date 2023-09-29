@@ -36,20 +36,24 @@ void	up_down(t_vars *vars, char **map, int xo, int yo)
 {
 	if (vars->key.w == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == '0'
-			|| map[((int)vars->py) / mapS][((int)vars->px + xo) / mapS] == '3')
+		if (map[((int)vars->py) / MAP_S][((int)vars->px + xo) / MAP_S] == '0'
+			|| map[((int)vars->py) / MAP_S]
+			[((int)vars->px + xo) / MAP_S] == '3')
 			vars->px += cos(vars->pa) * vars->key.shift;
-		if (map[((int)vars->py + yo) / mapS][((int)vars->px) / mapS] == '0'
-			|| map[((int)vars->py + yo) / mapS][((int)vars->px) / mapS] == '3')
+		if (map[((int)vars->py + yo) / MAP_S][((int)vars->px) / MAP_S] == '0'
+			|| map[((int)vars->py + yo) / MAP_S]
+			[((int)vars->px) / MAP_S] == '3')
 			vars->py += sin(vars->pa) * vars->key.shift;
 	}
 	if (vars->key.s == 1)
 	{
-		if (map[((int)vars->py) / mapS][((int)vars->px - xo) / mapS] == '0'
-			|| map[((int)vars->py) / mapS][((int)vars->px - xo) / mapS] == '3')
+		if (map[((int)vars->py) / MAP_S][((int)vars->px - xo) / MAP_S] == '0'
+			|| map[((int)vars->py) / MAP_S]
+			[((int)vars->px - xo) / MAP_S] == '3')
 			vars->px -= cos(vars->pa) * vars->key.shift;
-		if (map[((int)vars->py - yo) / mapS][((int)vars->px) / mapS] == '0'
-			|| map[((int)vars->py - yo) / mapS][((int)vars->px) / mapS] == '3')
+		if (map[((int)vars->py - yo) / MAP_S][((int)vars->px) / MAP_S] == '0'
+			|| map[((int)vars->py - yo) / MAP_S]
+			[((int)vars->px) / MAP_S] == '3')
 			vars->py -= sin(vars->pa) * vars->key.shift;
 	}
 }
@@ -63,8 +67,8 @@ void	left_right(t_vars *vars, char **map)
 	{
 		new_px = vars->px - cos(vars->pa + D90) * vars->key.shift;
 		new_py = vars->py - sin(vars->pa + D90) * vars->key.shift;
-		if (map[(int)(new_py / mapS)][(int)(new_px / mapS)] == '0'
-			|| map[(int)(new_py / mapS)][(int)(new_px / mapS)] == '3')
+		if (map[(int)(new_py / MAP_S)][(int)(new_px / MAP_S)] == '0'
+			|| map[(int)(new_py / MAP_S)][(int)(new_px / MAP_S)] == '3')
 		{
 			vars->px = new_px;
 			vars->py = new_py;
@@ -74,8 +78,8 @@ void	left_right(t_vars *vars, char **map)
 	{
 		new_px = vars->px + cos(vars->pa + D90) * vars->key.shift;
 		new_py = vars->py + sin(vars->pa + D90) * vars->key.shift;
-		if (map[(int)(new_py / mapS)][(int)(new_px / mapS)] == '0'
-			|| map[(int)(new_py / mapS)][(int)(new_px / mapS)] == '3')
+		if (map[(int)(new_py / MAP_S)][(int)(new_px / MAP_S)] == '0'
+			|| map[(int)(new_py / MAP_S)][(int)(new_px / MAP_S)] == '3')
 		{
 			vars->px = new_px;
 			vars->py = new_py;
