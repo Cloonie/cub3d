@@ -98,6 +98,11 @@ int	init_floor_ceiling_color(t_vars *vars, char *str)
 		vars->mapdata.floor_color[1] = ft_atoi(ft_strchr(&str[2], ',') + 1);
 		vars->mapdata.floor_color[2] = ft_atoi
 			(ft_strchr(ft_strchr(&str[2], ',') + 1, ',') + 1);
+		for (int x = 0; x < 3; x++)
+		{
+			if (vars->mapdata.floor_color[x] < 0 || vars->mapdata.floor_color[x] > 255)
+				quit(vars, "COLOR FLOOR ERROR");
+		}
 	}
 	else if (!ft_strncmp(str, "C ", 2) && comma == 2)
 	{
@@ -105,6 +110,11 @@ int	init_floor_ceiling_color(t_vars *vars, char *str)
 		vars->mapdata.ceiling_color[1] = ft_atoi(ft_strchr(&str[2], ',') + 1);
 		vars->mapdata.ceiling_color[2] = ft_atoi
 			(ft_strchr(ft_strchr(&str[2], ',') + 1, ',') + 1);
+		for (int x = 0; x < 3; x++)
+		{
+			if (vars->mapdata.ceiling_color[x] < 0 || vars->mapdata.ceiling_color[x] > 255)
+				quit(vars, "COLOR CEILING ERROR");
+		}
 	}
 	else
 		return (1);
